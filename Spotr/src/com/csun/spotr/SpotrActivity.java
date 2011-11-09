@@ -11,7 +11,7 @@ public class SpotrActivity extends Activity {
         setContentView(R.layout.main);
     }
     public void doSomething() {
-    
+    	//just a comment to test check in
     }
     // comment
 }
