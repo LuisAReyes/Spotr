@@ -37,7 +37,8 @@ public class LoginActivity extends Activity {
 	CheckBox checkVisible;
 	EditText edittextPassword;
 	EditText edittextUsername;
-	Button buttonLogin,buttonSignup;
+	Button buttonLogin;
+	Button buttonSignup;
 	
 	boolean passwordVisible = false;
 	
@@ -125,11 +126,7 @@ public class LoginActivity extends Activity {
 					//Toast.makeText(getApplicationContext(), "fail getting data", Toast.LENGTH_LONG).show();
 				}
 				
-				//decode json data
-				
-				String ct_name = null;
-				
-				
+				//decode json data				
 				try
 				{					
 					{						
@@ -137,8 +134,7 @@ public class LoginActivity extends Activity {
 						if (jArray.length() > 0)
 						{							
 							JSONObject jObject = jArray.getJSONObject(0);
-							ct_name = jObject.getString("username");
-							//Toast.makeText(getApplicationContext(),"Welcome back, " + ct_name, Toast.LENGTH_LONG).show();
+							String ct_name = jObject.getString("username");							
 							startActivity(new Intent("com.csun.spotr.MainMenuActivity"));
 						}
 						
@@ -149,11 +145,7 @@ public class LoginActivity extends Activity {
 				catch (Exception e)
 				{
 					Log.e("log_tag","Error: " + e.toString());
-					showDialog(0);				
-					//Toast.makeText(getApplicationContext(),"Invalid  ", Toast.LENGTH_LONG).show();
-					//Intent i = new Intent("com.csun.spotr.SignupActivity");
-					//startActivity(i);
-					
+					showDialog(0);					
 				}
 							
 			}
