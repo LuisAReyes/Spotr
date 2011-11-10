@@ -10,8 +10,8 @@ public class SpotrActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
     }
-    public void doSomething() {
+    
+    public void makeSomeChange() {
     	//just a comment to test check in
     }
-    // comment
 }
