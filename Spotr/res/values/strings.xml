@@ -7,9 +7,16 @@
     <string name="login_xml_checkbox_remember_password_str">Remember password</string>
     <string name="login_xml_checkbox_visible_password_str">Show visible password</string>
     <string name="login_xml_button_login_str">Log In</string>
-    <string name="login_xml_hyperlink_signup_str"><a href="http://google.com">Sign Up</a></string>
+    <string name="login_xml_button_signup_str">Sign Up</string> 
+    <string name="login_xml_hyperlink_signup_str"><a href="http://107.22.209.62/web_app/register.php">Sign Up</a></string>
         
-        
+    <!-- signup.xml - Tu Tran 11/9/2011-->
+    <string name="signup_xml_textview_email_str">Email</string>
+    <string name="signup_xml_textview_password_str">Password</string>
+    <string name="signup_xml_textview_confirmpassword_str">Confirm password</string>
+    <string name="signup_xml_button_signup_str">Sign Up</string>
+    <string name="signup_xml_checkbox_visible_characters_str">Show visible password</string>
+    <string name="signup_xml_button_exit_str">Exit</string>        
     <!-- mapview.xml -->
     <string name="mapview_xml_button_show_quest_str">Display quests</string>
     

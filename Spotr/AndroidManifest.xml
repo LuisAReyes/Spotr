@@ -26,6 +26,13 @@
             </intent-filter>
         </activity>
         
+        <!-- Signup Activity -->
+        <activity android:name=".SignupActivity">
+            <intent-filter >
+                <action android:name="com.csun.spotr.SignupActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>    
         <!-- Main Menu Activity -->
         <activity android:name=".MainMenuActivity" >
             <intent-filter >
