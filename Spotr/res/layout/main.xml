@@ -1,12 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/test_login"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:text="Log In Activity" />
 
-    <TextView
+    <Button
+        android:id="@+id/test_mainmenu"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Main Menu Activity" />
+
+    <Button
+        android:id="@+id/test_challenge"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Challenge Activity" />
+
+    <Button
+        android:id="@+id/test_mapview"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Map View Activity" />
+
+    <Button
+        android:id="@+id/test_reward"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Reward Activity" />
+
+    <Button
+        android:id="@+id/test_challengeinfo"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Challenge Info Activity" />
+
+    <Button
+        android:id="@+id/test_profile"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Profile Activity" />
+
+    <Button
+        android:id="@+id/test_friendlist"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello" />
+        android:layout_weight="1"
+        android:text="Friend List Activity" />
 
 </LinearLayout>

@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="hello">Hello World, SpotrActivity!</string>
-    <string name="app_name">Spotr</string>
-
+    <string name="app_name">The Spotr</string>
+    <!-- login.xml -->
+    <string name="login_xml_textview_email_str">Email</string>
+    <string name="login_xml_textview_password_str">Password</string>
+    <string name="login_xml_checkbox_remember_password_str">Remember password</string>
+    <string name="login_xml_checkbox_visible_password_str">Show visible password</string>
+    <string name="login_xml_button_login_str">Log In</string>
+    <string name="login_xml_hyperlink_signup_str"><a href="http://google.com">Sign Up</a></string>
+        
+        
+    <!-- mapview.xml -->
+    <string name="mapview_xml_button_show_quest_str">Display quests</string>
+    
+        
+    <!-- challenge.xml -->
+    <string name="challenge_xml_button_sort_by">Sort by</string>
 </resources>
