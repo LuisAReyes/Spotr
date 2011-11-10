@@ -20,6 +20,17 @@
     <!-- mapview.xml -->
     <string name="mapview_xml_button_show_quest_str">Display quests</string>
     
+    <!-- MainMenu.xml -->
+    <string name="main_menu_xml_button_profile_str">Profile</string>    
+    <string name="main_menu_xml_button_rewards_str">Rewards</string>    
+    <string name="main_menu_xml_button_leader_board_str">Leaderboards</string>
+    <string name="main_menu_xml_button_friend_str">Friends</string>
+    <string name="main_menu_xml_button_challenge_str">Challenges</string>
+    <string name="main_menu_xml_button_spot_str">Spots</string>    
+    
+    <!-- options_menu.xml -->
+    <string name="options_menu_xml_item_logout_str">Logout</string>
+    <string name="options_menu_xml_item_setting_str">Settings</string>    
         
     <!-- challenge.xml -->
     <string name="challenge_xml_button_sort_by">Sort by</string>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/options_menu_xml_item_setting_Icon"
+        android:icon="@drawable/settings"
+        android:title="@string/options_menu_xml_item_setting_str"/>
+
+    <item
+        android:id="@+id/options_menu_xml_item_logout_Icon"
+        android:icon="@drawable/logout"
+        android:title="@string/options_menu_xml_item_logout_str"/>
+    
+</menu>
