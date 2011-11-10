@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_launcher" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow>
+            <TextView
+                android:width="120px"
+                android:text="@string/signup_xml_textview_email_str" />
+
+            <EditText
+                android:id="@+id/signup_xml_edittext_email_id"
+                android:hint="@string/signup_xml_textview_email_str"
+                android:inputType="textEmailAddress"
+                android:width="200px" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/signup_xml_textview_password_str" />
+
+            <EditText
+                android:id="@+id/signup_xml_edittext_password_id"
+                android:hint="@string/signup_xml_textview_password_str"
+                android:inputType="textPassword" />
+
+        </TableRow>
+        
+        <TableRow>
+            <TextView
+                android:text="@string/signup_xml_textview_confirmpassword_str" />
+
+            <EditText
+                android:id="@+id/signup_xml_edittext_confirmpassword_id"
+                android:hint="@string/signup_xml_textview_confirmpassword_str"
+                android:inputType="textPassword" />
+
+        </TableRow>
+        
+         <TableRow>
+            <TextView/>
+
+            <CheckBox
+                android:id="@+id/signup_xml_checkbox_visible_characters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signup_xml_checkbox_visible_characters_str" />
+			
+        </TableRow>
+        
+        <TableRow>
+            <TextView/>
+
+            <Button
+                android:id="@+id/signup_xml_button_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/signup_xml_button_signup_str" />
+
+        </TableRow>
+        
+        <TableRow>
+            <TextView/>
+
+            <Button
+                android:id="@+id/signup_xml_button_exit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/signup_xml_button_exit_str" />
+
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
