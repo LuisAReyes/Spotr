@@ -103,8 +103,7 @@ public class LoginActivity extends Activity {
 				}
 				catch (Exception e)
 				{
-					Log.e("log_tag", "Error: " + e.toString());
-					//Toast.makeText(getApplicationContext(), "fail sending data", Toast.LENGTH_LONG).show();
+					Log.e("log_tag", "Error: " + e.toString());					
 				}	
 				
 					//convert response to string
@@ -122,8 +121,7 @@ public class LoginActivity extends Activity {
 				}
 				catch (Exception e)
 				{
-					Log.e("log_tag", "Error: " + e.toString());
-					//Toast.makeText(getApplicationContext(), "fail getting data", Toast.LENGTH_LONG).show();
+					Log.e("log_tag", "Error: " + e.toString());					
 				}
 				
 				//decode json data				
@@ -134,7 +132,7 @@ public class LoginActivity extends Activity {
 						if (jArray.length() > 0)
 						{							
 							JSONObject jObject = jArray.getJSONObject(0);
-							String ct_name = jObject.getString("username");							
+							String userName = jObject.getString("username");							
 							startActivity(new Intent("com.csun.spotr.MainMenuActivity"));
 						}
 						
