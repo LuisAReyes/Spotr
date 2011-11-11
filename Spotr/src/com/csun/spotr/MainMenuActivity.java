@@ -81,7 +81,7 @@ public class MainMenuActivity extends Activity {
 		btnSettings = (Button) findViewById(R.id.main_menu_xml_button_spot_icon);
 		btnSettings.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.ProfileActivity");
+				Intent i = new Intent("com.csun.spotr.settingsActivity");
 				startActivity(i);
 			}
 		});
@@ -92,8 +92,8 @@ public class MainMenuActivity extends Activity {
 				Intent i = new Intent("com.csun.spotr.ProfileActivity");
 				startActivity(i);
 			}
-		});*/
-		
+		});
+		*/
 		
 
 	}
@@ -110,6 +110,8 @@ public class MainMenuActivity extends Activity {
 		switch(item.getItemId())
 		{
 		case R.id.options_menu_xml_item_setting_Icon:
+			Intent i = new Intent("com.csun.spotr.SettingsActivity");
+			startActivity(i);
 			break;
 		case R.id.options_menu_xml_item_logout_Icon:
 			break;	

@@ -32,6 +32,14 @@
     <string name="options_menu_xml_item_logout_str">Logout</string>
     <string name="options_menu_xml_item_setting_str">Settings</string>    
         
+    <!-- settings.xml -->
+    <string name="settings_xml_checkbox_str">Share your Location with Friends</string>
+    <string-array name="setting_xml_spinner_defaultview_ary">
+        <item>Map View</item>
+        <item>Challenges View</item>
+        <item>Main Menu View</item>
+    </string-array>   
+    
     <!-- challenge.xml -->
     <string name="challenge_xml_button_sort_by">Sort by</string>
 </resources>

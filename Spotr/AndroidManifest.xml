@@ -80,6 +80,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>    
+        <!-- Settings Activity -->
+        <activity android:name=".SettingsActivity">
+            <intent-filter>
+                <action android:name="com.csun.spotr.SettingsActivty"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         
         <!-- Google Map API -->
         <uses-library android:name="com.google.android.maps" />
