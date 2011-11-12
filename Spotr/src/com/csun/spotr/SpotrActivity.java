@@ -2,17 +2,14 @@ package com.csun.spotr;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class SpotrActivity extends Activity {
 	/** Called when the activity is first created. */
-	private Button b1, b2, b3, b4, b5, b6, b7, b8;
+	private Button b1, b2, b3, b4, b5, b6, b7, b8, b9;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -75,8 +72,16 @@ public class SpotrActivity extends Activity {
 			}
 		});
 		
-		b8 = (Button) findViewById(R.id.test_place);
+		b8 = (Button) findViewById(R.id.test_friendlist);
 		b8.setOnClickListener(new OnClickListener() {
+			public void onClick(View arg0) {
+				Intent i = new Intent("com.csun.spotr.FriendListActivity");
+				startActivity(i);
+			}
+		});
+		
+		b9 = (Button) findViewById(R.id.test_place);
+		b9.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.PlaceActivity");
 				startActivity(i);

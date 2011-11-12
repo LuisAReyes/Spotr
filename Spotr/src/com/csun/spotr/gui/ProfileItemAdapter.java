@@ -16,7 +16,6 @@ public class ProfileItemAdapter extends BaseAdapter {
 
 	public ProfileItemAdapter(Activity c, String[] h, String[] b) {
 		super();
-
 		context = c;
 		headers = h;
 		bodies = b;

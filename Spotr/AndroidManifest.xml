@@ -77,6 +77,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        
+        <!-- Friend List Activity -->
+        <activity android:name=".FriendListActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.FriendListActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <!-- Challenge Info Activity -->
         <activity android:name=".ProfileActivity" >
@@ -94,7 +102,7 @@
             </intent-filter>
         </activity>
         
-        <!-- Place Detail Activity -->
+        <!-- Place Activity -->
         <activity android:name=".PlaceActivity" >
             <intent-filter >
                 <action android:name="com.csun.spotr.PlaceActivity" />
