@@ -18,9 +18,11 @@
     <string name="signup_xml_checkbox_visible_characters_str">Show visible password</string>
     <string name="signup_xml_button_exit_str">Exit</string>        
     <!-- mapview.xml -->
-    <string name="mapview_xml_button_show_quest_str">Display quests</string>
+    <string name="mapview_xml_button_view_str">View</string>
+    <string name="mapview_xml_button_locate_str">Locate</string>
+    <string name="mapview_xml_button_place_str">Places</string>
     
-    <!-- MainMenu.xml -->
+    <!-- main_menu.xml -->
     <string name="main_menu_xml_button_profile_str">Profile</string>    
     <string name="main_menu_xml_button_rewards_str">Rewards</string>    
     <string name="main_menu_xml_button_leader_board_str">Leaderboards</string>

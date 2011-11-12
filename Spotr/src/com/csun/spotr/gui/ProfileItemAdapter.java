@@ -1,4 +1,4 @@
-package com.csun.spotr;
+package com.csun.spotr.gui;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class ProfileItemAdapter extends BaseAdapter {
+import com.csun.spotr.R;
 
+public class ProfileItemAdapter extends BaseAdapter {
 	private Activity context;
 	private String headers[];
 	private String bodies[];
@@ -33,7 +34,7 @@ public class ProfileItemAdapter extends BaseAdapter {
 		return position;
 	}
 
-	public static class ViewHolder {
+	private static class ViewHolder {
 		TextView textviewHeader;
 		TextView textviewBody;
 	}

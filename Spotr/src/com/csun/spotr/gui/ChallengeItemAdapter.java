@@ -1,4 +1,4 @@
-package com.csun.spotr;
+package com.csun.spotr.gui;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import com.csun.spotr.R;
 
 public class ChallengeItemAdapter extends BaseAdapter {
 	private Activity context;
@@ -36,7 +38,7 @@ public class ChallengeItemAdapter extends BaseAdapter {
 		return position;
 	}
 
-	public static class ItemViewHolder {
+	private static class ItemViewHolder {
 		TextView headerTextView;
 		TextView bodyTextView;
 		CheckBox flagCheckBox;

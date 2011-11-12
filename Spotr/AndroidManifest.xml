@@ -8,12 +8,14 @@
 
     <application
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
+        android:label="@string/app_name" 
+        android:debuggable="true">
 
         <!-- Main Activity -->
         <activity android:name=".SpotrActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -22,72 +24,92 @@
         <activity android:name=".LoginActivity" >
             <intent-filter >
                 <action android:name="com.csun.spotr.LoginActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
+
         <!-- Signup Activity -->
-        <activity android:name=".SignupActivity">
+        <activity android:name=".SignupActivity" >
             <intent-filter >
                 <action android:name="com.csun.spotr.SignupActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>    
+        </activity>
         <!-- Main Menu Activity -->
         <activity android:name=".MainMenuActivity" >
             <intent-filter >
                 <action android:name="com.csun.spotr.MainMenuActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>    
-            
-         <!-- Challenge Activity -->
+        </activity>
+
+        <!-- Challenge Activity -->
         <activity android:name=".ChallengeActivity" >
             <intent-filter >
                 <action android:name="com.csun.spotr.ChallengeActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>    
-            
+        </activity>
+
         <!-- Map View Activity -->
         <activity android:name=".MapViewActivity" >
             <intent-filter >
                 <action android:name="com.csun.spotr.MapViewActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>    
-        
-         <!-- Reward Activity -->
+        </activity>
+
+        <!-- Reward Activity -->
         <activity android:name=".RewardActivity" >
             <intent-filter >
                 <action android:name="com.csun.spotr.RewardActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>    
-        
+        </activity>
+
         <!-- Challenge Info Activity -->
         <activity android:name=".ChallengeInfoActivity" >
             <intent-filter >
                 <action android:name="com.csun.spotr.ChallengeInfoActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>    
-        
+        </activity>
+
         <!-- Challenge Info Activity -->
         <activity android:name=".ProfileActivity" >
             <intent-filter >
                 <action android:name="com.csun.spotr.ProfileActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>    
+        </activity>
+        
         <!-- Settings Activity -->
-        <activity android:name=".SettingsActivity">
-            <intent-filter>
-                <action android:name="com.csun.spotr.SettingsActivty"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+        <activity android:name=".SettingsActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.SettingsActivty" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         
+        <!-- Place Detail Activity -->
+        <activity android:name=".PlaceActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.PlaceActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+            
+        <!-- Place Detail Activity -->
+        <activity android:name=".PlaceDetailActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.PlaceDetailActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <!-- Google Map API -->
         <uses-library android:name="com.google.android.maps" />
     </application>

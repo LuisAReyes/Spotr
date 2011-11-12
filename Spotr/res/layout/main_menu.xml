@@ -85,5 +85,5 @@
         android:drawableTop="@drawable/spots"
         android:text="@string/main_menu_xml_button_spot_str"
         android:textColor="#FFFF" />
-
+    
 </RelativeLayout>

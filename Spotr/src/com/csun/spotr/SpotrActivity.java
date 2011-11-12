@@ -75,5 +75,12 @@ public class SpotrActivity extends Activity {
 			}
 		});
 		
+		b8 = (Button) findViewById(R.id.test_place);
+		b8.setOnClickListener(new OnClickListener() {
+			public void onClick(View arg0) {
+				Intent i = new Intent("com.csun.spotr.PlaceActivity");
+				startActivity(i);
+			}
+		});
 	}
 }

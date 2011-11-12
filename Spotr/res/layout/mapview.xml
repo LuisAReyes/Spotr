@@ -4,18 +4,36 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/mapview_xml_button_show_quest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/mapview_xml_button_show_quest_str" />
+    <TableLayout
+        android:layout_width="400dp"
+        android:layout_height="40dp" >
+
+        <TableRow >
+            <Button
+                android:id="@+id/mapview_xml_button_change_view"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/mapview_xml_button_view_str" />
+
+            <Button
+                android:id="@+id/mapview_xml_button_locate"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/mapview_xml_button_locate_str" />
+
+            <Button
+                android:id="@+id/mapview_xml_button_places"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/mapview_xml_button_place_str" />
+        </TableRow>
+    </TableLayout>
 
     <com.google.android.maps.MapView
         android:id="@+id/mapview_xml_map"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:apiKey="0kqsfxjLdh6ggN9sWrcd75tQQA_2JugZxhGcElQ"
+        android:apiKey="0kqsfxjLdh6hBSw6P1O21ednBAHof_q1GuRuffg"
         android:clickable="true" />
 
 </LinearLayout>

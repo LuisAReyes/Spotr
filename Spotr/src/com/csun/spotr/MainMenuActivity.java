@@ -11,18 +11,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-
 public class MainMenuActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_menu);
-		
-		//activities to begin
-		Button btnProfile, btnChallenges, btnFriends, btnLeaderboards
-			, btnRewards, btnSpots, btnSettings, btnLogoff;
-				
-		//button for the profile
+
+		// activities to begin
+		Button btnProfile, btnChallenges, btnFriends, btnLeaderboards, btnRewards, btnSpots, btnSettings, btnLogoff;
+
+		// button for the profile
 		btnProfile = (Button) findViewById(R.id.main_menu_xml_button_profile_icon);
 		btnProfile.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
@@ -31,7 +29,7 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		//button for the challenge
+		// button for the challenge
 		btnChallenges = (Button) findViewById(R.id.main_menu_xml_button_challenge_icon);
 		btnChallenges.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
@@ -39,8 +37,8 @@ public class MainMenuActivity extends Activity {
 				startActivity(i);
 			}
 		});
-		
-		//button for the friends list
+
+		// button for the friends list
 
 		btnFriends = (Button) findViewById(R.id.main_menu_xml_button_friend_icon);
 		btnFriends.setOnClickListener(new OnClickListener() {
@@ -49,8 +47,8 @@ public class MainMenuActivity extends Activity {
 				startActivity(i);
 			}
 		});
-		
-		//button for the leaderboard
+
+		// button for the leaderboard
 		btnLeaderboards = (Button) findViewById(R.id.main_menu_xml_button_leader_board_icon);
 		btnLeaderboards.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
@@ -58,8 +56,8 @@ public class MainMenuActivity extends Activity {
 				startActivity(i);
 			}
 		});
-		
-		//button for rewards
+
+		// button for rewards
 		btnRewards = (Button) findViewById(R.id.main_menu_xml_button_award_icon);
 		btnRewards.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
@@ -67,8 +65,8 @@ public class MainMenuActivity extends Activity {
 				startActivity(i);
 			}
 		});
-		
-		//button for spots
+
+		// button for spots
 		btnSpots = (Button) findViewById(R.id.main_menu_xml_button_spot_icon);
 		btnSpots.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
@@ -76,45 +74,39 @@ public class MainMenuActivity extends Activity {
 				startActivity(i);
 			}
 		});
-		
+
 		/*
-		btnSettings = (Button) findViewById(R.id.main_menu_xml_button_spot_icon);
-		btnSettings.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.settingsActivity");
-				startActivity(i);
-			}
-		});
-		
-		btnLogoff = (Button) findViewById(R.id.main_menu_xml_button_spot_icon);
-		btnLogoff.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.ProfileActivity");
-				startActivity(i);
-			}
-		});
-		*/
-		
+		 * btnSettings = (Button)
+		 * findViewById(R.id.main_menu_xml_button_spot_icon);
+		 * btnSettings.setOnClickListener(new OnClickListener() { public void
+		 * onClick(View arg0) { Intent i = new
+		 * Intent("com.csun.spotr.settingsActivity"); startActivity(i); } });
+		 * 
+		 * btnLogoff = (Button)
+		 * findViewById(R.id.main_menu_xml_button_spot_icon);
+		 * btnLogoff.setOnClickListener(new OnClickListener() { public void
+		 * onClick(View arg0) { Intent i = new
+		 * Intent("com.csun.spotr.ProfileActivity"); startActivity(i); } });
+		 */
 
 	}
-	
+
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu){
+	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.options_menu,menu);
+		inflater.inflate(R.menu.options_menu, menu);
 		return true;
 	}
-	
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
-		switch(item.getItemId())
-		{
-		case R.id.options_menu_xml_item_setting_Icon:
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.options_menu_xml_item_setting_Icon :
 			Intent i = new Intent("com.csun.spotr.SettingsActivity");
 			startActivity(i);
 			break;
-		case R.id.options_menu_xml_item_logout_Icon:
-			break;	
+		case R.id.options_menu_xml_item_logout_Icon :
+			break;
 		}
 		return true;
 	}
