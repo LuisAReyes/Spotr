@@ -117,6 +117,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        
+        <!-- Leaderboard Activity -->
+        <activity android:name=".LeaderboardActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.LeaderboardActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>    
+        
 
         <!-- Google Map API -->
         <uses-library android:name="com.google.android.maps" />

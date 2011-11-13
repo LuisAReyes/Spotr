@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Edited by Jeremy Tebangin -->
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:id="@+id/leaderboard_item_xml_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp" >
+
+        <RelativeLayout
+            android:id="@+id/leaderboard_item_xml_relative_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/leaderboard_item_xml_leaderboard_item_user_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="50dp"
+                android:adjustViewBounds="false"
+                android:src="@drawable/leaderboard" />
+
+            <TextView
+                android:id="@+id/leaderboard_item_xml_leaderboard_item_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Username"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/leaderboard_item_xml_leaderboard_item_user_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/leaderboard_item_xml_leaderboard_item_user_name"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="60dp"
+                android:text="Headline/Status"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/leaderboard_item_xml_leaderboard_item_user_rank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="Rank"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</TableLayout>

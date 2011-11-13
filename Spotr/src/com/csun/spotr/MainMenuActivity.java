@@ -39,7 +39,6 @@ public class MainMenuActivity extends Activity {
 		});
 
 		// button for the friends list
-
 		btnFriends = (Button) findViewById(R.id.main_menu_xml_button_friend_icon);
 		btnFriends.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
@@ -48,11 +47,12 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		// button for the leaderboard
+		// button for the leaderboard 	
 		btnLeaderboards = (Button) findViewById(R.id.main_menu_xml_button_leader_board_icon);
 		btnLeaderboards.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.MainMenuActivity");
+				// editted by Chan Nguyen 11/12/2011
+				Intent i = new Intent("com.csun.spotr.LeaderboardActivity");
 				startActivity(i);
 			}
 		});

@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class SpotrActivity extends Activity {
 	/** Called when the activity is first created. */
-	private Button b1, b2, b3, b4, b5, b6, b7, b8, b9;
+	private Button b1, b2, b3, b4, b5, b6, b7, b8, b9, b10;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +84,14 @@ public class SpotrActivity extends Activity {
 		b9.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.PlaceActivity");
+				startActivity(i);
+			}
+		});
+		
+		b10 = (Button) findViewById(R.id.test_leaderboard);
+		b10.setOnClickListener(new OnClickListener() {
+			public void onClick(View arg0) {
+				Intent i = new Intent("com.csun.spotr.LeaderboardActivity");
 				startActivity(i);
 			}
 		});
