@@ -35,9 +35,9 @@ public class LeaderboardActivity extends Activity {
 			username[i] = "username" + i;
 			statistics[i] = "Status" + i;
 			rank[i] = "" + (i + 1);
-			imageId[i] = R.drawable.leaderboard;
+			imageId[i] = R.drawable.leaderboard2;
 		}
-
+		
 		leaderboardListView = (ListView) findViewById(R.id.leaderboard_xml_listview);
 		leaderboardItems = new LeaderboardItemAdapter(this, username, statistics, rank, imageId);
 		leaderboardListView.setAdapter(leaderboardItems);
