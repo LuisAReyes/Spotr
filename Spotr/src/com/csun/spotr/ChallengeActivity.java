@@ -20,6 +20,10 @@ import android.widget.TextView;
 
 import com.csun.spotr.gui.ChallengeItemAdapter;
 
+/**
+ * @author: Chan Nguyen
+ * 
+ */
 public class ChallengeActivity extends Activity {
 	private ListView challengeListView;
 	private ChallengeItemAdapter challengeItems;

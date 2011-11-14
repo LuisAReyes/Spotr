@@ -1,19 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_height="fill_parent" >
 
-    <ImageView
-        android:id="@+id/profile_xml_imageview_profile"
+    <TableRow >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_launcher" />
+
+            <TableLayout
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:stretchColumns="1" >
+
+                <TableRow >
+
+                    <TextView
+                        android:layout_column="1"
+                        android:padding="5dip"
+                        android:text="Challenges"
+                        android:textColor="#8E0808"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:gravity="right"
+                        android:padding="5dip"
+                        android:text="20" />
+                </TableRow>
+
+                <TableRow >
+
+                    <TextView
+                        android:layout_column="1"
+                        android:padding="5dip"
+                        android:text="Points"
+                        android:textColor="#8E0808"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:gravity="right"
+                        android:padding="5dip"
+                        android:text="1000" />
+                </TableRow>
+
+                <TableRow >
+
+                    <TextView
+                        android:layout_column="1"
+                        android:padding="5dip"
+                        android:text="Place Visisted"
+                        android:textColor="#8E0808"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:gravity="right"
+                        android:padding="5dip"
+                        android:text="100" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </TableRow>
+
+    <TextView />
+
+    <TextView />
+
+    <TextView
+        android:id="@+id/profile_xml_textview_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher" >
-    </ImageView>
+        android:gravity="center"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:text="Profolio"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#C80071"
+        android:textStyle="bold" />
 
-    <ListView
-        android:id="@+id/profile_xml_listview_profile"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-    </ListView>
-</LinearLayout>
+    <TextView />
+
+    <TextView
+        android:id="@+id/profile_xml_textview_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nick Name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/profile_xml_textview_name_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="........." />
+
+    <TextView
+        android:id="@+id/profile_xml_textview_education"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Education"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/profile_xml_textview_education_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=".........." />
+
+    <TextView
+        android:id="@+id/profile_xml_textview_hometown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Home Town"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/profile_xml_textview_hometown_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=".........." />
+
+    <TextView
+        android:id="@+id/profile_xml_textview_hobbies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hobbies"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/profile_xml_textview_hobbies_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=".........." />
+
+    <TextView
+        android:id="@+id/profile_xml_textview_about_you"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="About You"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/profile_xml_textview_about_you_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=".........." />
+
+    <TextView />
+
+    <TextView />
+
+    <TextView />
+
+    <TextView />
+
+</TableLayout>

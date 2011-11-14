@@ -35,7 +35,6 @@ import com.google.android.maps.OverlayItem;
 
 /**
  * @author: Chan Nguyen
- * 
  */
 public class MapViewActivity extends MapActivity {
 
@@ -97,12 +96,12 @@ public class MapViewActivity extends MapActivity {
 			}
 		});
 
-		// handle focus event
+		// handle locate event
 		locateButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				itemizedOverlay.clear();
 				currentLocation = getPhoneLocation();
-				processOverlayItems(currentLocation, "10");
+				processOverlayItems(currentLocation, "5");
 				mapController.animateTo(new GeoPoint((int) (currentLocation.getLatitude() * 1E6), (int) (currentLocation.getLongitude() * 1E6)));
 				mapController.setZoom(16);
 			}

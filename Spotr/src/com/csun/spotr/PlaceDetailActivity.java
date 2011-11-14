@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 /**
  * @author Chan Nguyen 
- *
  */
 public class PlaceDetailActivity extends Activity {
 	@Override
