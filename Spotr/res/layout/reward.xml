@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="25dp" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/reward_xml_textview"
@@ -12,20 +11,19 @@
         android:layout_gravity="center_horizontal"
         android:text="Rewards"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <GridLayout
-        android:id="@+id/reward_xml_gridlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.40" >
-    </GridLayout>
-
-    <EditText
-        android:id="@+id/reward_xml_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.15"
-        android:hint="Description of Reward"
-        android:inputType="textMultiLine" />
-
+    
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        
+		<LinearLayout
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:orientation="vertical">
+    		
+    	
+    	</LinearLayout>    
+	
+	</ScrollView>
+	
 </LinearLayout>
