@@ -36,7 +36,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:adjustViewBounds="false"
-                android:src="@drawable/leaderboard2" />
+                android:src="@drawable/leaderboards" />
         </RelativeLayout>
 
         <LinearLayout
