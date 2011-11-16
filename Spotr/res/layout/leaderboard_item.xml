@@ -21,6 +21,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:text="Rank"
+                android:textColor="#000000"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
         </RelativeLayout>
 
@@ -36,7 +37,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:adjustViewBounds="false"
-                android:src="@drawable/leaderboards" />
+                android:src="@drawable/leaderboard" />
         </RelativeLayout>
 
         <LinearLayout
@@ -58,6 +59,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:text="Headline/Status"
+                    android:textColor="#000000"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
@@ -67,6 +69,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:text="Username"
+                    android:textColor="#000000"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
             </RelativeLayout>
