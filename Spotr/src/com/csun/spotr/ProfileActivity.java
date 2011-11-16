@@ -1,5 +1,7 @@
 package com.csun.spotr;
 
+import com.csun.spotr.gui.ProfileItemAdapter;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 /**
  * @author: Chan Nguyen
@@ -24,6 +27,37 @@ public class ProfileActivity extends Activity {
 	private final int CAMERA_PICTURE = 111;
 	private final int GALLERY_PICTURE = 222;
 	private ImageView userPictureImageView;
+	
+	// Zach Duvall (11/16/2011)
+	ListView profileList;
+	ProfileItemAdapter adapter;
+	
+	private static String headers[] = { 
+		"E-mail", 
+		"Name", 
+		"Headline", 
+		"Nickname", 
+		"Location", 
+		"Hometown", 
+		"About me" 
+	};
+	private static String bodies[] = { 
+		"zdduvall@gmail.com", 
+		"Zach Duvall", 
+		"I am awesome.", 
+		"Zach Attack", 
+		"Burbank, CA", 
+		"Durham, NC", 
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum lacus ut nisl " +
+		"tempor et malesuada arcu semper. Maecenas at arcu felis. Aliquam erat volutpat. Maecenas " +
+		"erat sapien, eleifend et dignissim id, iaculis fringilla purus. Aenean varius dui id nisl " +
+		"semper ac fermentum est convallis. Proin porttitor dolor sed massa lacinia accumsan. Proin " +
+		"fermentum consectetur condimentum. Nunc ornare felis felis, quis pulvinar quam. Ut non quam " +
+		"tortor, id ultricies lacus. Curabitur lobortis metus ac massa malesuada placerat. Vestibulum " +
+		"porttitor pulvinar dapibus. Sed eget ipsum non arcu ornare volutpat. Sed iaculis ornare lectus " +
+		"eget sodales." 
+	}; // Note: I would normally put this in XML, but this is extremely temporary.  This should be a JSON
+	   // string from the database.
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +70,11 @@ public class ProfileActivity extends Activity {
 				startDialog();
 			}
 		});
+		
+		// Zach Duvall (11/16/2011)
+		profileList = (ListView) findViewById(R.id.profile_xml_listview_items);
+		adapter = new ProfileItemAdapter(this, headers, bodies);
+		profileList.setAdapter(adapter);
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

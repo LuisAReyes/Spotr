@@ -4,19 +4,21 @@
     android:layout_height="fill_parent" >
 
     <TextView
-        android:id="@+id/profile_item_xml_textview_profile_header"
+        android:id="@+id/profile_item_xml_textview_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Profile header" >
-    </TextView>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Header"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/profile_item_xml_textview_profile_body"
+        android:id="@+id/profile_item_xml_textview_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/litsitem_profile_xml_textview_profile_header"
-        android:text="This is body"
-        android:textAppearance="?android:attr/textAppearanceMedium" >
-    </TextView>
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/profile_item_xml_textview_header"
+        android:text="Body"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>
