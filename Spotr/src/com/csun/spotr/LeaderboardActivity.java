@@ -6,13 +6,24 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.widget.Button;
 
 
 import com.csun.spotr.gui.LeaderboardItemAdapter;
@@ -35,6 +46,7 @@ public class LeaderboardActivity extends Activity {
 	private static final String user_stat[] = {"Super Fighting Robot"};
 	private static final String user_rank[] = {"27"}; 
 	private static final int user_imageId[] = { R.drawable.megaman };
+	private static String megaman_blaster = "1,234,444,789";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,9 +70,8 @@ public class LeaderboardActivity extends Activity {
 				//-- Edgardo C. -- //
 				// Added a makeText generator to show name.
 				// Will later implement to show score, possibly?
-				Toast.makeText(getBaseContext(),
-				user[position] + "'s Score Goes Here", Toast.LENGTH_SHORT).show();
-						
+
+				showDialog(0);
 			}
 		});
 		
@@ -72,8 +83,61 @@ public class LeaderboardActivity extends Activity {
 		leaderboardListView.setAdapter(leaderboardItems);
 		leaderboardListView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+					//showDialog(0);
 			}
 		});
 	}
+	
+	protected Dialog onCreateDialog(int id) {
+//		ImageView image = (ImageView) findViewById(R.drawable.megaman);
+  //      Animation hyperspaceJump = 
+    //            AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
+      //      image.startAnimation(hyperspaceJump);
+		
+			switch (id) {
+				case 0:
+					/*return new AlertDialog.Builder(this)
+					.setIcon(R.drawable.leaderboards)
+					.setTitle(megaman_blaster)
+					.setPositiveButton("RETURN", new
+							DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton)
+								{
+									Toast.makeText(getBaseContext(),
+										"You're getting PWND!", Toast.LENGTH_SHORT).show();
+								}
+					})
+					.create();
+					*/
+					AlertDialog.Builder builder;
+					AlertDialog alertDialog;
+
+					
+					LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+					View layout = inflater.inflate(R.layout.leaderboard_dialog_box,
+					                               (ViewGroup) findViewById(R.id.layout_root));
+
+					TextView text = (TextView) layout.findViewById(R.id.text);
+					text.setText("Hello, this is a custom dialog!");
+					ImageView image = (ImageView) layout.findViewById(R.id.image);
+					image.setImageResource(R.drawable.leaderboards);
+
+					builder = new AlertDialog.Builder(this);
+					builder.setView(layout);
+					builder.setPositiveButton("RETURN", new
+							DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton)
+								{
+									Toast.makeText(getBaseContext(),
+										"You're getting PWND!", Toast.LENGTH_SHORT).show();
+								}
+					});
+					alertDialog = builder.create();
+					return alertDialog;
+			}
+			return null;
+		}
+	
 }

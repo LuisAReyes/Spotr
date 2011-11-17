@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@drawable/ac_ezio" >
+    android:background="@drawable/leaderboard_back" >
 
     <LinearLayout
         android:layout_weight="1.0"
