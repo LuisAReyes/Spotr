@@ -46,7 +46,7 @@ public class LeaderboardActivity extends Activity {
 	private static final String user_stat[] = {"Super Fighting Robot"};
 	private static final String user_rank[] = {"27"}; 
 	private static final int user_imageId[] = { R.drawable.megaman };
-	private static String megaman_blaster = "1,234,444,789";
+	private static String megaman_blaster = "1,234,444,700";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
