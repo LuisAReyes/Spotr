@@ -33,21 +33,21 @@ public class LeaderboardActivity extends Activity {
 	private LeaderboardItemAdapter leaderboardItems;
 
 	private static final int FINAL = 20;
-
 	private static final String username[] = new String[FINAL];
 	private static final String statistics[] = new String[FINAL];
 	private static final String rank[] = new String[FINAL];
 	private static final int imageId[] = new int[FINAL];
 	
+	
+	// -- User Data -- //
 	private ListView userView;
 	private LeaderboardItemAdapter userItem;
-	
-	private static final String user[] = {"Megaman"};
+		private static final String user[] = {"Megaman"};
 	private static final String user_stat[] = {"Super Fighting Robot"};
 	private static final String user_rank[] = {"27"}; 
 	private static final int user_imageId[] = { R.drawable.megaman };
-	private static String megaman_blaster = "1,234,444,700";
-
+	private static String megaman_blaster = "1,234,567,892";
+    // -- end User Data -- //
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,7 +60,7 @@ public class LeaderboardActivity extends Activity {
 			imageId[i] = R.drawable.leaderboard;
 		}
 		
-		////////////////////////////////////////////////////////////////////
+		// -- User View and User List Item is generated and placed into it's own List View -- //
 		userView = (ListView) findViewById(R.id.leaderboard_xml_user_view);
 		userItem = new LeaderboardItemAdapter(this,user, user_stat, user_rank, user_imageId);
 		userView.setAdapter(userItem);
@@ -68,14 +68,11 @@ public class LeaderboardActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
 			{
 				//-- Edgardo C. -- //
-				// Added a makeText generator to show name.
 				// Will later implement to show score, possibly?
-
 				showDialog(0);
 			}
 		});
-		
-		///////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////
 		
 
 		leaderboardListView = (ListView) findViewById(R.id.leaderboard_xml_listview);
@@ -89,17 +86,17 @@ public class LeaderboardActivity extends Activity {
 	}
 	
 	protected Dialog onCreateDialog(int id) {
-//		ImageView image = (ImageView) findViewById(R.drawable.megaman);
-  //      Animation hyperspaceJump = 
-    //            AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
-      //      image.startAnimation(hyperspaceJump);
+//		ImageView image2 = (ImageView) findViewById(R.drawable.megaman);
+//        Animation hyperspaceJump = 
+//                AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
+//            image2.startAnimation(hyperspaceJump);
 		
 			switch (id) {
 				case 0:
-					/*return new AlertDialog.Builder(this)
-					.setIcon(R.drawable.leaderboards)
+					return new AlertDialog.Builder(this)
+					.setIcon(R.drawable.megaman)
 					.setTitle(megaman_blaster)
-					.setPositiveButton("RETURN", new
+					.setNeutralButton("RETURN", new
 							DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int whichButton)
@@ -109,7 +106,10 @@ public class LeaderboardActivity extends Activity {
 								}
 					})
 					.create();
-					*/
+					
+					/*
+					 * Issues with generating an animation and plugging it into an Alert Dialog Box
+					 * 
 					AlertDialog.Builder builder;
 					AlertDialog alertDialog;
 
@@ -119,9 +119,9 @@ public class LeaderboardActivity extends Activity {
 					                               (ViewGroup) findViewById(R.id.layout_root));
 
 					TextView text = (TextView) layout.findViewById(R.id.text);
-					text.setText("Hello, this is a custom dialog!");
-					ImageView image = (ImageView) layout.findViewById(R.id.image);
-					image.setImageResource(R.drawable.leaderboards);
+					text.setText(megaman_blaster);
+					ImageView image = (ImageView) layout.findViewById(R.id.image);//.findViewById(R.drawable.megaman);
+					image.setImageResource(R.drawable.megaman);
 
 					builder = new AlertDialog.Builder(this);
 					builder.setView(layout);
@@ -136,6 +136,7 @@ public class LeaderboardActivity extends Activity {
 					});
 					alertDialog = builder.create();
 					return alertDialog;
+					*/
 			}
 			return null;
 		}
