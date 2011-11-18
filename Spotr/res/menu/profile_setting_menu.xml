@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/profile_setting_menu_xml_edit"
+        android:icon="@drawable/ic_launcher"
+        android:title="Edit"/>
+
+    <item
+        android:id="@+id/profile_setting_menu_xml_preference"
+        android:icon="@drawable/ic_launcher"
+        android:title="Preference"/>
+</menu>

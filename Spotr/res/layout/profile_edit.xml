@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/profile_edit_xml_textview_edit_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:text="Edit Page"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#0794B3"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:id="@+id/profile_edit_xml_scrollview_edit"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:id="@+id/LinearLayout02"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/profile_edit_xml_textview_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nick Name"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/profile_edit_xml_edittext_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/profile_edit_xml_textview_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/profile_edit_xml_edittext_email"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/profile_edit_xml_textview_education"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Education"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/profile_edit_xml_edittext_education"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/profile_edit_xml_textview_hometown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home Town"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/profile_edit_xml_edittext_hometown"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/profile_edit_xml_textview_hobbies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hobbies"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/profile_edit_xml_edittext_hobbies"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

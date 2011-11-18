@@ -9,6 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+/**
+ * @author: Chan Nguyen
+ */
 public class ChallengeInfoActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

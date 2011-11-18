@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,25 +35,48 @@ import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 	public static final String TAG = "LoginActivity";
+	
 	CheckBox checkVisible;
+	CheckBox checkSavePassword;
 	EditText edittextPassword;
 	EditText edittextUsername;
 	Button buttonLogin;
 	Button buttonSignup;
 	
+	// Zach Duvall (11/15/2011)
+	SharedPreferences prefs;
+	SharedPreferences.Editor editor;
+	boolean prefsSavePassword;
+	String prefsUsername;
+	String prefsPassword;
+	
 	boolean passwordVisible = false;
+	boolean savePassword = false;
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         
+        // Zach Duvall (11/15/2011)
+        prefs = getSharedPreferences("Spotr", MODE_PRIVATE);
+        prefsSavePassword = prefs.getBoolean("savePassword", false);
+        prefsUsername = prefs.getString("username", "");
+        prefsPassword = prefs.getString("password", "");
+        
         // Tu Tran was here 11/9/2011
         checkVisible = (CheckBox)findViewById(R.id.login_xml_checkbox_visible_characters);
+        checkSavePassword = (CheckBox)findViewById(R.id.login_xml_checkbox_remember_password);
         edittextPassword = (EditText)findViewById(R.id.login_xml_edittext_password_id);
         edittextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         edittextUsername = (EditText)findViewById(R.id.login_xml_edittext_email_id);
         buttonLogin = (Button)findViewById(R.id.login_xml_button_login);
         buttonSignup = (Button)findViewById(R.id.login_xml_button_signup);
+        
+        // Zach Duvall (11/15/2011)
+        if(prefsSavePassword) {
+        	edittextUsername.append(prefsUsername);
+        	edittextPassword.append(prefsPassword);
+        }
         
         checkVisible.setOnClickListener(new OnClickListener() {
 
@@ -103,7 +127,7 @@ public class LoginActivity extends Activity {
 				}
 				catch (Exception e)
 				{
-					Log.e("log_tag", "Error: " + e.toString());					
+					Log.e(TAG, "Error: " + e.toString());					
 				}	
 				
 					//convert response to string
@@ -121,7 +145,7 @@ public class LoginActivity extends Activity {
 				}
 				catch (Exception e)
 				{
-					Log.e("log_tag", "Error: " + e.toString());					
+					Log.e(TAG, "Error: " + e.toString());					
 				}
 				
 				//decode json data				
@@ -132,7 +156,17 @@ public class LoginActivity extends Activity {
 						if (jArray.length() > 0)
 						{							
 							JSONObject jObject = jArray.getJSONObject(0);
-							String userName = jObject.getString("username");							
+							String userName = jObject.getString("username");
+							
+							// Zach Duvall (11/15/2011)
+							if(savePassword) {
+								editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
+								editor.putBoolean("savePassword", true);
+								editor.putString("username", username);
+								editor.putString("password", password);
+								editor.commit();
+							}
+							
 							startActivity(new Intent("com.csun.spotr.MainMenuActivity"));
 						}
 						
@@ -142,7 +176,7 @@ public class LoginActivity extends Activity {
 			
 				catch (Exception e)
 				{
-					Log.e("log_tag","Error: " + e.toString());
+					Log.e(TAG,"Error: " + e.toString());
 					showDialog(0);					
 				}
 							
@@ -154,6 +188,17 @@ public class LoginActivity extends Activity {
         		startActivity(new Intent("com.csun.spotr.SignupActivity"));
         	}
         });
+        
+        // Zach Duvall (11/15/2011)
+        checkSavePassword.setOnClickListener(new OnClickListener() {
+        	public void onClick (View v) {
+        		if(!savePassword)
+        			savePassword = true;
+        		else
+        			savePassword = false;
+        	}
+        });
+        
     }
     
     @Override

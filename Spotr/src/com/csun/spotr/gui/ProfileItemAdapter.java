@@ -45,8 +45,8 @@ public class ProfileItemAdapter extends BaseAdapter {
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.profile_item, null);
 			holder = new ViewHolder();
-			holder.textviewHeader = (TextView) convertView.findViewById(R.id.profile_item_xml_textview_profile_header);
-			holder.textviewBody = (TextView) convertView.findViewById(R.id.profile_item_xml_textview_profile_body);
+			holder.textviewHeader = (TextView) convertView.findViewById(R.id.profile_item_xml_textview_header);
+			holder.textviewBody = (TextView) convertView.findViewById(R.id.profile_item_xml_textview_body);
 
 			convertView.setTag(holder);
 		}

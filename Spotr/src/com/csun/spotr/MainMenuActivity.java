@@ -106,6 +106,8 @@ public class MainMenuActivity extends Activity {
 			startActivity(i);
 			break;
 		case R.id.options_menu_xml_item_logout_Icon :
+			Intent k = new Intent("com.csun.spotr.LoginActivity");
+			startActivity(k);
 			break;
 		}
 		return true;

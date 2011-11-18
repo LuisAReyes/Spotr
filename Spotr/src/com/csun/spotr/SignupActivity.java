@@ -28,6 +28,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+/**
+ * @author: Tu Tran 
+ * */
 public class SignupActivity extends Activity {
 	Button buttonSignup;
 	EditText edittextEmail;
@@ -39,7 +42,6 @@ public class SignupActivity extends Activity {
 	boolean passwordVisible = false;
 	boolean validInformation = false;
 
-	/* Called when the activity is first created. */
 	// Tu Tran 11/09/11
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

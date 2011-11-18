@@ -1,43 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Edited by Edgardo A. Campos -->
+<!--  Edited by Edgardo A. Campos -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@drawable/leaderboard_back" >
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+    <LinearLayout
+        android:layout_weight="1.0"
+	  	android:layout_height="fill_parent"
+	   	android:layout_width="fill_parent"
+	   	android:orientation="vertical" >
+    
+    	<TableLayout
+        	android:id="@+id/leaderboard_xml_tableLayout1"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content" >
+	
+    	    <TableRow
+        	    android:id="@+id/leaderboard_xml_tableRow1"
+        	    android:layout_width="wrap_content"
+        	    android:layout_height="wrap_content" >
 
-        <TableRow
-            android:layout_width="wrap_content"
+        	    <TextView
+            	    android:id="@+id/leaderboard_xml_textView1"
+            	    android:layout_width="wrap_content"
+            	    android:layout_height="wrap_content"
+            	    android:text="NothingIsTrue"
+            	    android:textColor="#000000"
+            	    android:textAppearance="?android:attr/textAppearanceLarge"
+            	    android:textSize="14pt" />
+            
+        	</TableRow>
+
+        	<TableRow
+            	android:id="@+id/leaderboard_xml_tableRow2"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content" >
+            
+            	<ListView
+            		android:id="@+id/leaderboard_xml_listview"
+            		android:layout_width="fill_parent"
+            		android:layout_height="fill_parent"
+            		android:layout_weight="0.9" >           		
+        		</ListView>
+        		
+        	</TableRow>
+
+    	</TableLayout>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="120dp"
+        android:orientation="vertical" >
+
+        <TableLayout
+            android:id="@+id/leaderboard_xml_tableLayout2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <RelativeLayout
+            <TableRow
+                android:id="@+id/leaderboard_xml_tableRow1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
                 <TextView
-                    android:id="@+id/leaderboard_xml_textview_user_profile"
+                    android:id="@+id/leaderboard_xml_textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="User Profile Goes Here"
+                    android:text="EverythingIsPermitted"
+                    android:textColor="#000000"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="20pt" />
-            </RelativeLayout>
-        </TableRow>
+                    android:textSize="14pt" />
+            </TableRow>
 
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            <TableRow
+                android:id="@+id/leaderboard_xml_tableRow2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
 
-            <ListView
-                android:id="@+id/leaderboard_xml_listview"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="0.9" >
-            </ListView>
-        </TableRow>
-    </TableLayout>
+                <ListView
+                    android:id="@+id/leaderboard_xml_user_view"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.9" >
+                </ListView>
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
 
 </LinearLayout>
+    

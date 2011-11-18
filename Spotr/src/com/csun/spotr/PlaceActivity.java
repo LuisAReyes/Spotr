@@ -26,6 +26,9 @@ import com.csun.spotr.helper.GooglePlaceHelper;
 import com.csun.spotr.helper.JsonHelper;
 import com.csun.spotr.gui.LocationItemAdapter;
 
+/**
+ * @author: Chan Nguyen
+ */
 public class PlaceActivity extends Activity {
 	private ListView locationsListView;
 	private LocationItemAdapter locationItem;

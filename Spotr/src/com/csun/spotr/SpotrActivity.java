@@ -7,9 +7,21 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+/**
+ * @author: Chan Nguyen
+ */
 public class SpotrActivity extends Activity {
-	/** Called when the activity is first created. */
-	private Button b1, b2, b3, b4, b5, b6, b7, b8, b9, b10;
+	// testing 
+	private Button b1;
+	private Button b2;
+	private Button b3;
+	private Button b4;
+	private Button b5;
+	private Button b6;
+	private Button b7;
+	private Button b8;
+	private Button b9;
+	private Button b10;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
