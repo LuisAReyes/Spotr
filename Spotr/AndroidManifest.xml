@@ -97,7 +97,7 @@
         <!-- Settings Activity -->
         <activity android:name=".SettingsActivity" >
             <intent-filter >
-                <action android:name="com.csun.spotr.SettingsActivty" />
+                <action android:name="com.csun.spotr.SettingsActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
