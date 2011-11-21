@@ -23,12 +23,6 @@
             android:layout_height="wrap_content"
             android:text="Main Menu" />
 
-        <Button
-            android:id="@+id/reward_xml_button_setting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Settings" />
-
     </TableRow>
     
         <GridView

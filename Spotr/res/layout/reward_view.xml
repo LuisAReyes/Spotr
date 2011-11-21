@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/xml_reward_view_relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.40" >
+
+        <TextView
+            android:id="@+id/xml_reward_view_textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Reward View"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <ImageView
+            android:id="@+id/xml_reward_view_imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/awards" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/xml_reward_view_linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.60"
+        android:orientation="vertical" 
+        android:padding="20dp">
+
+        <EditText
+            android:id="@+id/xml_reward_view_editText1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.00"
+            android:inputType="textMultiLine"
+            android:hint="Description">
+        </EditText>
+
+        <EditText
+            android:id="@+id/xml_reward_view_editText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:inputType="textMultiLine"
+            android:hint="Notes:" />
+
+    </LinearLayout>
+
+</LinearLayout>
