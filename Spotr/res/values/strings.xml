@@ -29,6 +29,7 @@
     <string name="main_menu_xml_button_friend_str">Friends</string>
     <string name="main_menu_xml_button_challenge_str">Challenges</string>
     <string name="main_menu_xml_button_spot_str">Spots</string>    
+    <string name="main_menu_xml_slider_notification_str">Notification</string>
     
     <!-- options_menu.xml -->
     <string name="options_menu_xml_item_logout_str">Logout</string>

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +14,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainMenuActivity extends Activity {
+	
+	//Using friends array to populate Notification
+		String[] notificationList;
+		ArrayAdapter<String> adapter;
+		ListView mListView;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,6 +38,7 @@ public class MainMenuActivity extends Activity {
 		});
 
 		// button for the challenge
+		/*
 		btnChallenges = (Button) findViewById(R.id.main_menu_xml_button_challenge_icon);
 		btnChallenges.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
@@ -37,6 +46,7 @@ public class MainMenuActivity extends Activity {
 				startActivity(i);
 			}
 		});
+		*/
 
 		// button for the friends list
 		btnFriends = (Button) findViewById(R.id.main_menu_xml_button_friend_icon);
@@ -88,6 +98,13 @@ public class MainMenuActivity extends Activity {
 		 * onClick(View arg0) { Intent i = new
 		 * Intent("com.csun.spotr.ProfileActivity"); startActivity(i); } });
 		 */
+		
+		//populating Notification with Friends array
+		notificationList = getResources().getStringArray(R.array.friends_array);
+		mListView = (ListView) findViewById(R.id.main_menu_xml_slide_content);
+				
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, notificationList);
+		mListView.setAdapter(adapter);
 
 	}
 
