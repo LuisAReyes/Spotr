@@ -1,8 +1,15 @@
+/**
+ * @author Aleksandr Rozenman
+ * @author Adam Brakel
+ * @author: Chan Nguyen
+ */
+
 package com.csun.spotr;
 
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,10 +27,6 @@ import android.widget.TextView;
 
 import com.csun.spotr.gui.ChallengeItemAdapter;
 
-/**
- * @author: Chan Nguyen
- * 
- */
 public class ChallengeActivity extends Activity {
 	private ListView challengeListView;
 	private ChallengeItemAdapter challengeItems;
@@ -34,7 +37,7 @@ public class ChallengeActivity extends Activity {
 
 	private static final String rating[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" };
 
-	private static final boolean flags[] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+	private static final boolean flags[] = { false, false, false, true, false, false, false, false, false, false, false, false, false, false, false };
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,7 @@ public class ChallengeActivity extends Activity {
 		challengeListView.setAdapter(challengeItems);
 		challengeListView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+				
 			}
 		});
 	}

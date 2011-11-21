@@ -68,13 +68,13 @@ public class SpotrActivity extends Activity {
 			}
 		});
 		
-		b6 = (Button) findViewById(R.id.test_challengeinfo);
+		/*b6 = (Button) findViewById(R.id.test_challengeinfo);
 		b6.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.ChallengeInfoActivity");
 				startActivity(i);
 			}
-		});
+		});*/
 		
 		b7 = (Button) findViewById(R.id.test_profile);
 		b7.setOnClickListener(new OnClickListener() {

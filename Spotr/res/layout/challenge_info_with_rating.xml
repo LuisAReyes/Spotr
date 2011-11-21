@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/challenge_info_xml_textview_name"
+        android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -13,34 +13,34 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/challenge_info_xml_textview_location"
+        android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Location:"
         android:textAppearance="?android:attr/textAppearanceSmall" />
     <ProgressBar
-        android:id="@+id/challenge_info_xml_progressbar_progress"
+        android:id="@+id/progressBar1"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/challenge_info_xml_textview_pointsheader"
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Point Value:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/challenge_info_xml_textview_points"
+        android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="(# points)"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <RatingBar
-        android:id="@+id/challenge_info_xml_ratingbar_rating"
+        android:id="@+id/ratingBar1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content" >
             
             <TextView
-        		android:id="@+id/challenge_info_xml_textview_avgratingheader"
+        		android:id="@+id/textView3"
         		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
         		android:text="Average Rating"
@@ -65,14 +65,14 @@
         		android:gravity="left" />
             
             <TextView
-        		android:id="@+id/challenge_info_xml_textview_attemptedheader"
+        		android:id="@+id/textView5"
         		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
         		android:text="Attempted"
         		android:textAppearance="?android:attr/textAppearanceSmall" />
             
             <TextView
-                android:id="@+id/challenge_info_xml_textview_completedheader"
+                android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -87,21 +87,21 @@
             android:layout_height="wrap_content" >
             
              <TextView
-        		android:id="@+id/challenge_info_xml_textview_avgrating"
+        		android:id="@+id/textView4"
         		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
         		android:text="(rating #.##)"
         		android:textAppearance="?android:attr/textAppearanceSmall" />
 
     		<TextView
-        		android:id="@+id/challenge_info_xml_textview_attempted"
+        		android:id="@+id/textView6"
         		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
         		android:text="(#,###)"
         		android:textAppearance="?android:attr/textAppearanceSmall" />
 
 			<TextView
-        		android:id="@+id/challenge_info_xml_textview_completed"
+        		android:id="@+id/textView8"
         		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
         		android:text="(#,###)"
@@ -116,28 +116,28 @@
    
 
     <TextView
-        android:id="@+id/challenge_info_xml_textview_description"
+        android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Challenge Descrition: Go to Maury&apos;s and take a picture of each of their 52 coasters!"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/challenge_info_xml_textview_category"
+        android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Categories: Scavenger, Exploring, Social, etc."
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:id="@+id/challenge_info_xml_button_attempt"
+        android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Attempt!" />
 
     <CheckBox
-        android:id="@+id/challenge_info_xml_checkbox_reviewflag"
+        android:id="@+id/checkBox1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Flag Challenge for Moderator Review" />

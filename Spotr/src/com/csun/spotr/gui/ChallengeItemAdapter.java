@@ -1,6 +1,13 @@
+/**
+ * @author Aleksandr Rozenman
+ * @author Adam Brakel
+ * @author: Chan Nguyen
+ */
+
 package com.csun.spotr.gui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +16,9 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.csun.spotr.R;
+import com.csun.spotr.core.CurrentChallenge;
+
+import java.util.Random;
 
 public class ChallengeItemAdapter extends BaseAdapter {
 	private Activity context;
@@ -63,7 +73,32 @@ public class ChallengeItemAdapter extends BaseAdapter {
 
 		holder.headerTextView.setText(header[position]);
 		holder.bodyTextView.setText(body[position]);
-		holder.bodyTextView.setText(rating[position]);
+		holder.ratingTextView.setText(rating[position]);
+		holder.flagCheckBox.setChecked(flag[position]);
+		
+		convertView.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View convertView) {
+				Random rand = new Random();
+				
+				CurrentChallenge.name = ((ItemViewHolder)(convertView.getTag())).headerTextView.getText().toString();
+				CurrentChallenge.averageRating = Float.parseFloat(((ItemViewHolder)(convertView.getTag())).ratingTextView.getText().toString());
+				CurrentChallenge.reviewFlag = ((ItemViewHolder)(convertView.getTag())).flagCheckBox.isChecked();
+				CurrentChallenge.numRatings = rand.nextInt(500000000) + 1;
+				CurrentChallenge.points = rand.nextInt(100) + 1;
+				CurrentChallenge.progress = (byte)(rand.nextInt(102) - 1);
+				CurrentChallenge.description = ((ItemViewHolder)(convertView.getTag())).bodyTextView.getText().toString();
+				CurrentChallenge.numStarted = rand.nextInt(CurrentChallenge.numRatings);
+				CurrentChallenge.numCompleted = rand.nextInt(CurrentChallenge.numStarted);
+				int numCategories = rand.nextInt(5) + 1;
+				CurrentChallenge.category = new String[numCategories];
+				for(int i = 0; i < numCategories; i++)
+					CurrentChallenge.category[i] = "Cat" + i;
+				CurrentChallenge.location = "Location goes here";
+				
+				Intent i = new Intent("com.csun.spotr.ChallengeInfoActivity");
+				context.startActivity(i);
+			}
+		});
 		return convertView;
 	}
 }
