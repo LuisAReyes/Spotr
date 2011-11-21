@@ -53,8 +53,8 @@ public class ChallengeItemAdapter extends BaseAdapter {
 			holder = new ItemViewHolder();
 			holder.headerTextView = (TextView) convertView.findViewById(R.id.challenge_item_xml_textview_challenge_item_header);
 			holder.bodyTextView = (TextView) convertView.findViewById(R.id.challenge_item_xml_textview_challenge_item_body);
-			holder.ratingTextView = (TextView) convertView.findViewById(R.id.challenge_item_xml_textview_challenge_rating);
-			holder.flagCheckBox = (CheckBox) convertView.findViewById(R.id.challenge_item_xml_checkbox_flag);
+//			holder.ratingTextView = (TextView) convertView.findViewById(R.id.challenge_item_xml_textview_challenge_rating);
+//			holder.flagCheckBox = (CheckBox) convertView.findViewById(R.id.challenge_item_xml_checkbox_flag);
 			convertView.setTag(holder);
 		}
 		else {

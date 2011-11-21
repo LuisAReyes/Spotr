@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.csun.spotr"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0"
+    android:installLocation="preferExternal" >
+    <!-- the above line will prevent the AVD from whining about INSTALL_FAILED_INSUFFICIENT_STORAGE -->
+
 
     <uses-sdk android:minSdkVersion="10" />
 
