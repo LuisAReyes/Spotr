@@ -3,6 +3,7 @@ package com.csun.spotr;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,6 +39,7 @@ public class LeaderboardActivity extends Activity {
 	private static final String rank[] = new String[FINAL];
 	private static final int imageId[] = new int[FINAL];
 	
+	MediaPlayer m = null, n = null;
 	
 	// -- User Data -- //
 	private ListView userView;
@@ -46,7 +48,7 @@ public class LeaderboardActivity extends Activity {
 	private static final String user_stat[] = {"Super Fighting Robot"};
 	private static final String user_rank[] = {"27"}; 
 	private static final int user_imageId[] = { R.drawable.megaman02 };
-	private static String megaman_blaster = "1,234,567,892";
+	private static String megaman_blaster = "123456789";
     // -- end User Data -- //
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,13 @@ public class LeaderboardActivity extends Activity {
 			rank[i] = "" + (i + 1);
 			imageId[i] = R.drawable.leaderboard;
 		}
+		
+		//-- Jeremy T. --//
+		m = MediaPlayer.create(getApplicationContext(), R.raw.lorekeeper);
+		n = MediaPlayer.create(getApplicationContext(), R.raw.you_suck);
+		
+		m.setLooping(true);
+		m.start();
 		
 		// -- User View and User List Item is generated and placed into it's own List View -- //
 		userView = (ListView) findViewById(R.id.leaderboard_xml_user_view);
@@ -85,6 +94,16 @@ public class LeaderboardActivity extends Activity {
 		});
 	}
 	
+	public void onDestroy(){
+		super.onDestroy();
+		m.stop();
+		n.stop();
+		if(m != null)
+			m.release();
+		if(n != null)
+			n.release();
+	}
+	
 	protected Dialog onCreateDialog(int id) {
 //		ImageView image2 = (ImageView) findViewById(R.drawable.megaman);
 //        Animation hyperspaceJump = 
@@ -102,8 +121,7 @@ public class LeaderboardActivity extends Activity {
 							public void onClick(DialogInterface dialog,
 									int whichButton)
 								{
-									Toast.makeText(getBaseContext(),
-										"You're getting PWND!", Toast.LENGTH_SHORT).show();
+								n.start();
 								}
 					})
 					.create();
