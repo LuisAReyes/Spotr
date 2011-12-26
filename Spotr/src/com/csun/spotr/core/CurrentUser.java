@@ -10,8 +10,7 @@ public class CurrentUser {
 	private static User	user;
 	
 	public static void setCurrentUser(int id, String username, String password) {
-		Date date = new Date();
-		user = new User.Builder(id, username, password, date).build();
+		user = new User.Builder(id, username, password).build();
 	}
 	
 	public static User getCurrentUser() {

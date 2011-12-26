@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Vector;
 
 import android.graphics.Bitmap;
-import android.os.Build;
 
 public class User {
 	private final int id;
 	private final String username;
-	private final Date dateJoin;
 	private String password;
 
 	private String realname;
@@ -26,7 +24,6 @@ public class User {
 	public static class Builder {
 		private final int id;
 		private final String username;
-		private final Date dateJoin;
 		private String password;
 
 		private String realname;
@@ -38,11 +35,10 @@ public class User {
 		private List<Integer> challengeIds;
 		private List<Integer> placesVisitedIds;
 
-		public Builder(int id, String username, String password, Date dateJoin) {
+		public Builder(int id, String username, String password) {
 			// required parameters
 			this.id = id;
 			this.username = username;
-			this.dateJoin = dateJoin;
 			this.password = password;
 
 			// optional parameters
@@ -84,8 +80,16 @@ public class User {
 	public User(Builder builder) {
 		id = builder.id;
 		username = builder.username;
-		dateJoin = builder.dateJoin;
-
+		password = builder.password;
+		
+		realname = builder.realname;
+		dateOfBirth = builder.dateOfBirth;
+		points = builder.points;
+		picture = builder.picture;
+		friendIds = builder.friendIds;
+		badgeIds = builder.badgeIds;
+		challengeIds = builder.challengeIds;
+		placesVisitedIds = builder.placesVisitedIds;
 	}
 
 	public String getRealname() {
@@ -187,9 +191,5 @@ public class User {
 
 	public String getUsername() {
 		return username;
-	}
-
-	public Date getDateJoin() {
-		return dateJoin;
 	}
 }

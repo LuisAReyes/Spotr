@@ -1,0 +1,97 @@
+package com.csun.spotr;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.util.Log;
+import android.view.View;
+
+import com.csun.spotr.core.User;
+import com.csun.spotr.core.CurrentUser;
+import com.csun.spotr.gui.FriendListMainItemAdapter;
+import com.csun.spotr.helper.JsonHelper;
+
+public class FriendListMainActivity extends Activity {
+	private static final String TAG = "FriendListMainActivity";
+	private static final String GET_FRIENDS_URL = "http://107.22.209.62/android/get_friends.php";
+	private ListView listViewUser;
+	private FriendListMainItemAdapter userItemAdapter;
+	
+	public void onCreate(Bundle savedInstanceState) {
+		// testing purpose
+		// CurrentUser.setCurrentUser(6, "vlad", "somepass");
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.friend_list_main);
+		GetFriendTask task = new GetFriendTask();
+		task.execute();
+	}
+	
+	private class GetFriendTask extends AsyncTask<Void, Integer, List<User>> {
+		private List<NameValuePair> userData = new ArrayList<NameValuePair>(); 
+		private  ProgressDialog progressDialog = null;
+		
+		@Override
+		protected void onPreExecute() {
+			try {
+				userData.add(new BasicNameValuePair("id", Integer.toString(CurrentUser.getCurrentUser().getId())));
+			}
+			catch(NullPointerException e) {
+				Log.d(TAG, "hmmmmm....");
+			}
+			
+			// display waiting dialog
+			progressDialog = new ProgressDialog(FriendListMainActivity.this);
+			progressDialog.setMessage("Loading...");
+			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(true);
+			progressDialog.show();
+		}
+		
+		@Override
+		protected List<User> doInBackground(Void...voids) {
+			List<User> userList = new ArrayList<User>();
+			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_FRIENDS_URL, userData);
+			try {
+				for (int i = 0; i < array.length(); ++i) { 
+					userList.add(
+						new User.Builder(
+							array.getJSONObject(i).getInt("id"),
+							array.getJSONObject(i).getString("username"),
+							array.getJSONObject(i).getString("password")).build());
+					
+					Log.d(TAG, userList.get(i).getUsername());
+					Log.d(TAG, userList.get(i).getPassword());
+				}
+			}
+			catch (JSONException e) {
+				Log.e(TAG + "GetFriendTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+			}
+			return userList;
+		}
+		
+		@Override
+		protected void onPostExecute(List<User> userList) {
+			progressDialog.dismiss();
+			listViewUser = (ListView) findViewById(R.id.friend_list_main_xml_listview_friends);
+			userItemAdapter = new FriendListMainItemAdapter(FriendListMainActivity.this, userList);
+			listViewUser.setAdapter(userItemAdapter);
+			listViewUser.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					// handle click 
+				}
+			});
+		}
+	}
+}

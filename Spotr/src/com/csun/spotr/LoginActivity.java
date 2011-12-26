@@ -22,11 +22,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 	private static final String TAG = "[LoginActivity]";
@@ -73,7 +75,6 @@ public class LoginActivity extends Activity {
 					passwordVisible = true;
 				}
 			}
-
 		});
 
 		buttonLogin.setOnClickListener(new OnClickListener() {
@@ -146,10 +147,8 @@ public class LoginActivity extends Activity {
 					editor.putString("username", jsonUserInfo.getString("username"));
 					editor.putString("password", jsonUserInfo.getString("password"));
 					editor.commit();
-				
-					// set the current user
-					CurrentUser.setCurrentUser(23, jsonUserInfo.getString("username"), jsonUserInfo.getString("password"));
 				}
+				CurrentUser.setCurrentUser(jsonUserInfo.getInt("id"), jsonUserInfo.getString("username"), jsonUserInfo.getString("password"));
 			}
 			catch (Exception e) {
 				showDialog(0);
@@ -168,7 +167,6 @@ public class LoginActivity extends Activity {
 				showDialog(0);
 			}
 			else {
-				User user = CurrentUser.getCurrentUser();
 				startActivity(new Intent("com.csun.spotr.MainMenuActivity"));
 			}
 		}

@@ -53,15 +53,15 @@ public class PlaceActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		// set up layout
 		setContentView(R.layout.place);
+		
 		// make sure keyboard of edit text do not populate
 		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+		
 		// initially, load all locations
 		if (!startService()) {
 			CreateAlert("Unexpected Error!", "Service cannot be started.");
 		}
-		else {
-			// Toast.makeText(PlaceActivity.this, "Service Started", Toast.LENGTH_LONG).show();
-		}
+	
 		// register click event for refresh button
 		ImageButton refreshButton = (ImageButton) findViewById(R.id.place_xml_button_refresh);
 		refreshButton.setOnClickListener(new OnClickListener() {

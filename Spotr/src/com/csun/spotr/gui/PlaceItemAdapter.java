@@ -1,7 +1,6 @@
 package com.csun.spotr.gui;
 
 import java.util.List;
-import java.util.Vector;
 
 import com.csun.spotr.R;
 
@@ -36,7 +35,7 @@ public class PlaceItemAdapter extends BaseAdapter {
 	}
 
 	public Object getItem(int position) {
-		return position;
+		return places.get(position);
 	}
 
 	public long getItemId(int position) {
@@ -70,7 +69,12 @@ public class PlaceItemAdapter extends BaseAdapter {
 		holder.nameTextView.setText(places.get(position).getName());
 		holder.typesTextView.setText(places.get(position).getAddress());
 		holder.ratingTextView.setText(Integer.toString(places.get(position).getRating()));
-		holder.mapIconImageView.setImageBitmap(DownloadImageHelper.downloadImage(places.get(position).getIconUrl()));
+		/*
+		 * This task is to consuming
+		 * TODO: find a workaround to handle the image
+		 */
+		// holder.mapIconImageView.setImageBitmap(DownloadImageHelper.downloadImage(places.get(position).getIconUrl()));
+		holder.mapIconImageView.setImageResource(R.drawable.adium);
 		return convertView;
 	}
 

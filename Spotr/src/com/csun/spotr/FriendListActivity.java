@@ -1,33 +1,51 @@
 package com.csun.spotr;
 
 import android.app.Activity;
+import android.app.TabActivity;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.Toast;
 
-public class FriendListActivity extends Activity {
-	String[] friendsList;
-	ArrayAdapter<String> adapter;
-	ListView mListView;
-	EditText mSearchBar;
-
-	/** Called when the activity is first created. */
+public class FriendListActivity extends TabActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list);
-		friendsList = getResources().getStringArray(R.array.friends_array);
-		mListView = (ListView) findViewById(R.id.friend_list_xml_listview_friends);
-		mSearchBar = (EditText) findViewById(R.id.friend_list_xml_autocompletetextview_search_box);
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, friendsList);
-		mListView.setAdapter(adapter);
-	}
+		Resources res = getResources(); 
+		TabHost tabHost = getTabHost(); 
+		TabHost.TabSpec spec; 
+		Intent intent; 
 
-	public void onListItemClick(ListView listView, View V, int position, long id) {
-		listView.setItemChecked(position, listView.isItemChecked(position));
-		Toast.makeText(this, "This is your friend " + friendsList[position], Toast.LENGTH_SHORT).show();
+		// Create an Intent to launch an Activity for the tab (to be reused)
+		intent = new Intent().setClass(this, FriendListMainActivity.class); 
+		// Initialize a TabSpec for each tab and add it to the TabHost
+		spec = tabHost
+				.newTabSpec("All Friends")
+				.setIndicator("All Friends", res.getDrawable(R.drawable.place_activity_tab))
+				.setContent(intent);
+		tabHost.addTab(spec);
+
+		// Do the same for the other tabs
+		intent = new Intent().setClass(this, FriendListActionActivity.class);
+		spec = tabHost
+				.newTabSpec("Add Friends")
+				.setIndicator("Add Friends", res.getDrawable(R.drawable.place_activity_tab))
+				.setContent(intent);
+		tabHost.addTab(spec);
+
+		intent = new Intent().setClass(this, FriendListFeedActivity.class);
+		spec = tabHost
+				.newTabSpec("Friend Feeds")
+				.setIndicator("Friend Feeds", res.getDrawable(R.drawable.place_activity_tab))
+				.setContent(intent);
+		tabHost.addTab(spec);
+		// set current tab to action
+		tabHost.setCurrentTab(0);
 	}
 }

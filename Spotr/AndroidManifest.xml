@@ -102,6 +102,30 @@
             </intent-filter>
         </activity>
 
+        <!-- Friend List Main Activity -->
+        <activity android:name=".FriendListMainActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.FriendListMainActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Friend List Feed Activity -->
+        <activity android:name=".FriendListFeedActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.FriendListFeedActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Friend List Action Activity -->
+        <activity android:name=".FriendListActionActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.FriendListActionActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
         <!-- Challenge Info Activity -->
         <activity android:name=".ProfileActivity" >
             <intent-filter >
@@ -157,14 +181,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>  
-            
-            
-            
-            
-            
-            
-            
-            
             
         <!-- Map Location Activity -->
         <activity android:name=".MapLocationActivity" >
