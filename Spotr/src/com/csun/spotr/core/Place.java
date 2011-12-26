@@ -6,8 +6,8 @@ import java.util.Set;
 public class Place {
 	private final double longitude;
 	private final double latitude;
-	private final int 	 id;
-	
+	private final int id;
+
 	private String googleId;
 	private String address;
 	private String name;
@@ -22,8 +22,8 @@ public class Place {
 		// required parameter
 		private final double longitude;
 		private final double latitude;
-		private final int 	 id;
-		
+		private final int id;
+
 		// optional parameter
 		private String googleId = "n/a";
 		private String address = "n/a";
@@ -47,7 +47,7 @@ public class Place {
 			this.googleId = googleId;
 			return this;
 		}
-		
+
 		public Builder address(String address) {
 			this.address = address;
 			return this;
@@ -117,7 +117,7 @@ public class Place {
 	public int getId() {
 		return id;
 	}
-	
+
 	public String getGoogleId() {
 		return googleId;
 	}
@@ -183,7 +183,6 @@ public class Place {
 		return "(" + Double.toString(longitude) + ", " + Double.toString(latitude) + ")";
 	}
 
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
