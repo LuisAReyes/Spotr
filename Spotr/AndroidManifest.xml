@@ -16,7 +16,6 @@
         <activity android:name=".SpotrActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -25,7 +24,6 @@
         <activity android:name=".LoginActivity" >
             <intent-filter >
                 <action android:name="com.csun.spotr.LoginActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -38,6 +36,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        
         <!-- Main Menu Activity -->
         <activity android:name=".MainMenuActivity" >
             <intent-filter >
@@ -59,6 +58,14 @@
         <activity android:name=".MapViewActivity" >
             <intent-filter >
                 <action android:name="com.csun.spotr.MapViewActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+         <!-- Local Map View Activity -->
+        <activity android:name=".LocalMapViewActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.LocalMapViewActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -119,10 +126,50 @@
             </intent-filter>
         </activity>
             
-        <!-- Place Detail Activity -->
-        <activity android:name=".PlaceDetailActivity" >
+        <!-- Place Main Activity -->
+        <activity android:name=".PlaceMainActivity" >
             <intent-filter >
-                <action android:name="com.csun.spotr.PlaceDetailActivity" />
+                <action android:name="com.csun.spotr.PlaceMainActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Place Action Activity -->
+        <activity android:name=".PlaceActionActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.PlaceActionActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Place Activity Activity -->
+        <activity android:name=".PlaceActivityActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.PlaceActivityActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+            
+        <!-- Place Info Activity -->
+        <activity android:name=".PlaceInfoActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.PlaceInfoActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>  
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        <!-- Map Location Activity -->
+        <activity android:name=".MapLocationActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.MapLocationActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -155,6 +202,25 @@
             </intent-filter>
         </activity>
         
+       	<!-- DEMO ONLY -->
+         <activity
+            android:label="@string/app_name"
+            android:name=".demo.GetChallengesFromDatabaseActivity" >
+            <intent-filter >
+                <action android:name="com.csun.spotr.demo.GetChallengesFromDatabaseActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         <!-- Google Map API -->
         <uses-library android:name="com.google.android.maps" />
     </application>
@@ -164,7 +230,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
  	<uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature 
+        android:name="android.hardware.camera" />
     <uses-feature
         android:name="android.hardware.camera.autofocus"
         android:required="false" />

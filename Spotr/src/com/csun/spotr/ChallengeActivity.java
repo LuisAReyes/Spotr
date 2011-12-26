@@ -28,10 +28,16 @@ import android.widget.TextView;
 import com.csun.spotr.gui.ChallengeItemAdapter;
 
 public class ChallengeActivity extends Activity {
+	private final String TAG = "[ChallengeActivity]";
 	private ListView challengeListView;
 	private ChallengeItemAdapter challengeItems;
 
-	private static final String headers[] = { "Challenge 1", "Challenge 2", "Challenge 3", "Challenge 4", "Challenge 5", "Challenge 6", "Challenge 7", "Challenge 8", "Challenge 9", "Challenge 10", "Challenge 11", "Challenge 12", "Challenge 13", "Challenge 14", "Challenge 15", };
+	private static final String headers[] = { 
+		"Challenge 1", "Challenge 2", "Challenge 3", "Challenge 4", 
+		"Challenge 5", "Challenge 6", "Challenge 7", "Challenge 8", 
+		"Challenge 9", "Challenge 10", "Challenge 11", "Challenge 12", 
+		"Challenge 13", "Challenge 14", "Challenge 15", };
+
 
 	private static final String bodies[] = { "Description of challenge 1", "Description of challenge 2", "Description of challenge 3", "Description of challenge 4", "Description of challenge 5", "Description of challenge 6", "Description of challenge 7", "Description of challenge 8", "Description of challenge 9", "Description of challenge 10", "Description of challenge 11", "Description of challenge 12", "Description of challenge 13", "Description of challenge 14", "Description of challenge 15", };
 

@@ -16,17 +16,24 @@ import android.widget.Button;
 public class MainMenuActivity extends Activity {
 	
 	//Using friends array to populate Notification
-		String[] notificationList;
-		ArrayAdapter<String> adapter;
-		ListView mListView;
+	String[] notificationList;
+	ArrayAdapter<String> adapter;
+	ListView mListView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_menu);
+		setContentView(R.layout.main_menu_original);
 
 		// activities to begin
-		Button btnProfile, btnChallenges, btnFriends, btnLeaderboards, btnRewards, btnSpots, btnSettings, btnLogoff;
+		Button btnProfile;
+		Button btnChallenges;
+		Button btnFriends;
+		Button btnLeaderboards;
+		Button btnRewards;
+		Button btnSpots;
+		Button btnSettings;
+		Button btnLogoff;
 
 		// button for the profile
 		btnProfile = (Button) findViewById(R.id.main_menu_xml_button_profile_icon);
@@ -38,7 +45,6 @@ public class MainMenuActivity extends Activity {
 		});
 
 		// button for the challenge
-		/*
 		btnChallenges = (Button) findViewById(R.id.main_menu_xml_button_challenge_icon);
 		btnChallenges.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
@@ -46,7 +52,6 @@ public class MainMenuActivity extends Activity {
 				startActivity(i);
 			}
 		});
-		*/
 
 		// button for the friends list
 		btnFriends = (Button) findViewById(R.id.main_menu_xml_button_friend_icon);

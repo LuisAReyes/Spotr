@@ -5,37 +5,42 @@
     <TableRow >
 
         <ImageView
-            android:id="@+id/location_item_xml_imageview_location_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/place_item_xml_imageview_location_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="6dp"
             android:src="@drawable/ic_launcher" />
 
         <TextView
-            android:id="@+id/location_item_xml_textview_name"
+            android:id="@+id/place_item_xml_textview_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/black" />
     </TableRow>
 
     <TableRow >
 
-        <ImageView />
+        <ImageView 
+             android:layout_marginRight="6dp"/>
 
         <TextView
-            android:id="@+id/location_item_xml_textview_category"
+            android:id="@+id/place_item_xml_textview_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#595454" />
     </TableRow>
 
     <TableRow >
 
-        <ImageView />
+        <ImageView 
+             android:layout_marginRight="6dp"/>
 
         <TextView
-            android:id="@+id/location_item_xml_textview_rating"
+            android:id="@+id/place_item_xml_textview_rating"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#FF0000" />

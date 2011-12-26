@@ -79,6 +79,27 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Leaderboard Activity" />
+
+        <Button
+            android:id="@+id/test_place_main"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Place Main" />
+
+        <Button
+            android:id="@+id/d1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Get Challenges From Database" />
+
+        <Button
+            android:id="@+id/test_localmapview"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Local Map View Activity" />
     </LinearLayout>
 
 </ScrollView>

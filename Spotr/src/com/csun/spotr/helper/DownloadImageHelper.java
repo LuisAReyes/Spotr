@@ -11,8 +11,10 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 public class DownloadImageHelper {
-	private static URLConnection connection;
-	private static URL url;
+	private static final String 		TAG = "[DownloadImageHelper]";
+	private static 		 URLConnection	connection;
+	private static 		 URL 			url;
+	
 	private static InputStream openHttpConnection(String urlString) throws IOException {
 		InputStream in = null;
 		int response = -1;
@@ -38,16 +40,16 @@ public class DownloadImageHelper {
 		return in;
 	}
 
-	public static Bitmap downloadImage(String URL) {
+	public static Bitmap downloadImage(String url) {
 		Bitmap bitmap = null;
 		InputStream in = null;
 		try {
-			in = openHttpConnection(URL);
+			in = openHttpConnection(url);
 			bitmap = BitmapFactory.decodeStream(in);
 			in.close();
 		}
 		catch (IOException e) {
-			Log.d("[DownloadImageHelper] downloadImage(URL)", e.getMessage());
+			Log.d(TAG + ".downloadImage(String url)", e.getMessage());
 		}
 		return bitmap;
 	}

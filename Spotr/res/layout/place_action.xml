@@ -5,19 +5,12 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/place_xml_textview_find_place"
+        android:id="@+id/place_action_xml_textview_intro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Find a place: "
         android:textColor="@android:color/white"
         android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/place_xml_edittext_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true" >
-    </EditText>
 
     <View
         android:layout_width="fill_parent"
@@ -25,7 +18,7 @@
         android:background="#FAB002" />
 
     <TextView
-        android:id="@+id/place_xml_textview_search_title"
+        android:id="@+id/place_action_xml_textview_search_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nearby places"
@@ -33,7 +26,7 @@
         android:textStyle="bold" />
 
     <ListView
-        android:id="@+id/place_xml_listview_places"
+        android:id="@+id/place_action_xml_listview_actions"
         android:layout_width="fill_parent"
         android:layout_height="325dp"
         android:background="@android:color/white" >
@@ -43,16 +36,5 @@
         android:layout_width="fill_parent"
         android:layout_height="2dp"
         android:background="#FAB002" />
-
-    <ImageButton 
-        android:id="@+id/place_xml_button_refresh"
-        android:background="@android:color/black"
-        android:paddingTop="4dp"
-        android:paddingLeft="4dp"
-        android:paddingBottom="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/adium"
-        />
 
 </LinearLayout>

@@ -6,7 +6,6 @@
 package com.csun.spotr;
 
 import com.csun.spotr.core.CurrentChallenge;
-import com.csun.spotr.gui.ChallengeInfoAdapter;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -60,18 +59,22 @@ public class ChallengeInfoActivity extends Activity {
 		descriptionTextView.setText(CurrentChallenge.description);
 		flagCheckBox.setChecked(CurrentChallenge.reviewFlag);
 		avgratingRatingBar.setRating(CurrentChallenge.averageRating);
+		
 		if(-1 == CurrentChallenge.progress)
 			progressProgressBar.setProgress(0);
 		else
 			progressProgressBar.setProgress(CurrentChallenge.progress);
+		
 		locationTextView.setText(CurrentChallenge.location);
 		pointsTextView.setText(Integer.toString(CurrentChallenge.points));
 		avgratingTextView.setText(Float.toString(CurrentChallenge.averageRating));
 		attemptedTextView.setText(Integer.toString(CurrentChallenge.numStarted));
 		completedTextView.setText(Integer.toString(CurrentChallenge.numCompleted));
 		String category = "Categories: " + CurrentChallenge.category[0];
+		
 		for(int i = 1; i < CurrentChallenge.category.length; i++)
 			category += ", " + CurrentChallenge.category[i];
+		
 		categoryTextView.setText(category);
 	}
 }

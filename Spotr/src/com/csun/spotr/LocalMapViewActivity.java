@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +15,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -22,7 +25,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.csun.spotr.core.CurrentUser;
 import com.csun.spotr.core.Place;
@@ -40,8 +46,9 @@ import com.google.android.maps.OverlayItem;
 /**
  * @author: Chan Nguyen
  */
-public class MapViewActivity extends MapActivity {
-	private static final String TAG = "[MapViewActivity]";
+public class LocalMapViewActivity extends MapActivity {
+	private static final String TAG = "[LocalMapViewActivity]";
+	private static final String URL = "http://107.22.209.62/android/get_spots.php";
 	private static final String RADIUS = "500";
 	private MapView mapView;
 	private List<Overlay> mapOverlays;
@@ -61,7 +68,7 @@ public class MapViewActivity extends MapActivity {
 		// get overlays
 		mapOverlays = mapView.getOverlays();
 		// get the display icon on map
-		Drawable drawable = getResources().getDrawable(R.drawable.map_maker_red);
+		Drawable drawable = getResources().getDrawable(R.drawable.map_maker_green);
 		// initialize overlay item
 		itemizedOverlay = new MyItemizedOverlay(drawable, mapView);
 		// add them to the map
@@ -87,7 +94,7 @@ public class MapViewActivity extends MapActivity {
 			public void onClick(View view) {
 				itemizedOverlay.clear();
 				UpdateLocationTask task = new UpdateLocationTask();
-				task.execute("5");
+				task.execute("1");
 			}
 		});
 
@@ -101,45 +108,44 @@ public class MapViewActivity extends MapActivity {
 		});
 	}
 
-	private void processOverlayItems(Location currentLocation, String radius) {
+	private List<Place> filterPlaces(Location currentLocation, String radius) {
 		List<Place> placeList = new ArrayList<Place>();
-		String url = GooglePlaceHelper.buildGooglePlacesUrl(currentLocation, radius);
-		JSONObject json = JsonHelper.getJsonFromUrl(url);
+		List<NameValuePair> datas = new ArrayList<NameValuePair>();
+		datas.add(new BasicNameValuePair("latitude", Double.toString(currentLocation.getLatitude())));
+		datas.add(new BasicNameValuePair("longitude", Double.toString(currentLocation.getLongitude())));
+		datas.add(new BasicNameValuePair("radius", radius)); 
+		JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(URL, datas);
+		
+		int id = 0;
+		double longitude = 0.0;
+		double latitude = 0.0;
+		String name = "";
+		String description = "";
+		
 		try {
-			JSONArray placeInformationArray = json.getJSONArray("results");
-			for (int i = 0; i < placeInformationArray.length(); i++) {
-				JSONObject jsonObject = placeInformationArray.getJSONObject(i);
-				double longitude = jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lng");
-				double latitude = jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lat");
-				String id = jsonObject.getString("id");
-				String name = jsonObject.getString("name");
-				String types = jsonObject.getString("types");
-				String reference = jsonObject.getString("reference");
-				String iconUrl = jsonObject.getString("icon");
-
-				// build detailed place url
-				String placeDetailsUrl = GooglePlaceHelper.buildGooglePlaceDetailsUrl(reference);
-				// get json data
-				JSONObject jsonTemp = JsonHelper.getJsonFromUrl(placeDetailsUrl);
-				String address = jsonTemp.getJSONObject("result").getString("formatted_address");
-				
-				// String phoneNumber =
-				// jsonTemp.getJSONObject("result").getString("formatted_phone_number");
-				// String websiteUrl =
-				// jsonTemp.getJSONObject("result").getString("website");
-
-				// construct a place
-				Place place = new Place.Builder(longitude, latitude, i).googleId(id).name(name).types(types).iconUrl(iconUrl).address(address).build();
+			for (int i = 0; i < array.length(); ++i) { 
+				JSONObject temp = array.getJSONObject(i);
+				id = temp.getInt("id");
+				longitude = temp.getDouble("longitude");
+				latitude = temp.getDouble("latitude");
+				name = temp.getString("name");
+				description = temp.getString("description");
+				// create a place
+				Place place = new Place.Builder(longitude, latitude, id).name(name).address(description).build();
+				// add to list of places
 				placeList.add(place);
+				// create an item overlay based on this location
 				OverlayItem overlay = new OverlayItem(new GeoPoint((int) (place.getLatitude() * 1E6), (int) (place.getLongitude() * 1E6)), place.getName(), place.getAddress());
+				// add to item to map 
 				itemizedOverlay.addOverlay(overlay, place);
 			}
 		}
 		catch (JSONException e) {
-			Log.e(TAG + ".processOverlayItems(Location currentLocation, String radius)", "JSON error parsing data " + e.toString());
+			Log.e(TAG + ".filterPlaces() : ", "JSON error parsing data" + e.toString());
 		}
+		return placeList;
 	}
-
+	
 	private void startDialog() {
 		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
 		myAlertDialog.setTitle("Map View Option");
@@ -184,7 +190,7 @@ public class MapViewActivity extends MapActivity {
 			// wait for a new location
 			while (currentLocation == null) {
 			}
-			processOverlayItems(currentLocation, radius[0]);
+			filterPlaces(currentLocation, radius[0]);
 			return null;
 		}
 
@@ -204,7 +210,7 @@ public class MapViewActivity extends MapActivity {
 				locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, myLocationListener);
 			}
 			
-			progressDialog = new ProgressDialog(MapViewActivity.this);
+			progressDialog = new ProgressDialog(LocalMapViewActivity.this);
 			progressDialog.setMessage("Loading...");
 			progressDialog.setIndeterminate(true);
 			progressDialog.setCancelable(true);

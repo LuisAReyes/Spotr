@@ -1,0 +1,51 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TableRow>
+
+        <ImageView
+            android:id="@+id/place_action_item_xml_imageview_action_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="6dp"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/place_action_item_xml_textview_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+    </TableRow>
+
+    <TableRow>
+
+        <ImageView android:layout_marginRight="6dp" />
+
+        <TextView
+            android:id="@+id/place_action_item_xml_textview_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#595454" />
+    </TableRow>
+
+    <TableRow>
+
+        <ImageView android:layout_marginRight="6dp" />
+
+        <TextView
+            android:id="@+id/place_action_item_xml_textview_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#FF0000" />
+    </TableRow>
+
+    <TableRow>
+    </TableRow>
+
+</TableLayout>

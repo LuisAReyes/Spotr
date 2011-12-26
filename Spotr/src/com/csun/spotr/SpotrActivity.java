@@ -22,6 +22,11 @@ public class SpotrActivity extends Activity {
 	private Button b8;
 	private Button b9;
 	private Button b10;
+	private Button b11;
+	private Button b12;
+	
+	// for demo activity
+	private Button d1;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -107,5 +112,30 @@ public class SpotrActivity extends Activity {
 				startActivity(i);
 			}
 		});
+		
+		b11 = (Button) findViewById(R.id.test_place_main);
+		b11.setOnClickListener(new OnClickListener() {
+			public void onClick(View arg0) {
+				Intent i = new Intent("com.csun.spotr.PlaceMainActivity");
+				startActivity(i);
+			}
+		});
+		
+		b12 = (Button) findViewById(R.id.test_localmapview);
+		b12.setOnClickListener(new OnClickListener() {
+			public void onClick(View arg0) {
+				Intent i = new Intent("com.csun.spotr.LocalMapViewActivity");
+				startActivity(i);
+			}
+		});
+	
+		d1 = (Button) findViewById(R.id.d1);
+		d1.setOnClickListener(new OnClickListener() {
+			public void onClick(View arg0) {
+				Intent i = new Intent("com.csun.spotr.demo.GetChallengesFromDatabaseActivity");
+				startActivity(i);
+			}
+		});
+		
 	}
 }
