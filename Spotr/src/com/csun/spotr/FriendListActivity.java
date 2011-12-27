@@ -34,8 +34,8 @@ public class FriendListActivity extends TabActivity {
 		// Do the same for the other tabs
 		intent = new Intent().setClass(this, FriendListActionActivity.class);
 		spec = tabHost
-				.newTabSpec("Add Friends")
-				.setIndicator("Add Friends", res.getDrawable(R.drawable.place_activity_tab))
+				.newTabSpec("Find")
+				.setIndicator("Find", res.getDrawable(R.drawable.place_activity_tab))
 				.setContent(intent);
 		tabHost.addTab(spec);
 

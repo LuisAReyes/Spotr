@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/android:list"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/friend_list_action_xml_edittext_search"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:hint="Type a name"
+        android:singleLine="true" 
+        />
 
-        <Button 
-            android:id="@+id/button" 
-            android:text="Click"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-    </LinearLayout>
+    <Button
+        android:id="@+id/friend_list_action_xml_button_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do a Search" 
+        />
 
-</ScrollView>
+    <ListView
+        android:id="@+id/friend_list_action_xml_listview_search_friends"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/white" >
+    </ListView>
+
+</LinearLayout>

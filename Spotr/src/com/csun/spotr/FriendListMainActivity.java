@@ -31,7 +31,8 @@ public class FriendListMainActivity extends Activity {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		// testing purpose
-		// CurrentUser.setCurrentUser(6, "vlad", "somepass");
+		CurrentUser.setCurrentUser(6, "vlad", "somepass");
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list_main);
 		GetFriendTask task = new GetFriendTask();
@@ -44,13 +45,7 @@ public class FriendListMainActivity extends Activity {
 		
 		@Override
 		protected void onPreExecute() {
-			try {
-				userData.add(new BasicNameValuePair("id", Integer.toString(CurrentUser.getCurrentUser().getId())));
-			}
-			catch(NullPointerException e) {
-				Log.d(TAG, "hmmmmm....");
-			}
-			
+			userData.add(new BasicNameValuePair("id", Integer.toString(CurrentUser.getCurrentUser().getId())));
 			// display waiting dialog
 			progressDialog = new ProgressDialog(FriendListMainActivity.this);
 			progressDialog.setMessage("Loading...");
@@ -85,7 +80,7 @@ public class FriendListMainActivity extends Activity {
 		protected void onPostExecute(List<User> userList) {
 			progressDialog.dismiss();
 			listViewUser = (ListView) findViewById(R.id.friend_list_main_xml_listview_friends);
-			userItemAdapter = new FriendListMainItemAdapter(FriendListMainActivity.this, userList);
+			userItemAdapter = new FriendListMainItemAdapter(FriendListMainActivity.this, userList, R.drawable.adium);
 			listViewUser.setAdapter(userItemAdapter);
 			listViewUser.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

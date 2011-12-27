@@ -17,11 +17,13 @@ public class FriendListMainItemAdapter extends BaseAdapter {
 	private Activity context;
 	private List<User> users;
 	private boolean notifyChanged = false;
+	private int temporaryPictureId;
 
-	public FriendListMainItemAdapter(Activity context, List<User> users) {
+	public FriendListMainItemAdapter(Activity context, List<User> users, int pictureId) {
 		super();
 		this.context = context;
 		this.users = users;
+		this.temporaryPictureId = pictureId;
 	}
 
 	public int getCount() {
@@ -56,7 +58,7 @@ public class FriendListMainItemAdapter extends BaseAdapter {
 		}
 
 		holder.textViewName.setText(users.get(position).getUsername());
-		holder.imageViewPicture.setImageResource(R.drawable.adium);
+		holder.imageViewPicture.setImageResource(temporaryPictureId);
 		return convertView;
 	}
 
