@@ -10,7 +10,8 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" 
-        android:debuggable="true">
+        android:debuggable="true"
+        >
 
         <!-- Main Activity -->
         <activity android:name=".SpotrActivity" >
@@ -21,7 +22,8 @@
         </activity>
 
         <!-- Login Activity -->
-        <activity android:name=".LoginActivity" >
+        <activity android:name=".LoginActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.LoginActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -29,25 +31,26 @@
         </activity>
 
         <!-- Signup Activity -->
-        <activity android:name=".SignupActivity" >
+        <activity android:name=".SignupActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.SignupActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         
         <!-- Main Menu Activity -->
-        <activity android:name=".MainMenuActivity" >
+        <activity android:name=".MainMenuActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.MainMenuActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <!-- Challenge Activity -->
-        <activity android:name=".ChallengeActivity" >
+        <activity android:name=".ChallengeActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.ChallengeActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -55,7 +58,8 @@
         </activity>
 
         <!-- Map View Activity -->
-        <activity android:name=".MapViewActivity" >
+        <activity android:name=".MapViewActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.MapViewActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -63,7 +67,8 @@
         </activity>
         
          <!-- Local Map View Activity -->
-        <activity android:name=".LocalMapViewActivity" >
+        <activity android:name=".LocalMapViewActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.LocalMapViewActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -71,7 +76,8 @@
         </activity>
 
         <!-- Reward Activity -->
-        <activity android:name=".RewardActivity" >
+        <activity android:name=".RewardActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.RewardActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -79,7 +85,8 @@
         </activity>
         
         <!-- Reward View Activity -->
-        <activity android:name=".RewardViewActivity" >
+        <activity android:name=".RewardViewActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.RewardViewActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -87,7 +94,8 @@
         </activity>
 
         <!-- Challenge Info Activity -->
-        <activity android:name=".ChallengeInfoActivity" >
+        <activity android:name=".ChallengeInfoActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.ChallengeInfoActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -95,7 +103,8 @@
         </activity>
         
         <!-- Friend List Activity -->
-        <activity android:name=".FriendListActivity" >
+        <activity android:name=".FriendListActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.FriendListActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -103,7 +112,8 @@
         </activity>
 
         <!-- Friend List Main Activity -->
-        <activity android:name=".FriendListMainActivity" >
+        <activity android:name=".FriendListMainActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.FriendListMainActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -111,7 +121,8 @@
         </activity>
         
         <!-- Friend List Feed Activity -->
-        <activity android:name=".FriendListFeedActivity" >
+        <activity android:name=".FriendListFeedActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.FriendListFeedActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -119,7 +130,8 @@
         </activity>
         
         <!-- Friend List Action Activity -->
-        <activity android:name=".FriendListActionActivity" >
+        <activity android:name=".FriendListActionActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.FriendListActionActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -127,7 +139,8 @@
         </activity>
         
         <!-- Challenge Info Activity -->
-        <activity android:name=".ProfileActivity" >
+        <activity android:name=".ProfileActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.ProfileActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -135,7 +148,8 @@
         </activity>
         
         <!-- Settings Activity -->
-        <activity android:name=".SettingsActivity" >
+        <activity android:name=".SettingsActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.SettingsActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -143,15 +157,26 @@
         </activity>
         
         <!-- Place Activity -->
-        <activity android:name=".PlaceActivity" >
+        <activity android:name=".PlaceActivity" 
+            	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.PlaceActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        
+        <!-- Local Place Activity -->
+        <activity android:name=".LocalPlaceActivity" 
+            	  android:configChanges="orientation|keyboardHidden">
+            <intent-filter >
+                <action android:name="com.csun.spotr.LocalPlaceActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
             
         <!-- Place Main Activity -->
-        <activity android:name=".PlaceMainActivity" >
+        <activity android:name=".PlaceMainActivity" 
+            	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.PlaceMainActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -159,7 +184,8 @@
         </activity>
         
         <!-- Place Action Activity -->
-        <activity android:name=".PlaceActionActivity" >
+        <activity android:name=".PlaceActionActivity" 
+            	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.PlaceActionActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -167,7 +193,8 @@
         </activity>
         
         <!-- Place Activity Activity -->
-        <activity android:name=".PlaceActivityActivity" >
+        <activity android:name=".PlaceActivityActivity" 
+            	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.PlaceActivityActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -175,7 +202,8 @@
         </activity>
             
         <!-- Place Info Activity -->
-        <activity android:name=".PlaceInfoActivity" >
+        <activity android:name=".PlaceInfoActivity" 
+            	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.PlaceInfoActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -183,7 +211,8 @@
         </activity>  
             
         <!-- Map Location Activity -->
-        <activity android:name=".MapLocationActivity" >
+        <activity android:name=".MapLocationActivity" 
+            	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.MapLocationActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -191,7 +220,8 @@
         </activity>
         
         <!-- Leaderboard Activity -->
-        <activity android:name=".LeaderboardActivity" >
+        <activity android:name=".LeaderboardActivity" 
+            	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.LeaderboardActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -199,9 +229,8 @@
         </activity>    
         
         <!-- Profile Edit Activity -->
- 		<activity
-            android:label="@string/app_name"
-            android:name=".ProfileEditActivity" >
+ 		<activity android:name=".ProfileEditActivity" 
+            	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.ProfileEditActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -209,32 +238,13 @@
         </activity>
         
         <!-- Profile Preference Activity -->
-        <activity
-            android:label="@string/app_name"
-            android:name=".ProfilePreferenceActivity" >
+        <activity android:name=".ProfilePreferenceActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.ProfilePreferenceActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
-       	<!-- DEMO ONLY -->
-         <activity
-            android:label="@string/app_name"
-            android:name=".demo.GetChallengesFromDatabaseActivity" >
-            <intent-filter >
-                <action android:name="com.csun.spotr.demo.GetChallengesFromDatabaseActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        
-        
-        
-        
-        
-        
-        
-        
         
         
         <!-- Google Map API -->

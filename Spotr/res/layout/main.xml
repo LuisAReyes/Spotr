@@ -5,13 +5,13 @@
     android:layout_height="wrap_content" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <Button
             android:id="@+id/test_login"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
@@ -19,42 +19,42 @@
 
         <Button
             android:id="@+id/test_mainmenu"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="Main Menu Activity" />
 
         <Button
             android:id="@+id/test_challenge"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="Challenge Activity" />
 
         <Button
             android:id="@+id/test_mapview"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="Map View Activity" />
 
         <Button
             android:id="@+id/test_reward"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="Reward Activity" />
 
         <Button
             android:id="@+id/test_challengeinfo"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="Challenge Info Activity" />
 
         <Button
             android:id="@+id/test_profile"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="Profile Activity" />
@@ -68,38 +68,31 @@
 
         <Button
             android:id="@+id/test_place"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Place Activity" />
 
         <Button
             android:id="@+id/test_leaderboard"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Leaderboard Activity" />
 
         <Button
-            android:id="@+id/test_place_main"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Place Main" />
-
-        <Button
-            android:id="@+id/d1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Get Challenges From Database" />
-
-        <Button
             android:id="@+id/test_localmapview"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="Local Map View Activity" />
+        
+        <Button
+            android:id="@+id/test_localplace"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Local Place Activity" />
     </LinearLayout>
 
 </ScrollView>

@@ -3,13 +3,24 @@ package com.csun.spotr;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import com.csun.spotr.core.Challenge;
 import com.csun.spotr.core.CurrentUser;
 import com.csun.spotr.core.PlaceActionItem;
+import com.csun.spotr.core.User;
+import com.csun.spotr.gui.FriendListMainItemAdapter;
 import com.csun.spotr.gui.PlaceActionItemAdapter;
+import com.csun.spotr.helper.JsonHelper;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,44 +39,79 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class PlaceActionActivity extends Activity {
+	private static final String TAG = "[PlaceActionActivity]";
+	private static final String GET_CHALLENGES_URL = "http://107.22.209.62/android/get_challenges_from_place.php";
+	private int currentPlaceId;
+	private ListView list;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		CurrentUser.setCurrentUser(1, "hello", "android");
+		// set layout
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.place_action);
-		ArrayList<PlaceActionItem> items = new ArrayList<PlaceActionItem>();
-		items.add(new PlaceActionItem("Check In", "Check In", "+1", R.drawable.adium));
-		items.add(new PlaceActionItem("Poke someone", "Poke someone", "+1", R.drawable.adium));
-		items.add(new PlaceActionItem("Say something", "Say something", "+1", R.drawable.adium));
-		items.add(new PlaceActionItem("Snap a pictrue", "Snap a picture", "+1", R.drawable.adium));
-		items.add(new PlaceActionItem("Create a challenge", "Create a challenge", "+1", R.drawable.adium));
-		ListView actionListView = (ListView) findViewById(R.id.place_action_xml_listview_actions);
-		PlaceActionItemAdapter adapter = new PlaceActionItemAdapter(this, items);
-		// set adapter
-		actionListView.setAdapter(adapter);
-		actionListView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (position == 0) {
-					Animation animation = new TranslateAnimation(0, 500,0, 0);
-					animation.setDuration(1000);
-					TextView tv = (TextView) view.findViewById(R.id.place_action_item_xml_textview_title);
-					tv.startAnimation(animation);
-					tv.setBackgroundColor(android.graphics.Color.GREEN);
-					tv.setText(CurrentUser.getCurrentUser().getUsername());
-				}
-				else if (position == 1) {
+	
+		// initialize list view of challenges
+		list = (ListView) findViewById(R.id.place_action_xml_listview_actions);
+		
+		// get place id
+		Bundle extrasBundle = getIntent().getExtras();
+		currentPlaceId = extrasBundle.getInt("place_id");
+		
+		GetChallengesTask task = new GetChallengesTask();
+		task.execute();
+	}
+	
+	private class GetChallengesTask extends AsyncTask<String, Integer, List<Challenge>> {
+		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
+		private ProgressDialog progressDialog = null;
 
-				}
-				else if (position == 2) {
-					
-				}
-				else if (position == 3) {
-					
-				}
-				else { // position == 4
-					
+		@Override
+		protected void onPreExecute() {
+			// display waiting dialog
+			progressDialog = new ProgressDialog(PlaceActionActivity.this);
+			progressDialog.setMessage("Loading...");
+			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(true);
+			progressDialog.show();
+		}
+
+		@Override
+		protected List<Challenge> doInBackground(String... text) {
+			userData.add(new BasicNameValuePair("place_id", Integer.toString(currentPlaceId)));
+			List<Challenge> challengeList = new ArrayList<Challenge>();
+			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_CHALLENGES_URL, userData);
+			try {
+				for (int i = 0; i < array.length(); ++i) {
+					Challenge c = 
+						new Challenge.Builder(
+							array.getJSONObject(i).getInt("id"), 
+							Challenge.returnType(array.getJSONObject(i).getString("type")),
+							array.getJSONObject(i).getInt("points")) 
+							.name(array.getJSONObject(i).getString("name"))
+							.description(array.getJSONObject(i).getString("description"))
+							.build();
+					// add a challenge
+					challengeList.add(c);
 				}
 			}
-		});
+			catch (JSONException e) {
+				Log.e(TAG + "GetChallengesTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+			}
+			return challengeList;
+		}
+
+		@Override
+		protected void onPostExecute(List<Challenge> challengeList) {
+			progressDialog.dismiss();
+			PlaceActionItemAdapter adapter = new PlaceActionItemAdapter(PlaceActionActivity.this, challengeList);
+			list.setAdapter(adapter);
+			list.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				}
+			});
+		}
 	}
+	
+	
+
 }

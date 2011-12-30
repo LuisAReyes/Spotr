@@ -9,7 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.AdapterView;
@@ -38,7 +40,8 @@ public class FriendListActionActivity extends Activity {
 		setContentView(R.layout.friend_list_action);
 		Button buttonSearch = (Button) findViewById(R.id.friend_list_action_xml_button_search);
 		editTextSearch = (EditText) findViewById(R.id.friend_list_action_xml_edittext_search);
-		// TODO: should we allow user to search on an empty string? which returns the whole list of users in 
+		// TODO: should we allow user to search on an empty string? which
+		// returns the whole list of users in
 		// our database
 		buttonSearch.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -47,11 +50,11 @@ public class FriendListActionActivity extends Activity {
 			}
 		});
 	}
-	
+
 	private class GetUserTask extends AsyncTask<String, Integer, List<User>> {
-		private List<NameValuePair> userData = new ArrayList<NameValuePair>(); 
-		private  ProgressDialog progressDialog = null;
-		
+		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
+		private ProgressDialog progressDialog = null;
+
 		@Override
 		protected void onPreExecute() {
 			// display waiting dialog
@@ -61,22 +64,15 @@ public class FriendListActionActivity extends Activity {
 			progressDialog.setCancelable(true);
 			progressDialog.show();
 		}
-		
+
 		@Override
 		protected List<User> doInBackground(String... text) {
 			userData.add(new BasicNameValuePair("text", text[0].toString()));
 			List<User> userList = new ArrayList<User>();
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(SEARCH_FRIENDS_URL, userData);
 			try {
-				for (int i = 0; i < array.length(); ++i) { 
-					userList.add(
-						new User.Builder(
-							array.getJSONObject(i).getInt("id"),
-							array.getJSONObject(i).getString("username"),
-							array.getJSONObject(i).getString("password")).build());
-					
-					Log.d(TAG, userList.get(i).getUsername());
-					Log.d(TAG, userList.get(i).getPassword());
+				for (int i = 0; i < array.length(); ++i) {
+					userList.add(new User.Builder(array.getJSONObject(i).getInt("id"), array.getJSONObject(i).getString("username"), array.getJSONObject(i).getString("password")).build());
 				}
 			}
 			catch (JSONException e) {
@@ -84,7 +80,7 @@ public class FriendListActionActivity extends Activity {
 			}
 			return userList;
 		}
-		
+
 		@Override
 		protected void onPostExecute(List<User> userList) {
 			progressDialog.dismiss();
@@ -93,9 +89,34 @@ public class FriendListActionActivity extends Activity {
 			listViewUser.setAdapter(userItemAdapter);
 			listViewUser.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					// handle click 
+					startDialog();
 				}
 			});
 		}
+	}
+
+	private void startDialog() {
+		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
+		myAlertDialog.setTitle("Friend Dialog");
+		myAlertDialog.setMessage("Pick an option");
+		myAlertDialog.setPositiveButton("Send a request", new DialogInterface.OnClickListener() {
+			// do something when the button is clicked
+			public void onClick(DialogInterface arg0, int arg1) {
+			}
+		});
+
+		myAlertDialog.setNegativeButton("View profile", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+			}
+		});
+		myAlertDialog.show();
+	}
+
+	private void sendRequest(User user) {
+
+	}
+
+	private void viewProfile(User user) {
+
 	}
 }

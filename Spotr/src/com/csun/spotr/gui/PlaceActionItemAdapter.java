@@ -1,6 +1,7 @@
 package com.csun.spotr.gui;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import android.app.Activity;
@@ -11,16 +12,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.csun.spotr.R;
-import com.csun.spotr.core.PlaceActionItem;
+import com.csun.spotr.core.Challenge;
 
 public class PlaceActionItemAdapter extends BaseAdapter {
-	private ArrayList<PlaceActionItem> items;
+	private List<Challenge> items;
 	private Activity context;
 	
-	public PlaceActionItemAdapter(Activity context, ArrayList<PlaceActionItem> items) {
+	public PlaceActionItemAdapter(Activity context, List<Challenge> items) {
 		this.context = context;
 		this.items = items;
 	}
@@ -61,11 +61,21 @@ public class PlaceActionItemAdapter extends BaseAdapter {
 			holder = (ItemViewHolder) convertView.getTag();
 		}
 
-		holder.titleTextView.setText(items.get(position).getTitle());
+		holder.titleTextView.setText(items.get(position).getName());
 		holder.descriptionTextView.setText(items.get(position).getDescription());
-		holder.pointTextView.setText(items.get(position).getPoints());
-		holder.iconImageView.setImageResource(items.get(position).getIcon());
-
+		holder.pointTextView.setText(Integer.toString(items.get(position).getPoints()));
+		
+		if (items.get(position).getType() == Challenge.Type.CHECK_IN)
+			holder.iconImageView.setImageResource(R.drawable.adium);
+		else if (items.get(position).getType() == Challenge.Type.SNAP_PICTURE) 
+			holder.iconImageView.setImageResource(R.drawable.monkey);
+		else if (items.get(position).getType() == Challenge.Type.WRITE_ON_WALL)
+			holder.iconImageView.setImageResource(R.drawable.circus_car);
+		else if (items.get(position).getType() == Challenge.Type.WRITE_ON_WALL)
+			holder.iconImageView.setImageResource(R.drawable.elephant);
+		else 
+			holder.iconImageView.setImageResource(R.drawable.funshine_bear);
+		
 		return convertView;
 	}
 }

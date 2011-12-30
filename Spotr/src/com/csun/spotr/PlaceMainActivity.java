@@ -16,17 +16,23 @@ public class PlaceMainActivity extends TabActivity {
 		TabHost.TabSpec spec; 
 		Intent intent; 
 
-		// Create an Intent to launch an Activity for the tab (to be reused)
+		// get place_id extras from PlaceActivity/LocalPlaceActivity
+		Bundle extras = getIntent().getExtras();
+		
+		// create an Intent to launch an Activity for the tab (to be reused)
 		intent = new Intent().setClass(this, PlaceActionActivity.class);
+		
+		// pass this extra to PlaceActionActivity
+		intent.putExtras(extras);
 
-		// Initialize a TabSpec for each tab and add it to the TabHost
+		// initialize a TabSpec for each tab and add it to the TabHost
 		spec = tabHost
 				.newTabSpec("action")
 				.setIndicator("Action", res.getDrawable(R.drawable.place_activity_tab))
 				.setContent(intent);
 		tabHost.addTab(spec);
 
-		// Do the same for the other tabs
+		// do the same for the other tabs
 		intent = new Intent().setClass(this, PlaceActivityActivity.class);
 		spec = tabHost
 				.newTabSpec("activity")
