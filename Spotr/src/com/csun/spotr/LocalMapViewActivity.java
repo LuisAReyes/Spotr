@@ -185,29 +185,33 @@ public class LocalMapViewActivity extends MapActivity {
 	private class UpdateLocationTask extends AsyncTask<String, Integer, Void> {
 		private ProgressDialog progressDialog;
 		private Location currentLocation;
+		private MyLocationListener listener;
+		private LocationManager manager;
 		@Override
 		protected Void doInBackground(String... radius) {
 			// wait for a new location
 			while (currentLocation == null) {
 			}
+			manager.removeUpdates(listener);
 			filterPlaces(currentLocation, radius[0]);
 			return null;
 		}
 
 		@Override
 		protected void onPreExecute() {
-			MyLocationListener myLocationListener = new MyLocationListener();
-			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			listener = new MyLocationListener();
+			manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			// assume either GPS or Network is enabled
 			// TODO: add error handling
 			
 			// prefer GPS
-			if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, myLocationListener);
+			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
 			}
-			// otherwise use Network connection
-			else if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-				locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, myLocationListener);
+			else {
+				if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+					manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
+				}
 			}
 			
 			progressDialog = new ProgressDialog(LocalMapViewActivity.this);
@@ -246,7 +250,7 @@ public class LocalMapViewActivity extends MapActivity {
 
 	private class MyItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 		private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
-		private List<Place> placeInformations = new ArrayList<Place>();
+		private List<Place> places = new ArrayList<Place>();
 		private Context context;
 
 		public MyItemizedOverlay(Drawable defaultMarker, MapView mapView) {
@@ -256,13 +260,13 @@ public class LocalMapViewActivity extends MapActivity {
 
 		public void addOverlay(OverlayItem overlay, Place place) {
 			overlays.add(overlay);
-			placeInformations.add(place);
+			places.add(place);
 			populate();
 		}
 
 		public void clear() {
 			overlays.clear();
-			placeInformations.clear();
+			places.clear();
 		}
 
 		@Override
@@ -278,6 +282,9 @@ public class LocalMapViewActivity extends MapActivity {
 		@Override
 		protected boolean onBalloonTap(int index, OverlayItem item) {
 			Intent intent = new Intent("com.csun.spotr.PlaceMainActivity");
+			Bundle extras = new Bundle();
+			extras.putInt("place_id", places.get(index).getId());
+			intent.putExtras(extras);
 			startActivity(intent);
 			return true;
 		}

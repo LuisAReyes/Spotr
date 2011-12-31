@@ -179,29 +179,34 @@ public class MapViewActivity extends MapActivity {
 	private class UpdateLocationTask extends AsyncTask<String, Integer, Void> {
 		private ProgressDialog progressDialog;
 		private Location currentLocation;
+		private MyLocationListener listener;
+		private LocationManager manager;
+		
 		@Override
 		protected Void doInBackground(String... radius) {
 			// wait for a new location
 			while (currentLocation == null) {
 			}
+			manager.removeUpdates(listener);
 			processOverlayItems(currentLocation, radius[0]);
 			return null;
 		}
 
 		@Override
 		protected void onPreExecute() {
-			MyLocationListener myLocationListener = new MyLocationListener();
-			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			listener = new MyLocationListener();
+			manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			// assume either GPS or Network is enabled
 			// TODO: add error handling
 			
 			// prefer GPS
-			if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, myLocationListener);
+			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
 			}
-			// otherwise use Network connection
-			else if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-				locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, myLocationListener);
+			else {
+				if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+					manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
+				}
 			}
 			
 			progressDialog = new ProgressDialog(MapViewActivity.this);

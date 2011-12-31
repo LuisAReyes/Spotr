@@ -2,7 +2,6 @@ package com.csun.spotr;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,13 +16,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -44,7 +39,7 @@ import com.csun.spotr.gui.PlaceItemAdapter;
  */
 public class PlaceActivity extends Activity {
 	private final String 			  	TAG = "[PlaceActivity]";
-	private final String				radius = "500";
+	private final String				radius = "100";
 	private       ListView            	placesListView;
 	private       PlaceItemAdapter      placeItemAdapter;
 	
@@ -91,8 +86,10 @@ public class PlaceActivity extends Activity {
 	}
 	
 	private class UpdateLocationTask extends AsyncTask<Void, Integer, List<Place>> {
-		public   Location  			currentLocation = null;
-		private  ProgressDialog 	progressDialog = null;
+		private ProgressDialog progressDialog;
+		private Location currentLocation;
+		private MyLocationListener listener;
+		private LocationManager manager;
 		
 		@Override
 		protected List<Place> doInBackground(Void...voids) {
@@ -100,16 +97,28 @@ public class PlaceActivity extends Activity {
 			while(currentLocation == null) {
 				
 			}
+			// remove listener to preserve battery 
+			manager.removeUpdates(listener);
 			// get current location and passing it to get list of places
 			return retrievePlacesFromGoogle(currentLocation);
 		}
 		
 		@Override
 		protected void onPreExecute() {
-			MyLocationListener myLocationListener = new MyLocationListener();
-			myLocationListener = new MyLocationListener();
-			LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, myLocationListener);
+			listener = new MyLocationListener();
+			manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			// assume either GPS or Network is enabled
+			// TODO: add error handling
+			
+			// prefer GPS
+			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
+			}
+			else {
+				if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+					manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
+				}
+			}
 			// display waiting dialog
 			progressDialog = new ProgressDialog(PlaceActivity.this);
 			progressDialog.setMessage("Loading from Google Places...");

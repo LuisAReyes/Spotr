@@ -21,7 +21,6 @@ public class PlaceMainActivity extends TabActivity {
 		
 		// create an Intent to launch an Activity for the tab (to be reused)
 		intent = new Intent().setClass(this, PlaceActionActivity.class);
-		
 		// pass this extra to PlaceActionActivity
 		intent.putExtras(extras);
 
@@ -34,6 +33,9 @@ public class PlaceMainActivity extends TabActivity {
 
 		// do the same for the other tabs
 		intent = new Intent().setClass(this, PlaceActivityActivity.class);
+		// pass this Extra to PlaceActivityActivity
+		intent.putExtras(extras);
+		
 		spec = tabHost
 				.newTabSpec("activity")
 				.setIndicator("Activity", res.getDrawable(R.drawable.place_activity_tab))
@@ -41,6 +43,9 @@ public class PlaceMainActivity extends TabActivity {
 		tabHost.addTab(spec);
 
 		intent = new Intent().setClass(this, PlaceInfoActivity.class);
+		// pass this extra to PlaceInfoActivity
+		intent.putExtras(extras);
+		
 		spec = tabHost
 				.newTabSpec("information")
 				.setIndicator("Information", res.getDrawable(R.drawable.place_activity_tab))

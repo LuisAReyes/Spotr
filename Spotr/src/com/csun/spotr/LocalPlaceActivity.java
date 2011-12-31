@@ -41,6 +41,7 @@ import com.csun.spotr.helper.GooglePlaceHelper;
 import com.csun.spotr.helper.JsonHelper;
 import com.csun.spotr.core.Place;
 import com.csun.spotr.gui.PlaceItemAdapter;
+import com.google.android.maps.GeoPoint;
 
 /**
  * @author: Chan Nguyen
@@ -95,8 +96,10 @@ public class LocalPlaceActivity extends Activity {
 	}
 	
 	private class UpdateLocationTask extends AsyncTask<Void, Integer, List<Place>> {
-		public   Location  			currentLocation = null;
-		private  ProgressDialog 	progressDialog = null;
+		public   Location currentLocation = null;
+		private  ProgressDialog progressDialog = null;
+		private MyLocationListener listener;
+		private LocationManager manager;
 		
 		@Override
 		protected List<Place> doInBackground(Void...voids) {
@@ -104,16 +107,28 @@ public class LocalPlaceActivity extends Activity {
 			while(currentLocation == null) {
 				
 			}
+			manager.removeUpdates(listener);
 			// get current location and passing it to get list of places
 			return retrievePlaces(currentLocation, radius);
 		}
 		
 		@Override
 		protected void onPreExecute() {
-			MyLocationListener myLocationListener = new MyLocationListener();
-			myLocationListener = new MyLocationListener();
-			LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, myLocationListener);
+			listener = new MyLocationListener();
+			manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			// assume either GPS or Network is enabled
+			// TODO: add error handling
+			
+			// prefer GPS
+			// prefer GPS
+			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
+			}
+			else {
+				if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+					manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
+				}
+			}
 			// display waiting dialog
 			progressDialog = new ProgressDialog(LocalPlaceActivity.this);
 			progressDialog.setMessage("Loading local places...");
