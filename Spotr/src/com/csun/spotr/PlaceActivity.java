@@ -28,7 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.csun.spotr.helper.DownloadImageHelper;
 import com.csun.spotr.helper.GooglePlaceHelper;
 import com.csun.spotr.helper.JsonHelper;
 import com.csun.spotr.core.Place;
@@ -39,7 +38,7 @@ import com.csun.spotr.gui.PlaceItemAdapter;
  */
 public class PlaceActivity extends Activity {
 	private final String 			  	TAG = "[PlaceActivity]";
-	private final String				radius = "100";
+	private final String				radius = "150";
 	private       ListView            	placesListView;
 	private       PlaceItemAdapter      placeItemAdapter;
 	

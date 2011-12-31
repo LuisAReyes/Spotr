@@ -53,7 +53,6 @@ public class LeaderboardActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setContentView(R.layout.leaderboard);
 		for (int i = 0; i < FINAL; i++) {
 			username[i] = "username" + i;
@@ -63,8 +62,8 @@ public class LeaderboardActivity extends Activity {
 		}
 		
 		//-- Jeremy T. --//
-		m = MediaPlayer.create(getApplicationContext(), R.raw.lorekeeper);
-		n = MediaPlayer.create(getApplicationContext(), R.raw.you_suck);
+		m = MediaPlayer.create(getApplicationContext(), R.raw.the_show_goes_on);
+		n = MediaPlayer.create(getApplicationContext(), R.raw.the_show_goes_on);
 		
 		m.setLooping(true);
 		m.start();

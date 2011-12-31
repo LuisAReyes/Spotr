@@ -36,7 +36,8 @@ public class RewardImageAdapter extends BaseAdapter {
             imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
-        } else {
+        } 
+        else {
             imageView = (ImageView) convertView;
         }
 
@@ -46,7 +47,7 @@ public class RewardImageAdapter extends BaseAdapter {
 
     // references to our images
     private Integer[] mThumbIds = {
-            R.drawable.newbie, R.drawable.adventurer,
+    		R.drawable.newbie, R.drawable.adventurer,
             R.drawable.explorer, R.drawable.superstar,
             R.drawable.awards, R.drawable.awards,
             R.drawable.awards, R.drawable.awards,

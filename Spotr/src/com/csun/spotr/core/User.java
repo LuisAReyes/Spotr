@@ -8,48 +8,43 @@ import java.util.Vector;
 import android.graphics.Bitmap;
 
 public class User {
+	// required parameters
 	private final int id;
 	private final String username;
 	private String password;
-
+	// optional parameters
 	private String realname;
 	private Date dateOfBirth;
 	private int points;
+	private int challengesDone;
+	private int placesVisited;
 	private Bitmap picture;
-	private List<Integer> friendIds = null;
-	private List<Integer> badgeIds = null;
-	private List<Integer> challengeIds = null;
-	private List<Integer> placesVisitedIds = null;
 
 	public static class Builder {
+		// required parameters
 		private final int id;
 		private final String username;
 		private String password;
-
+		// optional parameters
 		private String realname;
 		private Date dateOfBirth;
 		private int points;
+		private int challengesDone;
+		private int placesVisited;
 		private Bitmap picture;
-		private List<Integer> friendIds;
-		private List<Integer> badgeIds;
-		private List<Integer> challengeIds;
-		private List<Integer> placesVisitedIds;
 
 		public Builder(int id, String username, String password) {
 			// required parameters
 			this.id = id;
 			this.username = username;
 			this.password = password;
-
 			// optional parameters
 			realname = username;
 			dateOfBirth = null;
 			points = 0;
+			challengesDone = 0;
+			placesVisited = 0;
 			picture = null;
-			friendIds = new ArrayList<Integer>();
-			badgeIds = new ArrayList<Integer>();
-			challengeIds = new ArrayList<Integer>();
-			placesVisitedIds = new ArrayList<Integer>();
 		}
 
 		public Builder realname(String realname) {
@@ -66,6 +61,16 @@ public class User {
 			this.points = points;
 			return this;
 		}
+		
+		public Builder challengesDone(int challengesDone) {
+			this.challengesDone = challengesDone;
+			return this;
+		}
+		
+		public Builder placesVisited(int placesVisited) {
+			this.placesVisited = placesVisited;
+			return this;
+		}
 
 		public Builder picture(Bitmap picture) {
 			this.picture = picture;
@@ -78,18 +83,15 @@ public class User {
 	}
 
 	public User(Builder builder) {
-		id = builder.id;
-		username = builder.username;
-		password = builder.password;
-		
-		realname = builder.realname;
-		dateOfBirth = builder.dateOfBirth;
-		points = builder.points;
-		picture = builder.picture;
-		friendIds = builder.friendIds;
-		badgeIds = builder.badgeIds;
-		challengeIds = builder.challengeIds;
-		placesVisitedIds = builder.placesVisitedIds;
+		this.id = builder.id;
+		this.username = builder.username;
+		this.password = builder.password;
+		this.realname = builder.realname;
+		this.dateOfBirth = builder.dateOfBirth;
+		this.points = builder.points;
+		this.setChallengesDone(builder.challengesDone);
+		this.setPlacesVisited(builder.placesVisited);
+		this.picture = builder.picture;
 	}
 
 	public String getRealname() {
@@ -124,6 +126,22 @@ public class User {
 		this.points = points;
 	}
 
+	public int getChallengesDone() {
+		return challengesDone;
+	}
+
+	public void setChallengesDone(int challengesDone) {
+		this.challengesDone = challengesDone;
+	}
+
+	public int getPlacesVisited() {
+		return placesVisited;
+	}
+
+	public void setPlacesVisited(int placesVisited) {
+		this.placesVisited = placesVisited;
+	}
+
 	public Bitmap getPicture() {
 		return picture;
 	}
@@ -132,64 +150,45 @@ public class User {
 		this.picture = picture;
 	}
 
-	public List<Integer> getFriendIds() {
-		return new ArrayList<Integer>(friendIds);
-	}
-
-	public void addFriendId(Integer id) {
-		this.friendIds.add(id);
-	}
-
-	public boolean removeFriendId(Integer id) {
-		if (this.friendIds.remove(id)) {
-			return true;
-		}
-		return false;
-	}
-
-	public List<Integer> getBadgeIds() {
-		return new ArrayList<Integer>(badgeIds);
-	}
-
-	public void addBadgeId(Integer id) {
-		this.badgeIds.add(id);
-	}
-
-	public boolean removeBadgeId(Integer id) {
-		if (this.badgeIds.remove(id)) {
-			return true;
-		}
-		return false;
-	}
-
-	public List<Integer> getChallengeIds() {
-		return new ArrayList<Integer>(challengeIds);
-	}
-
-	public void addChallengeId(Integer id) {
-		this.challengeIds.add(id);
-	}
-
-	public boolean removeChallenge(Integer id) {
-		if (this.challengeIds.remove(id)) {
-			return true;
-		}
-		return false;
-	}
-
-	public List<Integer> getPlacesVisitedIds() {
-		return new ArrayList<Integer>(placesVisitedIds);
-	}
-
-	public void setPlacesVisitedIds(Vector<Integer> placesVisitedIds) {
-		this.placesVisitedIds = placesVisitedIds;
-	}
-
 	public int getId() {
 		return id;
 	}
 
 	public String getUsername() {
 		return username;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (id != other.id)
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		}
+		else if (!username.equals(other.username))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", realname=" + realname + ", dateOfBirth=" + dateOfBirth + ", points=" + points + ", challengesDone=" + challengesDone + ", placesVisited=" + placesVisited + ", picture=" + picture + "]";
 	}
 }

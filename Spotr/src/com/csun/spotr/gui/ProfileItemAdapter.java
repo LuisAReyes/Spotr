@@ -1,5 +1,7 @@
 package com.csun.spotr.gui;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,18 +13,18 @@ import com.csun.spotr.R;
 
 public class ProfileItemAdapter extends BaseAdapter {
 	private Activity context;
-	private String headers[];
-	private String bodies[];
+	private List<String> headers;
+	private List<String> bodies;
 
-	public ProfileItemAdapter(Activity c, String[] h, String[] b) {
+	public ProfileItemAdapter(Activity context, List<String> headers, List<String> bodies) {
 		super();
-		context = c;
-		headers = h;
-		bodies = b;
+		this.context = context;
+		this.headers = headers;
+		this.bodies = bodies;
 	}
 
 	public int getCount() {
-		return headers.length;
+		return headers.size();
 	}
 
 	public Object getItem(int position) {
@@ -53,9 +55,8 @@ public class ProfileItemAdapter extends BaseAdapter {
 		else
 			holder = (ViewHolder) convertView.getTag();
 
-		holder.textviewHeader.setText(headers[position]);
-		holder.textviewBody.setText(bodies[position]);
-
+		holder.textviewHeader.setText(headers.get(position));
+		holder.textviewBody.setText(bodies.get(position));
 		return convertView;
 	}
 }

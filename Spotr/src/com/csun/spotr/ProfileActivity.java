@@ -1,69 +1,66 @@
 package com.csun.spotr;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.csun.spotr.core.Place;
+import com.csun.spotr.core.User;
 import com.csun.spotr.gui.ProfileItemAdapter;
+import com.csun.spotr.helper.JsonHelper;
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.OverlayItem;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * @author: Chan Nguyen
  */
 public class ProfileActivity extends Activity {
-	private final int CAMERA_PICTURE = 111;
-	private final int GALLERY_PICTURE = 222;
+	private static final String TAG = "[ProfileActivity]";
+	private static final String GET_USER_DETAIL_URL = "http://107.22.209.62/android/get_user_detail.php";
+	private static final int CAMERA_PICTURE = 111;
+	private static final int GALLERY_PICTURE = 222;
 	private ImageView userPictureImageView;
 	
-	// Zach Duvall (11/16/2011)
-	ListView profileList;
-	ProfileItemAdapter adapter;
+	private ListView profileList;
+	private ProfileItemAdapter adapter;
+	private int currentUserId;
 	
-	private static String headers[] = { 
-		"E-mail", 
-		"Name", 
-		"Headline", 
-		"Nickname", 
-		"Location", 
-		"Hometown", 
-		"About me" 
-	};
-	private static String bodies[] = { 
-		"zdduvall@gmail.com", 
-		"Zach Duvall", 
-		"I am awesome.", 
-		"Zach Attack", 
-		"Burbank, CA", 
-		"Durham, NC", 
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum lacus ut nisl " +
-		"tempor et malesuada arcu semper. Maecenas at arcu felis. Aliquam erat volutpat. Maecenas " +
-		"erat sapien, eleifend et dignissim id, iaculis fringilla purus. Aenean varius dui id nisl " +
-		"semper ac fermentum est convallis. Proin porttitor dolor sed massa lacinia accumsan. Proin " +
-		"fermentum consectetur condimentum. Nunc ornare felis felis, quis pulvinar quam. Ut non quam " +
-		"tortor, id ultricies lacus. Curabitur lobortis metus ac massa malesuada placerat. Vestibulum " +
-		"porttitor pulvinar dapibus. Sed eget ipsum non arcu ornare volutpat. Sed iaculis ornare lectus " +
-		"eget sodales." 
-	}; // Note: I would normally put this in XML, but this is extremely temporary.  This should be a JSON
-	   // string from the database.
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile);
 
+		// testing
+		currentUserId = 6;
+		
 		userPictureImageView = (ImageView) findViewById(R.id.image_view);
 		userPictureImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -71,10 +68,8 @@ public class ProfileActivity extends Activity {
 			}
 		});
 		
-		// Zach Duvall (11/16/2011)
-		profileList = (ListView) findViewById(R.id.profile_xml_listview_items);
-		adapter = new ProfileItemAdapter(this, headers, bodies);
-		profileList.setAdapter(adapter);
+		GetUserDetailTask task = new GetUserDetailTask();
+		task.execute();
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -146,4 +141,67 @@ public class ProfileActivity extends Activity {
 		}
 		return true;
 	}
+	
+	private class GetUserDetailTask extends AsyncTask<Void, Integer, User> {
+		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
+		private ProgressDialog progressDialog = null;
+
+		@Override
+		protected User doInBackground(Void...voids) {
+			userData.add(new BasicNameValuePair("user_id", Integer.toString(currentUserId)));
+			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_USER_DETAIL_URL, userData);
+			User user = null;
+			try {
+				user = new User.Builder( 
+						array.getJSONObject(0).getInt("id"), 
+						array.getJSONObject(0).getString("username"), 
+						array.getJSONObject(0).getString("password"))
+					.challengesDone(array.getJSONObject(0).getInt("challenges_done"))
+					.placesVisited(array.getJSONObject(0).getInt("places_visited"))
+					.points(array.getJSONObject(0).getInt("points"))
+					.build();
+			}
+			catch (JSONException e) {
+				Log.e(TAG + "GetUserDetailTask.doInBackground() : ", "JSON error parsing data" + e.toString());
+			}
+			return user;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			// display waiting dialog
+			progressDialog = new ProgressDialog(ProfileActivity.this);
+			progressDialog.setMessage("Loading ...");
+			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(true);
+			progressDialog.show();
+		}
+	
+		@Override
+		protected void onPostExecute(final User user) {
+			progressDialog.dismiss();
+			
+			TextView textViewChallengesDone = (TextView) findViewById(R.id.profile_xml_textview_challenges_done);
+			textViewChallengesDone.setText(Integer.toString(user.getChallengesDone()));
+			
+			TextView textViewPlacesVisited = (TextView) findViewById(R.id.profile_xml_textview_places_visited);
+			textViewPlacesVisited.setText(Integer.toString(user.getPlacesVisited()));
+			
+			TextView textViewPoints = (TextView) findViewById(R.id.profile_xml_textview_points);
+			textViewPoints.setText(Integer.toString(user.getPoints()));
+			
+			List<String> headers = new ArrayList<String>();
+			List<String> bodies = new ArrayList<String>();
+			
+			headers.add("Name");
+			bodies.add(user.getUsername());
+			headers.add("Password");
+			bodies.add(user.getPassword());
+			
+			profileList = (ListView) findViewById(R.id.profile_xml_listview_items);
+			adapter = new ProfileItemAdapter(ProfileActivity.this, headers, bodies);
+			profileList.setAdapter(adapter);
+		}
+	}
+	
 }

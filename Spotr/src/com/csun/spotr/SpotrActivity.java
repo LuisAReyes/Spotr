@@ -11,30 +11,12 @@ import android.widget.Button;
  * @author: Chan Nguyen
  */
 public class SpotrActivity extends Activity {
-	// testing 
-	private Button b1;
-	private Button b2;
-	private Button b3;
-	private Button b4;
-	private Button b5;
-	private Button b6;
-	private Button b7;
-	private Button b8;
-	private Button b9;
-	private Button b10;
-	private Button b11;
-	private Button b12;
-	private Button b13;
-	
-	// for demo activity
-	private Button d1;
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		b1 = (Button) findViewById(R.id.test_login);
+		Button b1 = (Button) findViewById(R.id.test_login);
 		b1.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.LoginActivity");
@@ -42,7 +24,7 @@ public class SpotrActivity extends Activity {
 			}
 		});
 
-		b2 = (Button) findViewById(R.id.test_mainmenu);
+		Button b2 = (Button) findViewById(R.id.test_mainmenu);
 		b2.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.MainMenuActivity");
@@ -50,7 +32,7 @@ public class SpotrActivity extends Activity {
 			}
 		});
 
-		b3 = (Button) findViewById(R.id.test_challenge);
+		Button b3 = (Button) findViewById(R.id.test_challenge);
 		b3.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.ChallengeActivity");
@@ -58,7 +40,7 @@ public class SpotrActivity extends Activity {
 			}
 		});
 
-		b4 = (Button) findViewById(R.id.test_mapview);
+		Button b4 = (Button) findViewById(R.id.test_mapview);
 		b4.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.MapViewActivity");
@@ -66,68 +48,46 @@ public class SpotrActivity extends Activity {
 			}
 		});
 		
-		b5 = (Button) findViewById(R.id.test_reward);
+		Button b5 = (Button) findViewById(R.id.test_friendlist);
 		b5.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.RewardActivity");
-				startActivity(i);
-			}
-		});
-		
-		/*b6 = (Button) findViewById(R.id.test_challengeinfo);
-		b6.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.ChallengeInfoActivity");
-				startActivity(i);
-			}
-		});*/
-		
-		b7 = (Button) findViewById(R.id.test_profile);
-		b7.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.ProfileActivity");
-				startActivity(i);
-			}
-		});
-		
-		b8 = (Button) findViewById(R.id.test_friendlist);
-		b8.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.FriendListActivity");
 				startActivity(i);
 			}
 		});
 		
-		b9 = (Button) findViewById(R.id.test_place);
-		b9.setOnClickListener(new OnClickListener() {
+		Button b6 = (Button) findViewById(R.id.test_place);
+		b6.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.PlaceActivity");
 				startActivity(i);
 			}
 		});
 		
-		b10 = (Button) findViewById(R.id.test_leaderboard);
-		b10.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.LeaderboardActivity");
-				startActivity(i);
-			}
-		});
-		
-		b11 = (Button) findViewById(R.id.test_localmapview);
-		b11.setOnClickListener(new OnClickListener() {
+		Button b7 = (Button) findViewById(R.id.test_localmapview);
+		b7 .setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.LocalMapViewActivity");
 				startActivity(i);
 			}
 		});
 	
-		b12 = (Button) findViewById(R.id.test_localplace);
-		b12.setOnClickListener(new OnClickListener() {
+		Button b8 = (Button) findViewById(R.id.test_localplace);
+		b8.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.LocalPlaceActivity");
 				startActivity(i);
 			}
 		});
+		
+		Button b9 = (Button) findViewById(R.id.test_profilemain);
+		b9.setOnClickListener(new OnClickListener() {
+			public void onClick(View arg0) {
+				Intent i = new Intent("com.csun.spotr.ProfileMainActivity");
+				startActivity(i);
+			}
+		});
+		
+		
 	}
 }

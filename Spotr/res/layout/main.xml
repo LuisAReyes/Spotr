@@ -43,28 +43,12 @@
             android:text="Map View Activity" />
 
         <Button
-            android:id="@+id/test_reward"
-            style="@style/my_button_2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Reward Activity" />
-
-        <Button
             android:id="@+id/test_challengeinfo"
             style="@style/my_button_1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Challenge Info Activity" />
-
-        <Button
-            android:id="@+id/test_profile"
-            style="@style/my_button_3"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Profile Activity" />
 
         <Button
             android:id="@+id/test_friendlist"
@@ -83,14 +67,6 @@
             android:text="Place Activity" />
 
         <Button
-            android:id="@+id/test_leaderboard"
-            style="@style/my_button_3"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Leaderboard Activity" />
-
-        <Button
             android:id="@+id/test_localmapview"
             style="@style/my_button_2"
             android:layout_width="fill_parent"
@@ -105,6 +81,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Local Place Activity" />
+        
+        <Button
+            android:id="@+id/test_profilemain"
+            style="@style/my_button_1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Main Profile Activity" />
     </LinearLayout>
 
 </ScrollView>

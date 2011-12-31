@@ -138,14 +138,7 @@
             </intent-filter>
         </activity>
         
-        <!-- Challenge Info Activity -->
-        <activity android:name=".ProfileActivity" 
-        		  android:configChanges="orientation|keyboardHidden">
-            <intent-filter >
-                <action android:name="com.csun.spotr.ProfileActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+       
         
         <!-- Settings Activity -->
         <activity android:name=".SettingsActivity" 
@@ -227,6 +220,25 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>    
+        
+        
+         <!-- Profile Activity -->
+        <activity android:name=".ProfileMainActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
+            <intent-filter >
+                <action android:name="com.csun.spotr.ProfileMainActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+         <!-- Profile Activity -->
+        <activity android:name=".ProfileActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
+            <intent-filter >
+                <action android:name="com.csun.spotr.ProfileActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         
         <!-- Profile Edit Activity -->
  		<activity android:name=".ProfileEditActivity" 

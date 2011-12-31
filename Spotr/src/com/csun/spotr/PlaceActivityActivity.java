@@ -23,7 +23,7 @@ public class PlaceActivityActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.place_activity);
         LinearLayout mainLayout = (LinearLayout) findViewById(R.id.place_activity_xml_linearlayout_main);
-        for (int i = 0; i < 20; ++i) {
+        for (int i = 0; i < 10; ++i) {
         	addTable(mainLayout);
         }
     }

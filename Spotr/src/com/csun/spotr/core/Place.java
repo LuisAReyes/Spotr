@@ -146,7 +146,7 @@ public class Place {
 		return name;
 	}
 
-	public void setIconUrl(String icon) {
+	public void setIconUrl(String iconUrl) {
 		this.iconUrl = iconUrl;
 	}
 
@@ -178,9 +178,23 @@ public class Place {
 		return rating;
 	}
 
+	public Set<Integer> getChallenges() {
+		return new HashSet<Integer>(challenges);
+	}
+
+	public void addChallenges(Integer i) {
+		this.challenges.add(i);
+	}
+
+	public void showChallenges() {
+		for (Integer i : challenges) {
+			System.out.print(i + ", ");
+		}
+	}
+
 	@Override
 	public String toString() {
-		return "(" + Double.toString(longitude) + ", " + Double.toString(latitude) + ")";
+		return "Place [longitude=" + longitude + ", latitude=" + latitude + ", id=" + id + ", googleId=" + googleId + ", address=" + address + ", name=" + name + ", types=" + types + ", iconUrl=" + iconUrl + ", phoneNumber=" + phoneNumber + ", websiteUrl=" + websiteUrl + ", rating=" + rating + ", challenges=" + challenges + "]";
 	}
 
 	@Override
@@ -212,17 +226,4 @@ public class Place {
 		return true;
 	}
 
-	public Set<Integer> getChallenges() {
-		return new HashSet<Integer>(challenges);
-	}
-
-	public void addChallenges(Integer i) {
-		this.challenges.add(i);
-	}
-
-	public void showChallenges() {
-		for (Integer i : challenges) {
-			System.out.print(i + ", ");
-		}
-	}
 }
