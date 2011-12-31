@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.csun.spotr.core.Place;
 import com.csun.spotr.core.User;
 import com.csun.spotr.gui.ProfileItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
@@ -59,7 +58,8 @@ public class ProfileActivity extends Activity {
 		setContentView(R.layout.profile);
 
 		// testing
-		currentUserId = 6;
+		Bundle extrasBundle = getIntent().getExtras();
+		currentUserId = extrasBundle.getInt("user_id");
 		
 		userPictureImageView = (ImageView) findViewById(R.id.image_view);
 		userPictureImageView.setOnClickListener(new OnClickListener() {

@@ -15,9 +15,15 @@ public class ProfileMainActivity extends TabActivity {
 		TabHost tabHost = getTabHost(); 
 		TabHost.TabSpec spec; 
 		Intent intent; 
-
+		
+		// get use_id from ProfileMainActivity
+		Bundle extras = getIntent().getExtras();
+		int currentUserId = extras.getInt("user_id");
 		// tab 1
 		intent = new Intent().setClass(this, ProfileActivity.class);
+		// pass it to ProfileActivity
+		intent.putExtra("user_id", currentUserId);
+		
 		spec = tabHost
 				.newTabSpec("profile")
 				.setIndicator("Profile", res.getDrawable(R.drawable.place_activity_tab))

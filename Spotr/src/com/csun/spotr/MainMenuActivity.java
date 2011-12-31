@@ -1,5 +1,8 @@
 package com.csun.spotr;
 
+import com.csun.spotr.core.CurrentUser;
+import com.csun.spotr.core.User;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,8 +42,12 @@ public class MainMenuActivity extends Activity {
 		btnProfile = (Button) findViewById(R.id.main_menu_xml_button_profile_icon);
 		btnProfile.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.ProfileActivity");
-				startActivity(i);
+				User user = CurrentUser.getCurrentUser();
+				Bundle extras = new Bundle();
+				extras.putInt("user_id", user.getId());
+				Intent intent = new Intent("com.csun.spotr.ProfileMainActivity");
+				intent.putExtras(extras);
+				startActivity(intent);
 			}
 		});
 
@@ -62,11 +69,9 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		// button for the leaderboard 	
 		btnLeaderboards = (Button) findViewById(R.id.main_menu_xml_button_leader_board_icon);
 		btnLeaderboards.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				// editted by Chan Nguyen 11/12/2011
 				Intent i = new Intent("com.csun.spotr.LeaderboardActivity");
 				startActivity(i);
 			}
@@ -90,20 +95,6 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-		/*
-		 * btnSettings = (Button)
-		 * findViewById(R.id.main_menu_xml_button_spot_icon);
-		 * btnSettings.setOnClickListener(new OnClickListener() { public void
-		 * onClick(View arg0) { Intent i = new
-		 * Intent("com.csun.spotr.settingsActivity"); startActivity(i); } });
-		 * 
-		 * btnLogoff = (Button)
-		 * findViewById(R.id.main_menu_xml_button_spot_icon);
-		 * btnLogoff.setOnClickListener(new OnClickListener() { public void
-		 * onClick(View arg0) { Intent i = new
-		 * Intent("com.csun.spotr.ProfileActivity"); startActivity(i); } });
-		 */
-		
 		//populating Notification with Friends array
 		notificationList = getResources().getStringArray(R.array.friends_array);
 		mListView = (ListView) findViewById(R.id.main_menu_xml_slide_content);

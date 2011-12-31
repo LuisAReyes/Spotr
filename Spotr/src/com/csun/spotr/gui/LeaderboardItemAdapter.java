@@ -1,6 +1,9 @@
 package com.csun.spotr.gui;
 
+import java.util.List;
+
 import com.csun.spotr.R;
+import com.csun.spotr.core.User;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -13,37 +16,32 @@ import android.widget.TextView;
 
 public class LeaderboardItemAdapter extends BaseAdapter {
 	private Activity context;
-	private String username[];
-	private String status[];
-	private String rank[];
-	private int imageId[];
-
-	public LeaderboardItemAdapter(Activity activityContext, String[] username, String[] status, String[] rank, int[] imageId) {
+	private List<User> userList;
+	
+	public LeaderboardItemAdapter(Activity context, List<User> userList) {
 		super();
-		this.context = activityContext;
-		this.username = username;
-		this.status = status;
-		this.rank = rank;
-		this.imageId = imageId;
+		this.context = context;
+		this.userList = userList;
 	}
 
 	public int getCount() {
-		return username.length;
+		return userList.size();
 	}
 
 	public Object getItem(int position) {
-		return position;
+		return userList.get(position);
 	}
 
 	public long getItemId(int position) {
 		return position;
 	}
 
-	public static class ItemViewHolder {
-		TextView usernameTextView;
-		TextView statusTextView;
-		TextView rankTextView;
-		ImageView imageIdImageView;
+	private static class ItemViewHolder {
+		TextView textViewRank;
+		TextView textViewUsername;
+		TextView textViewChallengesDone;
+		TextView textViewPlacesVisited;
+		TextView textViewPoints;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -52,20 +50,22 @@ public class LeaderboardItemAdapter extends BaseAdapter {
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.leaderboard_item, null);
 			holder = new ItemViewHolder();
-			holder.usernameTextView = (TextView) convertView.findViewById(R.id.leaderboard_item_xml_leaderboard_item_user_name);
-			holder.statusTextView = (TextView) convertView.findViewById(R.id.leaderboard_item_xml_leaderboard_item_user_status);
-			holder.rankTextView = (TextView) convertView.findViewById(R.id.leaderboard_item_xml_leaderboard_item_user_rank);
-			holder.imageIdImageView = (ImageView) convertView.findViewById(R.id.leaderboard_item_xml_leaderboard_item_user_image);
+			holder.textViewRank = (TextView) convertView.findViewById(R.id.leaderboard_item_xml_textview_rank);
+			holder.textViewUsername = (TextView) convertView.findViewById(R.id.leaderboard_item_xml_textview_username);
+			holder.textViewChallengesDone = (TextView) convertView.findViewById(R.id.leaderboard_item_xml_textview_cd);
+			holder.textViewPlacesVisited = (TextView) convertView.findViewById(R.id.leaderboard_item_xml_textview_pv);
+			holder.textViewPoints = (TextView) convertView.findViewById(R.id.leaderboard_item_xml_textview_pts);
 			convertView.setTag(holder);
 		}
 		else {
 			holder = (ItemViewHolder) convertView.getTag();
 		}
 
-		holder.usernameTextView.setText(username[position]);
-		holder.statusTextView.setText(status[position]);
-		holder.rankTextView.setText(rank[position]);
-		holder.imageIdImageView.setImageResource(imageId[position]);
+		holder.textViewRank.setText(Integer.toString(userList.get(position).getRank()));
+		holder.textViewUsername.setText(userList.get(position).getUsername());
+		holder.textViewChallengesDone.setText(Integer.toString(userList.get(position).getChallengesDone()));
+		holder.textViewPlacesVisited.setText(Integer.toString(userList.get(position).getPlacesVisited()));
+		holder.textViewPoints.setText(Integer.toString(userList.get(position).getPoints()));
 		return convertView;
 	}
 }

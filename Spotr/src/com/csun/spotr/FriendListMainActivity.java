@@ -9,7 +9,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.AdapterView;
@@ -31,7 +34,7 @@ public class FriendListMainActivity extends Activity {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		// testing purpose
-		CurrentUser.setCurrentUser(6, "vlad", "somepass");
+		// CurrentUser.setCurrentUser(6, "vlad", "somepass");
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list_main);
@@ -77,16 +80,38 @@ public class FriendListMainActivity extends Activity {
 		}
 		
 		@Override
-		protected void onPostExecute(List<User> userList) {
+		protected void onPostExecute(final List<User> userList) {
 			progressDialog.dismiss();
 			listViewUser = (ListView) findViewById(R.id.friend_list_main_xml_listview_friends);
 			userItemAdapter = new FriendListMainItemAdapter(FriendListMainActivity.this, userList, R.drawable.adium);
 			listViewUser.setAdapter(userItemAdapter);
 			listViewUser.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					// handle click 
+					startDialog(userList.get(position));
 				}
 			});
 		}
+	}
+	
+	private void startDialog(final User user) {
+		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
+		myAlertDialog.setTitle("Friend Dialog");
+		myAlertDialog.setMessage("Pick an option");
+		myAlertDialog.setPositiveButton("Send a message", new DialogInterface.OnClickListener() {
+			// do something when the button is clicked
+			public void onClick(DialogInterface arg0, int arg1) {
+			}
+		});
+
+		myAlertDialog.setNegativeButton("View profile", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				Intent intent = new Intent("com.csun.spotr.ProfileMainActivity");
+				Bundle extras = new Bundle();
+				extras.putInt("user_id", user.getId());
+				intent.putExtras(extras);
+				startActivity(intent);
+			}
+		});
+		myAlertDialog.show();
 	}
 }

@@ -276,8 +276,6 @@ public class MapViewActivity extends MapActivity {
 
 		@Override
 		protected boolean onBalloonTap(int index, OverlayItem item) {
-			Intent intent = new Intent("com.csun.spotr.PlaceMainActivity");
-			startActivity(intent);
 			return true;
 		}
 	}

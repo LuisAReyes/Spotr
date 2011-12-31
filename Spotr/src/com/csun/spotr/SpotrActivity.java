@@ -24,14 +24,6 @@ public class SpotrActivity extends Activity {
 			}
 		});
 
-		Button b2 = (Button) findViewById(R.id.test_mainmenu);
-		b2.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.MainMenuActivity");
-				startActivity(i);
-			}
-		});
-
 		Button b3 = (Button) findViewById(R.id.test_challenge);
 		b3.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
@@ -44,14 +36,6 @@ public class SpotrActivity extends Activity {
 		b4.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.MapViewActivity");
-				startActivity(i);
-			}
-		});
-		
-		Button b5 = (Button) findViewById(R.id.test_friendlist);
-		b5.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.FriendListActivity");
 				startActivity(i);
 			}
 		});
@@ -79,15 +63,5 @@ public class SpotrActivity extends Activity {
 				startActivity(i);
 			}
 		});
-		
-		Button b9 = (Button) findViewById(R.id.test_profilemain);
-		b9.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.ProfileMainActivity");
-				startActivity(i);
-			}
-		});
-		
-		
 	}
 }

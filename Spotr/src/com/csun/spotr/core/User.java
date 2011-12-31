@@ -18,6 +18,7 @@ public class User {
 	private int points;
 	private int challengesDone;
 	private int placesVisited;
+	private int rank;
 	private Bitmap picture;
 
 	public static class Builder {
@@ -31,6 +32,7 @@ public class User {
 		private int points;
 		private int challengesDone;
 		private int placesVisited;
+		private int rank;
 		private Bitmap picture;
 
 		public Builder(int id, String username, String password) {
@@ -76,6 +78,11 @@ public class User {
 			this.picture = picture;
 			return this;
 		}
+		
+		public Builder rank(int rank) {
+			this.rank = rank;
+			return this;
+		}
 
 		public User build() {
 			return new User(this);
@@ -89,8 +96,9 @@ public class User {
 		this.realname = builder.realname;
 		this.dateOfBirth = builder.dateOfBirth;
 		this.points = builder.points;
-		this.setChallengesDone(builder.challengesDone);
-		this.setPlacesVisited(builder.placesVisited);
+		this.challengesDone = builder.challengesDone;
+		this.placesVisited = builder.placesVisited;
+		this.rank = builder.rank;
 		this.picture = builder.picture;
 	}
 
@@ -142,6 +150,14 @@ public class User {
 		this.placesVisited = placesVisited;
 	}
 
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+	
+	public int getRank() {
+		return rank;
+	}
+	
 	public Bitmap getPicture() {
 		return picture;
 	}
