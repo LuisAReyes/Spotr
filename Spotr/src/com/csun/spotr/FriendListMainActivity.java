@@ -27,11 +27,11 @@ import com.csun.spotr.gui.FriendListMainItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
 public class FriendListMainActivity extends Activity {
-	private static final String    				   TAG = "[FriendListMainActivity]";
-	private static final String 				   GET_FRIENDS_URL = "http://107.22.209.62/android/get_friends.php";
-	private 			 ListView 				   listViewUser = null;
-	private 		     FriendListMainItemAdapter userItemAdapter = null;
-	private  		     List<User>                userList = null;
+	private static final String TAG = "[FriendListMainActivity]";
+	private static final String GET_FRIENDS_URL = "http://107.22.209.62/android/get_friends.php";
+	private ListView listViewUser = null;
+	private FriendListMainItemAdapter userItemAdapter = null;
+	private List<User> userList = null;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

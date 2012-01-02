@@ -41,12 +41,12 @@ import com.google.android.maps.OverlayItem;
  * @author: Chan Nguyen
  */
 public class MapViewActivity extends MapActivity {
-	private static final String 			TAG = "[MapViewActivity]";
-	private static final String 			RADIUS = "50";
-	private 			 MapView 			mapView;
-	private 			 List<Overlay> 		mapOverlays;
-	private 			 MyItemizedOverlay 	itemizedOverlay;
-	private 			 MapController 		mapController;
+	private static final String TAG = "[MapViewActivity]";
+	private static final String RADIUS = "50";
+	private MapView mapView;
+	private List<Overlay> mapOverlays;
+	private MyItemizedOverlay itemizedOverlay;
+	private MapController mapController;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

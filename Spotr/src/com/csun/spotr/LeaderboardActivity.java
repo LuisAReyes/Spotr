@@ -36,7 +36,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.widget.Button;
 
-
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.core.User;
 import com.csun.spotr.gui.FriendListMainItemAdapter;
@@ -44,10 +43,10 @@ import com.csun.spotr.gui.LeaderboardItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
 public class LeaderboardActivity extends Activity {
-	private static final String     			 TAG = "[LeaderboardActivity]";
-	private static final String 				 GET_USERS_URL = "http://107.22.209.62/android/get_users.php";
-	private 			 ListView 				 list = null;
-	private 			 LeaderboardItemAdapter  adapter = null;
+	private static final String TAG = "[LeaderboardActivity]";
+	private static final String GET_USERS_URL = "http://107.22.209.62/android/get_users.php";
+	private ListView list = null;
+	private LeaderboardItemAdapter adapter = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

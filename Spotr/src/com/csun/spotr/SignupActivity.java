@@ -29,16 +29,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class SignupActivity extends Activity {
-	private static final String 	TAG = "[SignupActivity]";
-	private static final String 	SIGN_UP_URL = "http://107.22.209.62/android/signup.php";
-	private 			 Button 	buttonSignup = null;
-	private 			 EditText 	edittextEmail = null;
-	private 			 EditText 	edittextPassword = null;
-	private 			 EditText 	edittextConfirmPassword = null;
-	private 			 CheckBox 	checkboxVisible = null;
-	private 			 Button 	buttonExit = null;
-	private 			 boolean 	passwordVisible = false;
-	private 			 boolean 	validInformation = false;
+	private static final String TAG = "[SignupActivity]";
+	private static final String SIGN_UP_URL = "http://107.22.209.62/android/signup.php";
+	private Button 	buttonSignup = null;
+	private EditText edittextEmail = null;
+	private EditText edittextPassword = null;
+	private EditText edittextConfirmPassword = null;
+	private CheckBox checkboxVisible = null;
+	private Button buttonExit = null;
+	private boolean passwordVisible = false;
+	private boolean validInformation = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

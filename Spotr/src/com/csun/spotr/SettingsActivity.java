@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 public class SettingsActivity extends Activity {
 	private static final String TAG = "[SettingActivity]";
-	String[] defaultView;
+	private String[] defaultView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

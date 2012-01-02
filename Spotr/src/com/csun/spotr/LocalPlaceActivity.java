@@ -47,11 +47,11 @@ import com.google.android.maps.GeoPoint;
  * @author: Chan Nguyen
  */
 public class LocalPlaceActivity extends Activity {
-	private static final String 		    TAG = "[LocalPlaceActivity]";
-	private static final String 		    URL = "http://107.22.209.62/android/get_spots.php";
-	private static final String				RADIUS = "50";
-	private              ListView           placesListView;
-	private              PlaceItemAdapter   placeItemAdapter;
+	private static final String TAG = "[LocalPlaceActivity]";
+	private static final String URL = "http://107.22.209.62/android/get_spots.php";
+	private static final String	RADIUS = "50";
+	private ListView placesListView;
+	private PlaceItemAdapter   placeItemAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

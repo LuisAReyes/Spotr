@@ -31,15 +31,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity {
-	private static final String 					TAG = "[LoginActivity]";
-	private static final String 					LOGIN_URL = "http://107.22.209.62/android/login.php";
-	private 			 EditText 					edittextUsername;
-	private 			 EditText 					edittextPassword;
-	private 		     SharedPreferences 			prefs;
-	private 			 SharedPreferences.Editor 	editor;
-	private 			 boolean 	  				prefsSavePassword = false;
-	private 			 boolean 					passwordVisible = false;
-	private 			 boolean 					savePassword = false;
+	private static final String TAG = "[LoginActivity]";
+	private static final String LOGIN_URL = "http://107.22.209.62/android/login.php";
+	private EditText edittextUsername;
+	private EditText edittextPassword;
+	private SharedPreferences prefs;
+	private SharedPreferences.Editor editor;
+	private boolean prefsSavePassword = false;
+	private boolean passwordVisible = false;
+	private boolean savePassword = false;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

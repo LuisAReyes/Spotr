@@ -17,10 +17,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainMenuActivity extends Activity {
-	private static final String 				TAG = "[MainMenuActivity]";
-	private 			 String[] 				notificationList = null;
-	private 			 ArrayAdapter<String> 	adapter = null;
-	private 			 ListView 				mListView = null;
+	private static final String TAG = "[MainMenuActivity]";
+	private String[] notificationList = null;
+	private ArrayAdapter<String> 	adapter = null;
+	private ListView mListView = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

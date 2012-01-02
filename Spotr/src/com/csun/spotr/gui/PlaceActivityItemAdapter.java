@@ -112,8 +112,8 @@ public class PlaceActivityItemAdapter extends BaseAdapter {
 			// TableRow.LayoutParams textLayoutParams = new TableRow.LayoutParams();
 	    	// textLayoutParams.setMargins(100, 0, 0, 0);
 	    	// row.addView(messageBox, textLayoutParams);
-			row.addView(messageBox);
 			row.addView(dummy);
+			row.addView(messageBox);
 	    	holder.table.addView(row);
 	
 		}

@@ -29,12 +29,12 @@ import com.csun.spotr.gui.FriendListMainItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
 public class FriendListActionActivity extends Activity {
-	private static final  String 					 TAG = "FriendListActionActivity";
-	private static final  String 					 SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
-	private 			  ListView 					 listViewUser = null;
-	private 		      FriendListMainItemAdapter  userItemAdapter = null;
-	private 			  EditText 				     editTextSearch = null;
-	private 			  List<User>  				 userList = null;
+	private static final  String TAG = "FriendListActionActivity";
+	private static final  String SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
+	private ListView listViewUser = null;
+	private FriendListMainItemAdapter userItemAdapter = null;
+	private EditText editTextSearch = null;
+	private List<User> userList = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

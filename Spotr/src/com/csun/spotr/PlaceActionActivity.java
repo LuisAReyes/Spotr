@@ -26,13 +26,13 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class PlaceActionActivity extends Activity {
-	private static final  String 				  TAG = "[PlaceActionActivity]";
-	private static final  String 				  GET_CHALLENGES_URL = "http://107.22.209.62/android/get_challenges_from_place.php";
-	private static final  String				  DO_CHECK_IN_URL = "http://107.22.209.62/android/do_check_in.php";
-	private 			  int 				      currentPlaceId;
-	private 			  int 					  currentChosenItem;
-	private 			  ListView 				  list;
-	private				  PlaceActionItemAdapter  adapter;
+	private static final  String TAG = "[PlaceActionActivity]";
+	private static final  String GET_CHALLENGES_URL = "http://107.22.209.62/android/get_challenges_from_place.php";
+	private static final  String DO_CHECK_IN_URL = "http://107.22.209.62/android/do_check_in.php";
+	private int currentPlaceId;
+	private int currentChosenItem;
+	private ListView list;
+	private	PlaceActionItemAdapter  adapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

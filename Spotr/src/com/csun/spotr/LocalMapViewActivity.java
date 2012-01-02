@@ -47,13 +47,13 @@ import com.google.android.maps.OverlayItem;
  * @author: Chan Nguyen
  */
 public class LocalMapViewActivity extends MapActivity {
-	private static final String 			TAG = "[LocalMapViewActivity]";
-	private static final String 			URL = "http://107.22.209.62/android/get_spots.php";
-	private static final String 			RADIUS = "500";
-	private 			 MapView 			mapView = null;
-	private 			 List<Overlay> 		mapOverlays = null;
-	private 			 MyItemizedOverlay  itemizedOverlay = null;
-	private              MapController      mapController = null;
+	private static final String TAG = "[LocalMapViewActivity]";
+	private static final String URL = "http://107.22.209.62/android/get_spots.php";
+	private static final String RADIUS = "500";
+	private MapView mapView = null;
+	private List<Overlay> mapOverlays = null;
+	private MyItemizedOverlay itemizedOverlay = null;
+	private MapController mapController = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

@@ -37,10 +37,10 @@ import com.csun.spotr.gui.PlaceItemAdapter;
  * @author: Chan Nguyen
  */
 public class PlaceActivity extends Activity {
-	private static final String 			TAG = "[PlaceActivity]";
-	private static final String		  		RADIUS = "50";
-	private              ListView           placesListView;
-	private       		 PlaceItemAdapter   placeItemAdapter;
+	private static final String TAG = "[PlaceActivity]";
+	private static final String	RADIUS = "50";
+	private ListView placesListView;
+	private PlaceItemAdapter placeItemAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

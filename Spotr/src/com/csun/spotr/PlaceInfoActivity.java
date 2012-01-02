@@ -38,13 +38,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
 public class PlaceInfoActivity extends MapActivity {
-	private static final String 			TAG = "[PlaceInfoActivity]";
-	private static final String 			GET_SPOT_DETAIL_URL = "http://107.22.209.62/android/get_spot_detail.php";
-	private 			 int 				currentPlaceId = 0;
-	private 			 MapView 			mapView = null;
-	private 			 List<Overlay> 		mapOverlays = null;
-	private 			 MapController 		mapController = null;
-	private 			 MyItemizedOverlay  itemizedOverlay = null;
+	private static final String TAG = "[PlaceInfoActivity]";
+	private static final String GET_SPOT_DETAIL_URL = "http://107.22.209.62/android/get_spot_detail.php";
+	private int currentPlaceId = 0;
+	private MapView mapView = null;
+	private List<Overlay> mapOverlays = null;
+	private MapController mapController = null;
+	private MyItemizedOverlay itemizedOverlay = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
