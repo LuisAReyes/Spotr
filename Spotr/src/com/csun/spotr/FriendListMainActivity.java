@@ -27,22 +27,20 @@ import com.csun.spotr.gui.FriendListMainItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
 public class FriendListMainActivity extends Activity {
-	private static final String TAG = "FriendListMainActivity";
-	private static final String GET_FRIENDS_URL = "http://107.22.209.62/android/get_friends.php";
-	private ListView listViewUser;
-	private FriendListMainItemAdapter userItemAdapter;
+	private static final String    				   TAG = "[FriendListMainActivity]";
+	private static final String 				   GET_FRIENDS_URL = "http://107.22.209.62/android/get_friends.php";
+	private 			 ListView 				   listViewUser = null;
+	private 		     FriendListMainItemAdapter userItemAdapter = null;
+	private  		     List<User>                userList = null;
 	
 	public void onCreate(Bundle savedInstanceState) {
-		// testing purpose
-		// CurrentUser.setCurrentUser(6, "vlad", "somepass");
-		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list_main);
 		GetFriendTask task = new GetFriendTask();
 		task.execute();
 	}
 	
-	private class GetFriendTask extends AsyncTask<Void, Integer, List<User>> {
+	private class GetFriendTask extends AsyncTask<Void, Integer, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>(); 
 		private  ProgressDialog progressDialog = null;
 		
@@ -58,39 +56,58 @@ public class FriendListMainActivity extends Activity {
 		}
 		
 		@Override
-		protected List<User> doInBackground(Void...voids) {
-			List<User> userList = new ArrayList<User>();
+		protected Boolean doInBackground(Void...voids) {
+			// initialize list of user
+			userList = new ArrayList<User>();
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_FRIENDS_URL, userData);
-			try {
-				for (int i = 0; i < array.length(); ++i) { 
-					userList.add(
-						new User.Builder(
-							array.getJSONObject(i).getInt("id"),
-							array.getJSONObject(i).getString("username"),
-							array.getJSONObject(i).getString("password")).build());
-					
-					Log.d(TAG, userList.get(i).getUsername());
-					Log.d(TAG, userList.get(i).getPassword());
+			if (array != null) { 
+				try {
+					for (int i = 0; i < array.length(); ++i) { 
+						userList.add(
+							new User.Builder(
+								array.getJSONObject(i).getInt("id"),
+								array.getJSONObject(i).getString("username"),
+								array.getJSONObject(i).getString("password"))
+								.imageUrl(array.getJSONObject(i).getString("image_url")).build());
+						
+					}
 				}
+				catch (JSONException e) {
+					Log.e(TAG + "GetFriendTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+				}
+				return true;
 			}
-			catch (JSONException e) {
-				Log.e(TAG + "GetFriendTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+			else {
+				return false;
 			}
-			return userList;
 		}
 		
 		@Override
-		protected void onPostExecute(final List<User> userList) {
+		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
-			listViewUser = (ListView) findViewById(R.id.friend_list_main_xml_listview_friends);
-			userItemAdapter = new FriendListMainItemAdapter(FriendListMainActivity.this, userList, R.drawable.adium);
-			listViewUser.setAdapter(userItemAdapter);
-			listViewUser.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					startDialog(userList.get(position));
-				}
-			});
+			if (result == true) {
+				listViewUser = (ListView) findViewById(R.id.friend_list_main_xml_listview_friends);
+				userItemAdapter = new FriendListMainItemAdapter(FriendListMainActivity.this, userList);
+				listViewUser.setAdapter(userItemAdapter);
+				listViewUser.setOnItemClickListener(new OnItemClickListener() {
+					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+						startDialog(userList.get(position));
+					}
+				});
+			}
+			else {
+				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListMainActivity.this).create();
+				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
+				dialogMessage.setMessage("You don't have any friend yet!");
+				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				dialogMessage.show();
+			}
 		}
+			
 	}
 	
 	private void startDialog(final User user) {

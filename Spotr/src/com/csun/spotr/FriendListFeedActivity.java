@@ -25,6 +25,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 public class FriendListFeedActivity extends Activity {
+	private static final String TAG = "[FriendListFeedActivity]";
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

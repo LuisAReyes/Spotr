@@ -19,7 +19,7 @@ public class User {
 	private int challengesDone;
 	private int placesVisited;
 	private int rank;
-	private Bitmap picture;
+	private String imageUrl;
 
 	public static class Builder {
 		// required parameters
@@ -33,7 +33,7 @@ public class User {
 		private int challengesDone;
 		private int placesVisited;
 		private int rank;
-		private Bitmap picture;
+		private String imageUrl;
 
 		public Builder(int id, String username, String password) {
 			// required parameters
@@ -46,7 +46,7 @@ public class User {
 			points = 0;
 			challengesDone = 0;
 			placesVisited = 0;
-			picture = null;
+			imageUrl = null;
 		}
 
 		public Builder realname(String realname) {
@@ -74,8 +74,8 @@ public class User {
 			return this;
 		}
 
-		public Builder picture(Bitmap picture) {
-			this.picture = picture;
+		public Builder imageUrl(String imageUrl) {
+			this.imageUrl = imageUrl;
 			return this;
 		}
 		
@@ -99,7 +99,7 @@ public class User {
 		this.challengesDone = builder.challengesDone;
 		this.placesVisited = builder.placesVisited;
 		this.rank = builder.rank;
-		this.picture = builder.picture;
+		this.imageUrl = builder.imageUrl;
 	}
 
 	public String getRealname() {
@@ -158,12 +158,12 @@ public class User {
 		return rank;
 	}
 	
-	public Bitmap getPicture() {
-		return picture;
+	public String getImageUrl() {
+		return imageUrl;
 	}
 
-	public void setPicture(Bitmap picture) {
-		this.picture = picture;
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	public int getId() {
@@ -205,6 +205,6 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", realname=" + realname + ", dateOfBirth=" + dateOfBirth + ", points=" + points + ", challengesDone=" + challengesDone + ", placesVisited=" + placesVisited + ", picture=" + picture + "]";
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", realname=" + realname + ", dateOfBirth=" + dateOfBirth + ", points=" + points + ", challengesDone=" + challengesDone + ", placesVisited=" + placesVisited + ", imageUrl=" + imageUrl + "]";
 	}
 }

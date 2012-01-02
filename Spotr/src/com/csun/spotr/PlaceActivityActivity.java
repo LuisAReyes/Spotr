@@ -1,155 +1,120 @@
 package com.csun.spotr;
 
-import com.csun.spotr.core.Challenge;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import com.csun.spotr.core.CurrentUser;
+import com.csun.spotr.core.PlaceLog;
+import com.csun.spotr.gui.PlaceActivityItemAdapter;
+import com.csun.spotr.helper.JsonHelper;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Typeface;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 public class PlaceActivityActivity extends Activity {
+	private static final String 					TAG = "[PlaceActivityActivity]";
+	private static final String 				 	GET_PLACELOG_URL = "http://107.22.209.62/android/get_activities.php";
+	private 			 List<PlaceLog> 		 	placeLogList;
+	private 			 int 						currentPlaceId = 0;
+	private 			 ListView 				    list = null;
+	private 			 PlaceActivityItemAdapter 	adapter = null;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.place_activity);
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.place_activity_xml_linearlayout_main);
-        for (int i = 0; i < 10; ++i) {
-        	addTable(mainLayout);
-        }
+        
+        Bundle extrasBundle = getIntent().getExtras();
+		currentPlaceId = extrasBundle.getInt("place_id");
+		
+		GetPlaceLogTask task = new GetPlaceLogTask();
+		task.execute();
     }
     
-    public void addTable(LinearLayout layout) {
-	    TableLayout table = new TableLayout(this);
-	    addTitleRow(table, "channguyen", "@csun", "5 months ago", BitmapFactory.decodeResource(this.getResources(), R.drawable.monkey));
-	    addCheckInRow(table);
-	    addSeparatorRow(table);
-	    addSnapPictureRow(table, BitmapFactory.decodeResource(this.getResources(), R.drawable.elephant));
-	    addSeparatorRow(table);
-	    addWriteWallRow(table, "Hello Android");
-	    addSeparatorRow(table);
-	    layout.addView(table);
-	    addSeperatorLine(layout);
-    }
+    private class GetPlaceLogTask extends AsyncTask<Void, Integer, Boolean> {
+		private List<NameValuePair> placeData = new ArrayList<NameValuePair>(); 
+		private  ProgressDialog progressDialog = null;
+		
+		@Override
+		protected void onPreExecute() {
+			placeData.add(new BasicNameValuePair("spots_id", Integer.toString(currentPlaceId)));
+			// display waiting dialog
+			progressDialog = new ProgressDialog(PlaceActivityActivity.this);
+			progressDialog.setMessage("Loading...");
+			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(true);
+			progressDialog.show();
+		}
+		
+		@Override
+		protected Boolean doInBackground(Void...voids) {
+			placeLogList = new ArrayList<PlaceLog>();
+			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_PLACELOG_URL, placeData);
+			if (array != null) { 
+				try {
+					for (int i = 0; i < array.length(); ++i) { 
+						placeLogList.add(
+							new PlaceLog.Builder(array.getJSONObject(i).getInt("id"),
+								array.getJSONObject(i).getString("username"),
+								array.getJSONObject(i).getString("type"),
+								array.getJSONObject(i).getString("created"))
+								.name(array.getJSONObject(i).getString("name"))
+								.description(array.getJSONObject(i).getString("description"))
+								.imageUrl(array.getJSONObject(i).getString("image_url"))
+								.userUrl(array.getJSONObject(i).getString("user_image_url"))
+								.build());
+						
+					}
+				}
+				catch (JSONException e) {
+					Log.e(TAG + "GetPlaceLogTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+				}
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			progressDialog.dismiss();
+			if (result == true) {
+				list = (ListView) findViewById(R.id.place_activity_xml_listview);
+				adapter = new PlaceActivityItemAdapter(PlaceActivityActivity.this, placeLogList);
+				list.setAdapter(adapter);
+				list.setOnItemClickListener(new OnItemClickListener() {
+					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					}
+				});
+			}
+			else {
+				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActivityActivity.this).create();
+				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
+				dialogMessage.setMessage("You don't have any friend yet!");
+				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				dialogMessage.show();
+			}
+		}
+			
+	}
     
-    private void addSeperatorLine(LinearLayout layout) {
-    	View line = new View(this);
-    	LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, 2);
-    	params.setMargins(0, 2, 0, 2);
-		line.setBackgroundColor(Color.YELLOW);
-		layout.addView(line, params);
-    }
-    
-    private void addSnapPictureRow(TableLayout table, Bitmap bitmap) {
-    	TableRow row = new TableRow(this);	
-    	LinearLayout outerLayout = new LinearLayout(this);
-    	// add text
-    	TextView text = new TextView(this);
-    	text.setText("Snap Picture");
-    	text.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-    	LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-    	textLayoutParams.setMargins(100, 0, 0, 0);
-    	// add picture
-    	ImageView picture = new ImageView(this);
-    	LinearLayout.LayoutParams pictureLayoutParams = new LinearLayout.LayoutParams(150, 150);
-    	picture.setImageBitmap(bitmap);
-    	pictureLayoutParams.setMargins(80, 0, 0, 0);
-    	// add layout
-    	outerLayout.addView(text, textLayoutParams);
-    	outerLayout.addView(picture, pictureLayoutParams);
-    	row.addView(outerLayout);
-    	// add row to table
-    	table.addView(row);
-    }
-    
-    private void addCheckInRow(TableLayout table) {
-    	TableRow row = new TableRow(this);	
-    	// create a TextView
-    	TextView text = new TextView(this);
-    	text.setText("Check In");
-    	text.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-    	TableRow.LayoutParams textLayoutParams = new TableRow.LayoutParams();
-    	textLayoutParams.setMargins(100, 0, 0, 0);
-    	// add this TextView to row
-    	row.addView(text, textLayoutParams);
-    	// add row to table
-    	table.addView(row);
-    }
-    
-    void addSeparatorRow(TableLayout table) {
-    	TableRow separator = new TableRow(this);
-    	View line = new View(this);
-    	TableRow.LayoutParams separatorLayoutParams = new TableRow.LayoutParams(300, 1);
-    	separatorLayoutParams.setMargins(100, 0, 0, 0);
-		line.setBackgroundColor(Color.BLUE);
-		separator.addView(line, separatorLayoutParams);
-    	table.addView(separator);
-    }
-    
-    private void addWriteWallRow(TableLayout table, String message) {
-    	TableRow row = new TableRow(this);	
-    	LinearLayout outerLayout = new LinearLayout(this);
-    	outerLayout.setOrientation(LinearLayout.VERTICAL);
-    	// add text
-    	TextView text = new TextView(this);
-    	text.setText("Write On Wall");
-    	text.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-    	
-    	// add content 
-    	TextView content = new TextView(this);
-    	content.setText(message);
-    	
-    	// create params
-    	LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-    	params.setMargins(100, 0, 0, 0);
- 
-    	outerLayout.addView(text, params);
-    	outerLayout.addView(content, params);
-    	row.addView(outerLayout);
-    	// add row to table
-    	table.addView(row);
-    }
-    
-    private void addTitleRow(TableLayout table, String username, String place, String time, Bitmap bitmap) {
-    	TableRow row = new TableRow(this);	
-    	LinearLayout outerLayout = new LinearLayout(this);
-    	outerLayout.setOrientation(LinearLayout.HORIZONTAL);
-    	// add picture
-    	ImageView picture = new ImageView(this);
-    	LinearLayout.LayoutParams layoutParamsPicture = new LinearLayout.LayoutParams(80, 80);
-    	picture.setImageBitmap(bitmap);
-    	
-    	LinearLayout innerLayout = new LinearLayout(this);
-    	innerLayout.setOrientation(LinearLayout.VERTICAL);
-    	LinearLayout.LayoutParams layoutParamsInnerLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-    	layoutParamsInnerLayout.setMargins(20, 0, 0, 0);
-    	
-    	TextView textViewUsername = new TextView(this);
-    	textViewUsername.setText(username + " : " + time);
-    	textViewUsername.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-    	LinearLayout.LayoutParams layoutParamsUsername = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-    	
-     	// add content 
-    	TextView textViewPlace = new TextView(this);
-    	textViewPlace.setText(place);
-    	LinearLayout.LayoutParams layoutParamsPlace = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-    	
-    	innerLayout.addView(textViewUsername, layoutParamsUsername);
-    	innerLayout.addView(textViewPlace, layoutParamsPlace);
-    	
-    	outerLayout.addView(picture, layoutParamsPicture);
-    	outerLayout.addView(innerLayout, layoutParamsInnerLayout);
-    	row.addView(outerLayout);
-    	// add row to table
-    	table.addView(row);
-    }
 }

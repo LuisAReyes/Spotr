@@ -17,11 +17,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainMenuActivity extends Activity {
-	
-	//Using friends array to populate Notification
-	String[] notificationList;
-	ArrayAdapter<String> adapter;
-	ListView mListView;
+	private static final String 				TAG = "[MainMenuActivity]";
+	private 			 String[] 				notificationList = null;
+	private 			 ArrayAdapter<String> 	adapter = null;
+	private 			 ListView 				mListView = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -90,7 +89,7 @@ public class MainMenuActivity extends Activity {
 		btnSpots = (Button) findViewById(R.id.main_menu_xml_button_spot_icon);
 		btnSpots.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.MapViewActivity");
+				Intent i = new Intent("com.csun.spotr.LocalPlaceActivity");
 				startActivity(i);
 			}
 		});

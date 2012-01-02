@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class SettingsActivity extends Activity {
+	private static final String TAG = "[SettingActivity]";
 	String[] defaultView;
 
 	@Override
@@ -26,7 +27,7 @@ public class SettingsActivity extends Activity {
 		s1.setOnItemSelectedListener(new OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				int index = arg0.getSelectedItemPosition();
-				Toast.makeText(getBaseContext(), "You have Selected item: " + defaultView[index], Toast.LENGTH_SHORT).show();
+				Toast.makeText(getBaseContext(), "You have selected item: " + defaultView[index], Toast.LENGTH_SHORT).show();
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {

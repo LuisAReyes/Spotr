@@ -41,12 +41,12 @@ import com.google.android.maps.OverlayItem;
  * @author: Chan Nguyen
  */
 public class MapViewActivity extends MapActivity {
-	private static final String TAG = "[MapViewActivity]";
-	private static final String RADIUS = "500";
-	private MapView mapView;
-	private List<Overlay> mapOverlays;
-	private MyItemizedOverlay itemizedOverlay;
-	MapController mapController;
+	private static final String 			TAG = "[MapViewActivity]";
+	private static final String 			RADIUS = "50";
+	private 			 MapView 			mapView;
+	private 			 List<Overlay> 		mapOverlays;
+	private 			 MyItemizedOverlay 	itemizedOverlay;
+	private 			 MapController 		mapController;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,7 @@ public class MapViewActivity extends MapActivity {
 			public void onClick(View view) {
 				itemizedOverlay.clear();
 				UpdateLocationTask task = new UpdateLocationTask();
-				task.execute("5");
+				task.execute("1");
 			}
 		});
 
@@ -108,28 +108,18 @@ public class MapViewActivity extends MapActivity {
 		try {
 			JSONArray placeInformationArray = json.getJSONArray("results");
 			for (int i = 0; i < placeInformationArray.length(); i++) {
-				JSONObject jsonObject = placeInformationArray.getJSONObject(i);
-				double longitude = jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lng");
-				double latitude = jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lat");
-				String id = jsonObject.getString("id");
-				String name = jsonObject.getString("name");
-				String types = jsonObject.getString("types");
-				String reference = jsonObject.getString("reference");
-				String iconUrl = jsonObject.getString("icon");
-
-				// build detailed place url
-				String placeDetailsUrl = GooglePlaceHelper.buildGooglePlaceDetailsUrl(reference);
-				// get json data
+				String placeDetailsUrl = 
+					GooglePlaceHelper.buildGooglePlaceDetailsUrl(placeInformationArray.getJSONObject(i).getString("reference"));
 				JSONObject jsonTemp = JsonHelper.getJsonFromUrl(placeDetailsUrl);
 				String address = jsonTemp.getJSONObject("result").getString("formatted_address");
-				
-				// String phoneNumber =
-				// jsonTemp.getJSONObject("result").getString("formatted_phone_number");
-				// String websiteUrl =
-				// jsonTemp.getJSONObject("result").getString("website");
-
 				// construct a place
-				Place place = new Place.Builder(longitude, latitude, i).googleId(id).name(name).types(types).iconUrl(iconUrl).address(address).build();
+				Place place = new Place.Builder(
+					placeInformationArray.getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lng"),
+					placeInformationArray.getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+					i)
+					.name(placeInformationArray.getJSONObject(i).getString("name"))
+					.address(address).build();
+				
 				placeList.add(place);
 				OverlayItem overlay = new OverlayItem(new GeoPoint((int) (place.getLatitude() * 1E6), (int) (place.getLongitude() * 1E6)), place.getName(), place.getAddress());
 				itemizedOverlay.addOverlay(overlay, place);

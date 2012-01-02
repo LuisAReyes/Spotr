@@ -8,6 +8,7 @@ import android.widget.TextView;
  * @author Chan Nguyen 
  */
 public class PlaceDetailActivity extends Activity {
+	private static final String TAG = "[PlaceDetailActivity]";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

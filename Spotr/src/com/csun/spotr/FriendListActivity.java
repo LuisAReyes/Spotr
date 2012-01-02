@@ -13,6 +13,8 @@ import android.widget.TabHost;
 import android.widget.Toast;
 
 public class FriendListActivity extends TabActivity {
+	private static final String TAG = "[FriendListActivity]";
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 public class PlaceMainActivity extends TabActivity {
+	private static final String TAG = "[TabActivity]";
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -15,10 +17,8 @@ public class PlaceMainActivity extends TabActivity {
 		TabHost tabHost = getTabHost(); 
 		TabHost.TabSpec spec; 
 		Intent intent; 
-
 		// get place_id extras from PlaceActivity/LocalPlaceActivity
 		Bundle extras = getIntent().getExtras();
-		
 		// create an Intent to launch an Activity for the tab (to be reused)
 		intent = new Intent().setClass(this, PlaceActionActivity.class);
 		// pass this extra to PlaceActionActivity

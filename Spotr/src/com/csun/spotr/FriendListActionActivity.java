@@ -23,16 +23,18 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.csun.spotr.core.CurrentUser;
 import com.csun.spotr.core.User;
 import com.csun.spotr.gui.FriendListMainItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
 public class FriendListActionActivity extends Activity {
-	private static final String TAG = "FriendListActionActivity";
-	private static final String SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
-	private ListView listViewUser;
-	private FriendListMainItemAdapter userItemAdapter;
-	private EditText editTextSearch;
+	private static final  String 					 TAG = "FriendListActionActivity";
+	private static final  String 					 SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
+	private 			  ListView 					 listViewUser = null;
+	private 		      FriendListMainItemAdapter  userItemAdapter = null;
+	private 			  EditText 				     editTextSearch = null;
+	private 			  List<User>  				 userList = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class FriendListActionActivity extends Activity {
 		});
 	}
 
-	private class GetUserTask extends AsyncTask<String, Integer, List<User>> {
+	private class GetUserTask extends AsyncTask<String, Integer, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
 
@@ -66,32 +68,55 @@ public class FriendListActionActivity extends Activity {
 		}
 
 		@Override
-		protected List<User> doInBackground(String... text) {
+		protected Boolean doInBackground(String... text) {
 			userData.add(new BasicNameValuePair("text", text[0].toString()));
-			List<User> userList = new ArrayList<User>();
+			userList = new ArrayList<User>();
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(SEARCH_FRIENDS_URL, userData);
-			try {
-				for (int i = 0; i < array.length(); ++i) {
-					userList.add(new User.Builder(array.getJSONObject(i).getInt("id"), array.getJSONObject(i).getString("username"), array.getJSONObject(i).getString("password")).build());
+			if (array != null) {
+				try {
+					for (int i = 0; i < array.length(); ++i) {
+						userList.add(
+								new User.Builder(
+									array.getJSONObject(i).getInt("id"),
+									array.getJSONObject(i).getString("username"),
+									array.getJSONObject(i).getString("password"))
+									.imageUrl(array.getJSONObject(i).getString("image_url")).build());
+					}
 				}
+				catch (JSONException e) {
+					Log.e(TAG + "GetUserTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+				}
+				return true;
 			}
-			catch (JSONException e) {
-				Log.e(TAG + "GetUserTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+			else {
+				return false;
 			}
-			return userList;
 		}
 
 		@Override
-		protected void onPostExecute(List<User> userList) {
+		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
-			listViewUser = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
-			userItemAdapter = new FriendListMainItemAdapter(FriendListActionActivity.this, userList, R.drawable.funshine_bear);
-			listViewUser.setAdapter(userItemAdapter);
-			listViewUser.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					startDialog();
-				}
-			});
+			if (result == true) {
+				listViewUser = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
+				userItemAdapter = new FriendListMainItemAdapter(FriendListActionActivity.this, userList);
+				listViewUser.setAdapter(userItemAdapter);
+				listViewUser.setOnItemClickListener(new OnItemClickListener() {
+					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+						startDialog();
+					}
+				});
+			}
+			else {
+				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
+				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
+				dialogMessage.setMessage("No name match this search criteria. Please try again!");
+				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				dialogMessage.show();	
+			}
 		}
 	}
 

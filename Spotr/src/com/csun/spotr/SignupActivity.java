@@ -28,21 +28,18 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-/**
- * @author: Tu Tran 
- * */
 public class SignupActivity extends Activity {
-	Button buttonSignup;
-	EditText edittextEmail;
-	EditText edittextPassword;
-	EditText edittextConfirmPassword;
-	CheckBox checkboxVisible;
-	Button buttonExit;
+	private static final String 	TAG = "[SignupActivity]";
+	private static final String 	SIGN_UP_URL = "http://107.22.209.62/android/signup.php";
+	private 			 Button 	buttonSignup = null;
+	private 			 EditText 	edittextEmail = null;
+	private 			 EditText 	edittextPassword = null;
+	private 			 EditText 	edittextConfirmPassword = null;
+	private 			 CheckBox 	checkboxVisible = null;
+	private 			 Button 	buttonExit = null;
+	private 			 boolean 	passwordVisible = false;
+	private 			 boolean 	validInformation = false;
 
-	boolean passwordVisible = false;
-	boolean validInformation = false;
-
-	// Tu Tran 11/09/11
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,9 +68,7 @@ public class SignupActivity extends Activity {
 		});
 
 		buttonSignup.setOnClickListener(new OnClickListener() {
-			String url = "http://107.22.209.62/android/signup.php";
 			String result = "";
-
 			public void onClick(View v) {
 				String email = edittextEmail.getText().toString();
 				String password = edittextPassword.getText().toString();
@@ -94,7 +89,7 @@ public class SignupActivity extends Activity {
 
 						// Connect to server
 						HttpClient httpclient = new DefaultHttpClient();
-						HttpPost httppost = new HttpPost(url);
+						HttpPost httppost = new HttpPost(SIGN_UP_URL);
 
 						httppost.setEntity(new UrlEncodedFormEntity(signupData));
 						HttpResponse response = httpclient.execute(httppost);

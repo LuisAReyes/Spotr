@@ -22,7 +22,6 @@ import com.csun.spotr.helper.DownloadImageHelper;
 public class PlaceItemAdapter extends BaseAdapter {
 	private Activity 		context;
 	private List<Place>	    places;
-	private boolean 		notifyChanged = false;
 
 	public PlaceItemAdapter(Activity context, List<Place> places) {
 		super();
@@ -76,11 +75,6 @@ public class PlaceItemAdapter extends BaseAdapter {
 		// holder.mapIconImageView.setImageBitmap(DownloadImageHelper.downloadImage(places.get(position).getIconUrl()));
 		holder.mapIconImageView.setImageResource(R.drawable.adium);
 		return convertView;
-	}
-
-	public void notifyDataSetChanged() {
-		super.notifyDataSetChanged();
-		notifyChanged = true;
 	}
 
 	/*

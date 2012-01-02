@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.csun.spotr.R;
 import com.csun.spotr.core.User;
+import com.csun.spotr.helper.DownloadImageHelper;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -16,14 +17,11 @@ import android.widget.TextView;
 public class FriendListMainItemAdapter extends BaseAdapter {
 	private Activity context;
 	private List<User> users;
-	private boolean notifyChanged = false;
-	private int temporaryPictureId;
 
-	public FriendListMainItemAdapter(Activity context, List<User> users, int pictureId) {
+	public FriendListMainItemAdapter(Activity context, List<User> users) {
 		super();
 		this.context = context;
 		this.users = users;
-		this.temporaryPictureId = pictureId;
 	}
 
 	public int getCount() {
@@ -58,14 +56,14 @@ public class FriendListMainItemAdapter extends BaseAdapter {
 		}
 
 		holder.textViewName.setText(users.get(position).getUsername());
-		holder.imageViewPicture.setImageResource(temporaryPictureId);
+		try {
+			holder.imageViewPicture.setImageDrawable(
+				DownloadImageHelper.getImageFromUrl(users.get(position).getImageUrl()));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		return convertView;
-	}
-
-	@Override
-	public void notifyDataSetChanged() {
-		super.notifyDataSetChanged();
-		notifyChanged = true;
 	}
 
 	/*

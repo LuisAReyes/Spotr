@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 public class ProfileMainActivity extends TabActivity {
+	private static final String TAG = "[ProfileMainActivity]";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

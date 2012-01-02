@@ -37,20 +37,18 @@ import com.csun.spotr.gui.PlaceItemAdapter;
  * @author: Chan Nguyen
  */
 public class PlaceActivity extends Activity {
-	private final String 			  	TAG = "[PlaceActivity]";
-	private final String				radius = "150";
-	private       ListView            	placesListView;
-	private       PlaceItemAdapter      placeItemAdapter;
+	private static final String 			TAG = "[PlaceActivity]";
+	private static final String		  		RADIUS = "50";
+	private              ListView           placesListView;
+	private       		 PlaceItemAdapter   placeItemAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// set up layout
 		setContentView(R.layout.place);
-		
 		// make sure keyboard of edit text do not populate
 		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-		
 		// initially, load all locations
 		if (!startService()) {
 			CreateAlert("Unexpected Error!", "Service cannot be started.");
@@ -141,7 +139,7 @@ public class PlaceActivity extends Activity {
 		
 		private List<Place> retrievePlacesFromGoogle(Location location) {
 			List<Place> placeList = new ArrayList<Place>();
-			String url = GooglePlaceHelper.buildGooglePlacesUrl(location, radius);
+			String url = GooglePlaceHelper.buildGooglePlacesUrl(location, RADIUS);
 			JSONObject json = JsonHelper.getJsonFromUrl(url);
 			try {
 				JSONArray placeInformationArray = json.getJSONArray("results");

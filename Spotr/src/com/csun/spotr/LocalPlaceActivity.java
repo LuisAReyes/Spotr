@@ -47,11 +47,11 @@ import com.google.android.maps.GeoPoint;
  * @author: Chan Nguyen
  */
 public class LocalPlaceActivity extends Activity {
-	private static final String 		TAG = "[LocalPlaceActivity]";
-	private static final String 		URL = "http://107.22.209.62/android/get_spots.php";
-	private final String				radius = "500";
-	private       ListView            	placesListView;
-	private       PlaceItemAdapter      placeItemAdapter;
+	private static final String 		    TAG = "[LocalPlaceActivity]";
+	private static final String 		    URL = "http://107.22.209.62/android/get_spots.php";
+	private static final String				RADIUS = "50";
+	private              ListView           placesListView;
+	private              PlaceItemAdapter   placeItemAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public class LocalPlaceActivity extends Activity {
 			}
 			manager.removeUpdates(listener);
 			// get current location and passing it to get list of places
-			return retrievePlaces(currentLocation, radius);
+			return retrievePlaces(currentLocation, RADIUS);
 		}
 		
 		@Override
@@ -161,29 +161,22 @@ public class LocalPlaceActivity extends Activity {
 			datas.add(new BasicNameValuePair("longitude", Double.toString(currentLocation.getLongitude())));
 			datas.add(new BasicNameValuePair("radius", radius)); 
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(URL, datas);
-			
-			int id = 0;
-			double longitude = 0.0;
-			double latitude = 0.0;
-			String name = "";
-			String description = "";
-			
+			/*
+			 * TODO: check for array null
+			 */
 			try {
 				for (int i = 0; i < array.length(); ++i) { 
-					JSONObject temp = array.getJSONObject(i);
-					id = temp.getInt("id");
-					longitude = temp.getDouble("longitude");
-					latitude = temp.getDouble("latitude");
-					name = temp.getString("name");
-					description = temp.getString("description");
 					// create a place
-					Place place = new Place.Builder(longitude, latitude, id).name(name).address(description).build();
-					// add to list of places
-					placeList.add(place);
+					placeList.add(new Place.Builder(
+						array.getJSONObject(i).getDouble("longitude"),
+						array.getJSONObject(i).getDouble("latitude"),
+						array.getJSONObject(i).getInt("id"))
+							.name(array.getJSONObject(i).getString("name"))
+							.address(array.getJSONObject(i).getString("description")).build());
 				}
 			}
 			catch (JSONException e) {
-				Log.e(TAG + ".filterPlaces() : ", "JSON error parsing data" + e.toString());
+				Log.e(TAG + ".retrievePlaces(Location currentLocation, String radius)", "JSON error parsing data" + e.toString());
 			}
 			return placeList;
 		}

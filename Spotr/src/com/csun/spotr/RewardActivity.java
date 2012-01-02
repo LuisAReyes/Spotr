@@ -21,6 +21,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class RewardActivity extends Activity {
+	private static final String TAG = "[RewardActivity]";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,7 +52,6 @@ public class RewardActivity extends Activity {
 	        }
 	    });	
 	}
-	
 	
 	//Menu Button Selections
 	@Override

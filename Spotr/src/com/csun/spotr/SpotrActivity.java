@@ -7,10 +7,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-/**
- * @author: Chan Nguyen
- */
 public class SpotrActivity extends Activity {
+	private static final String TAG = "[SpotrActivity]";
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

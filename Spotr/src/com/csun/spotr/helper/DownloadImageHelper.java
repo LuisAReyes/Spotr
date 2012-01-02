@@ -8,13 +8,14 @@ import java.net.URLConnection;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 public class DownloadImageHelper {
-	private static final String 		TAG = "[DownloadImageHelper]";
-	private static 		 URLConnection	connection;
-	private static 		 URL 			url;
-	
+	private static final String TAG = "[DownloadImageHelper]";
+	private static URLConnection connection;
+	private static URL url;
+
 	private static InputStream openHttpConnection(String urlString) throws IOException {
 		InputStream in = null;
 		int response = -1;
@@ -53,4 +54,9 @@ public class DownloadImageHelper {
 		}
 		return bitmap;
 	}
+
+	public static Drawable getImageFromUrl(String url) throws Exception {
+		return Drawable.createFromStream((InputStream) new URL(url).getContent(), "src");
+	}
+
 }

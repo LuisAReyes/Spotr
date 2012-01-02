@@ -22,8 +22,8 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ChallengeInfoActivity extends Activity {
-	//private ChallengeInfoAdapter challengeInfo;
-	//private ListView challengeInfoListView;
+	private static final String TAG = "[ChallengeInfoActivity]";
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -44,10 +44,10 @@ import com.csun.spotr.gui.LeaderboardItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
 public class LeaderboardActivity extends Activity {
-	private static final String TAG = "[LeaderboardActivity]";
-	private static final String GET_USERS_URL = "http://107.22.209.62/android/get_users.php";
-	private ListView list;
-	private LeaderboardItemAdapter adapter;
+	private static final String     			 TAG = "[LeaderboardActivity]";
+	private static final String 				 GET_USERS_URL = "http://107.22.209.62/android/get_users.php";
+	private 			 ListView 				 list = null;
+	private 			 LeaderboardItemAdapter  adapter = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

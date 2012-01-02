@@ -42,15 +42,14 @@ import android.widget.TextView;
  * @author: Chan Nguyen
  */
 public class ProfileActivity extends Activity {
-	private static final String TAG = "[ProfileActivity]";
-	private static final String GET_USER_DETAIL_URL = "http://107.22.209.62/android/get_user_detail.php";
-	private static final int CAMERA_PICTURE = 111;
-	private static final int GALLERY_PICTURE = 222;
-	private ImageView userPictureImageView;
-	
-	private ListView profileList;
-	private ProfileItemAdapter adapter;
-	private int currentUserId;
+	private static final String 				TAG = "[ProfileActivity]";
+	private static final String 				GET_USER_DETAIL_URL = "http://107.22.209.62/android/get_user_detail.php";
+	private static final int 					CAMERA_PICTURE = 111;
+	private static final int 					GALLERY_PICTURE = 222;
+	private 			 ImageView 				userPictureImageView = null;
+	private 			 ListView 			 	profileList = null;
+	private 			 ProfileItemAdapter		adapter = null;
+	private 			 int 				 	currentUserId = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

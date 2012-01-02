@@ -4,19 +4,19 @@
     <style name="my_button_1"> 
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:textColor">#FF0000</item>
+        <item name="android:textColor">#591728</item>
     </style>
 
     <style name="my_button_2">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:textColor">#00FF11</item>
+        <item name="android:textColor">#591728</item>
     </style>
 
     <style name="my_button_3">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:textColor">#0D00FF</item>
+        <item name="android:textColor">#591728</item>
     </style>
 
 </resources>
