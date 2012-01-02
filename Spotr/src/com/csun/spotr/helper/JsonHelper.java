@@ -1,5 +1,6 @@
 package com.csun.spotr.helper;
 
+import com.csun.spotr.singleton.CustomHttpClient;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;

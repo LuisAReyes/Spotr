@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.csun.spotr.R;
-import com.csun.spotr.core.PlaceActionItem;
+import com.csun.spotr.core.PlaceAction;
 
 public class UserActivityItemAdapter extends BaseAdapter {
 	private List<String> items;

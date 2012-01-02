@@ -30,7 +30,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.csun.spotr.core.CurrentUser;
+import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.core.Place;
 import com.csun.spotr.gui.BalloonItemizedOverlay;
 import com.csun.spotr.helper.DownloadImageHelper;

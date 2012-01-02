@@ -8,7 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.csun.spotr.core.CurrentUser;
+import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.core.PlaceLog;
 import com.csun.spotr.gui.PlaceActivityItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
@@ -26,12 +26,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class PlaceActivityActivity extends Activity {
-	private static final String 					TAG = "[PlaceActivityActivity]";
-	private static final String 				 	GET_PLACELOG_URL = "http://107.22.209.62/android/get_activities.php";
-	private 			 List<PlaceLog> 		 	placeLogList;
-	private 			 int 						currentPlaceId = 0;
-	private 			 ListView 				    list = null;
-	private 			 PlaceActivityItemAdapter 	adapter = null;
+	private static final String TAG = "[PlaceActivityActivity]";
+	private static final String GET_PLACELOG_URL = "http://107.22.209.62/android/get_activities.php";
+	private List<PlaceLog> placeLogList;
+	private int currentPlaceId = 0;
+	private ListView list = null;
+	private PlaceActivityItemAdapter adapter = null;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,7 +105,7 @@ public class PlaceActivityActivity extends Activity {
 			else {
 				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActivityActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-				dialogMessage.setMessage("You don't have any friend yet!");
+				dialogMessage.setMessage("There are no activities for this place!");
 				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();

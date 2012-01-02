@@ -1,6 +1,6 @@
 package com.csun.spotr;
 
-import com.csun.spotr.core.CurrentUser;
+import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.core.User;
 
 import android.app.Activity;

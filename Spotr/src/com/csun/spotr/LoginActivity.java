@@ -8,7 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.csun.spotr.core.CurrentUser;
+import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.core.User;
 import com.csun.spotr.helper.JsonHelper;
 

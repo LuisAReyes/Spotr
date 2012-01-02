@@ -22,7 +22,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.csun.spotr.core.User;
-import com.csun.spotr.core.CurrentUser;
+import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.gui.FriendListMainItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
@@ -68,7 +68,7 @@ public class FriendListMainActivity extends Activity {
 								array.getJSONObject(i).getInt("id"),
 								array.getJSONObject(i).getString("username"),
 								array.getJSONObject(i).getString("password"))
-								.imageUrl(array.getJSONObject(i).getString("image_url")).build());
+								.imageUrl(array.getJSONObject(i).getString("user_image_url")).build());
 						
 					}
 				}

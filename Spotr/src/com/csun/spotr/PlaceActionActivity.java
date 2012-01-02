@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.csun.spotr.core.Challenge;
-import com.csun.spotr.core.CurrentUser;
+import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.gui.PlaceActionItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
