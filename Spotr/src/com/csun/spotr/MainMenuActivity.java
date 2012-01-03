@@ -54,7 +54,7 @@ public class MainMenuActivity extends Activity {
 		btnChallenges = (Button) findViewById(R.id.main_menu_xml_button_challenge_icon);
 		btnChallenges.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.ChallengeActivity");
+				Intent i = new Intent("com.csun.spotr.LocalMapViewActivity");
 				startActivity(i);
 			}
 		});

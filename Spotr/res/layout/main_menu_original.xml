@@ -71,7 +71,7 @@
         android:layout_toRightOf="@+id/main_menu_xml_button_award_icon"
         android:background="@android:color/transparent"
         android:drawableTop="@drawable/challenges"
-        android:text="@string/main_menu_xml_button_challenge_str"
+        android:text="Map"
         android:textColor="#FF0066" />
 
     <Button

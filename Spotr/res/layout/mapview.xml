@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@drawable/the_place_background">
 
     <TableLayout
         android:layout_width="400dp"
@@ -13,18 +14,21 @@
                 android:id="@+id/mapview_xml_button_change_view"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="@string/mapview_xml_button_view_str" />
 
             <Button
                 android:id="@+id/mapview_xml_button_locate"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="@string/mapview_xml_button_locate_str" />
 
             <Button
                 android:id="@+id/mapview_xml_button_places"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="@string/mapview_xml_button_place_str" />
         </TableRow>
     </TableLayout>
@@ -32,7 +36,7 @@
     <com.google.android.maps.MapView
         android:id="@+id/mapview_xml_map"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="420dp"
         android:apiKey="0kqsfxjLdh6hBSw6P1O21ednBAHof_q1GuRuffg"
         android:clickable="true" />
 

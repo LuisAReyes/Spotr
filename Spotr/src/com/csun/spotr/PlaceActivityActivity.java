@@ -74,6 +74,7 @@ public class PlaceActivityActivity extends Activity {
 								array.getJSONObject(i).getString("type"),
 								array.getJSONObject(i).getString("created"))
 									.name(array.getJSONObject(i).getString("name"))
+									.comment(array.getJSONObject(i).getString("comment"))
 									.description(array.getJSONObject(i).getString("description"))
 									.userPictureDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("user_image_url")))
 									.snapPictureDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("snap_picture_url")))

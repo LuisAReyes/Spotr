@@ -97,8 +97,10 @@ public class PlaceActivityItemAdapter extends BaseAdapter {
 			 */
 			TableRow row = new TableRow(context);	
 			TextView messageBox = new TextView(context);
+			messageBox.setSingleLine(false);
+			messageBox.setMaxLines(5);
 			ImageView dummy = new ImageView(context);
-			messageBox.setText(items.get(position).getDescription());
+			messageBox.setText(items.get(position).getComment());
 			// TableRow.LayoutParams textLayoutParams = new TableRow.LayoutParams();
 	    	// textLayoutParams.setMargins(100, 0, 0, 0);
 	    	// row.addView(messageBox, textLayoutParams);

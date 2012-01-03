@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@drawable/the_leader_background">
 
     <TableLayout
         android:id="@+id/leaderboard_xml_tablelayout_table"
@@ -19,6 +20,7 @@
             	android:padding="2dip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#000000"
                 android:text="Rank" />
 
             <TextView
@@ -26,6 +28,7 @@
             	android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#000000"
                 android:text="Username" />
 
             <TextView
@@ -33,6 +36,7 @@
             	android:padding="5dip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#000000"
                 android:text="CD" />
 
             <TextView
@@ -40,6 +44,7 @@
             	android:padding="5dip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#000000"
                 android:text="PV" />
 
             <TextView
@@ -47,6 +52,7 @@
             	android:padding="5dip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#000000"
                 android:text="Pts" />
         </TableRow>
     </TableLayout>
@@ -54,8 +60,8 @@
     <ListView
         android:id="@+id/leaderboard_xml_listview_users"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@android:color/white" >
+        android:layout_height="wrap_content"
+        android:background="@drawable/the_leaderboard_background" >
     </ListView>
 
 </LinearLayout>
