@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -68,7 +69,7 @@ public class LocalPlaceActivity extends Activity {
 		}
 	
 		// register click event for refresh button
-		ImageButton refreshButton = (ImageButton) findViewById(R.id.place_xml_button_refresh);
+		Button refreshButton = (Button) findViewById(R.id.place_xml_button_refresh);
 		refreshButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				startService();

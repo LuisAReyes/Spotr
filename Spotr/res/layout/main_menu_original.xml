@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent" 
+    android:background="@drawable/headphone">
 
     <ImageView
         android:id="@+id/main_menu_xml_imageview_logo"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/logo" />
+        android:src="@drawable/earth" />
 
     <Button
         android:id="@+id/main_menu_xml_button_profile_icon"
@@ -19,7 +20,7 @@
         android:background="@android:color/transparent"
         android:drawableTop="@drawable/profile"
         android:text="@string/main_menu_xml_button_profile_str"
-        android:textColor="#FFFF" />
+        android:textColor="#FF0066" />
 
     <Button
         android:id="@+id/main_menu_xml_button_award_icon"
@@ -32,7 +33,7 @@
         android:background="@android:color/transparent"
         android:drawableTop="@drawable/awards"
         android:text="@string/main_menu_xml_button_rewards_str"
-        android:textColor="#FFFF" />
+        android:textColor="#FF0066" />
 
     <Button
         android:id="@+id/main_menu_xml_button_leader_board_icon"
@@ -45,7 +46,7 @@
         android:background="@android:color/transparent"
         android:drawableTop="@drawable/leaderboards"
         android:text="@string/main_menu_xml_button_leader_board_str"
-        android:textColor="#FFFF" />
+        android:textColor="#FF0066" />
 
     <Button
         android:id="@+id/main_menu_xml_button_friend_icon"
@@ -58,7 +59,7 @@
         android:background="@android:color/transparent"
         android:drawableTop="@drawable/friends"
         android:text="@string/main_menu_xml_button_friend_str"
-        android:textColor="#FFFF" />
+        android:textColor="#FF0066" />
 
     <Button
         android:id="@+id/main_menu_xml_button_challenge_icon"
@@ -71,7 +72,7 @@
         android:background="@android:color/transparent"
         android:drawableTop="@drawable/challenges"
         android:text="@string/main_menu_xml_button_challenge_str"
-        android:textColor="#FFFF" />
+        android:textColor="#FF0066" />
 
     <Button
         android:id="@+id/main_menu_xml_button_spot_icon"
@@ -84,7 +85,7 @@
         android:background="@android:color/transparent"
         android:drawableTop="@drawable/spots"
         android:text="@string/main_menu_xml_button_spot_str"
-        android:textColor="#FFFF" />
+        android:textColor="#FF0066" />
     
     <SlidingDrawer 
         android:id="@+id/main_menu_xml_slider"

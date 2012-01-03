@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@drawable/map_background">
 
     <TextView
         android:id="@+id/place_xml_textview_find_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Find a place: "
-        android:textColor="@android:color/white"
+        android:text="Find"
+        android:textColor="#FA540C"
         android:textStyle="bold" />
 
     <EditText
@@ -29,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nearby places"
-        android:textColor="@android:color/white"
+        android:textColor="#FA540C"
         android:textStyle="bold" />
 
     <ListView
@@ -43,16 +44,16 @@
         android:layout_width="fill_parent"
         android:layout_height="2dp"
         android:background="#FAB002" />
-
-    <ImageButton 
+
+    <Button
         android:id="@+id/place_xml_button_refresh"
-        android:background="@android:color/black"
-        android:paddingTop="4dp"
-        android:paddingLeft="4dp"
-        android:paddingBottom="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/adium"
-        />
+        android:layout_gravity="center"
+        android:paddingBottom="4dp"
+        android:paddingLeft="4dp"
+        android:paddingTop="4dp"
+        android:paddingRight="4dp"
+        android:text="Refresh Location" />
 
 </LinearLayout>

@@ -3,7 +3,9 @@
     android:id="@+id/place_activity_xml_linearlayout_main"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@drawable/the_background"
+    >
     <ListView
         android:id="@+id/place_activity_xml_listview"
         android:layout_width="match_parent"
