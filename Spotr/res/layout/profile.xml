@@ -10,7 +10,7 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:id="@+id/image_view"
+                android:id="@+id/profile_xml_imageview_user_picture"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginLeft="2dp"

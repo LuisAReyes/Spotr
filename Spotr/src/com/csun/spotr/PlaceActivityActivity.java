@@ -11,6 +11,7 @@ import org.json.JSONException;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.core.PlaceLog;
 import com.csun.spotr.gui.PlaceActivityItemAdapter;
+import com.csun.spotr.helper.DownloadImageHelper;
 import com.csun.spotr.helper.JsonHelper;
 
 import android.app.Activity;
@@ -72,11 +73,11 @@ public class PlaceActivityActivity extends Activity {
 								array.getJSONObject(i).getString("username"),
 								array.getJSONObject(i).getString("type"),
 								array.getJSONObject(i).getString("created"))
-								.name(array.getJSONObject(i).getString("name"))
-								.description(array.getJSONObject(i).getString("description"))
-								.imageUrl(array.getJSONObject(i).getString("image_url"))
-								.userUrl(array.getJSONObject(i).getString("user_image_url"))
-								.build());
+									.name(array.getJSONObject(i).getString("name"))
+									.description(array.getJSONObject(i).getString("description"))
+									.userPictureDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("user_image_url")))
+									.snapPictureDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("snap_picture_url")))
+										.build());
 						
 					}
 				}
@@ -92,8 +93,8 @@ public class PlaceActivityActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
 			if (result == true) {
+				progressDialog.dismiss();
 				list = (ListView) findViewById(R.id.place_activity_xml_listview);
 				adapter = new PlaceActivityItemAdapter(PlaceActivityActivity.this, placeLogList);
 				list.setAdapter(adapter);
@@ -103,6 +104,7 @@ public class PlaceActivityActivity extends Activity {
 				});
 			}
 			else {
+				progressDialog.dismiss();
 				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActivityActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("There are no activities for this place!");

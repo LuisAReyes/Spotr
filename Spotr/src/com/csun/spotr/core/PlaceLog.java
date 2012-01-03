@@ -1,5 +1,6 @@
 package com.csun.spotr.core;
 
+import android.graphics.drawable.Drawable;
 import android.widget.TextView.BufferType;
 
 import com.csun.spotr.gui.UserActivityItemAdapter;
@@ -14,10 +15,10 @@ public class PlaceLog {
 	// optional parameters
 	private String name;
 	private String description;
-	private String imageUrl;
-	private String userUrl;
+	private Drawable snapPictureDrawable;
+	private Drawable userPictureDrawable;
 	private String comment;
-	
+
 	public static class Builder {
 		// required parameters
 		private final int id;
@@ -28,47 +29,47 @@ public class PlaceLog {
 		// optional parameters
 		private String name = "";
 		private String description = "";
-		private String imageUrl = "";
-		private String userUrl = "";
+		private Drawable snapPictureDrawable = null;
+		private Drawable userPictureDrawable = null;
 		private String comment = "";
-		
+
 		public Builder(int id, String username, String challengeType, String time) {
 			this.id = id;
 			this.username = username;
 			this.challengeType = challengeType;
 			this.time = time;
 		}
-		
+
 		public Builder name(String name) {
 			this.name = name;
 			return this;
 		}
-		
+
 		public Builder description(String description) {
 			this.description = description;
 			return this;
 		}
-		
-		public Builder imageUrl(String imageUrl) {
-			this.imageUrl = imageUrl;
+
+		public Builder userPictureDrawable(Drawable drawable) {
+			this.userPictureDrawable = drawable;
 			return this;
 		}
-		
-		public Builder userUrl(String userUrl) {
-			this.userUrl = userUrl;
+
+		public Builder snapPictureDrawable(Drawable drawable) {
+			this.snapPictureDrawable = drawable;
 			return this;
 		}
-		
+
 		public Builder comment(String comment) {
 			this.comment = comment;
 			return this;
 		}
-		
+
 		public PlaceLog build() {
 			return new PlaceLog(this);
 		}
 	}
-	
+
 	public PlaceLog(Builder builder) {
 		this.id = builder.id;
 		this.username = builder.username;
@@ -76,8 +77,8 @@ public class PlaceLog {
 		this.time = builder.time;
 		this.name = builder.name;
 		this.description = builder.description;
-		this.imageUrl = builder.imageUrl;
-		this.userUrl = builder.userUrl;
+		this.userPictureDrawable = builder.userPictureDrawable;
+		this.snapPictureDrawable = builder.snapPictureDrawable;
 		this.comment = builder.comment;
 	}
 
@@ -97,20 +98,20 @@ public class PlaceLog {
 		this.description = description;
 	}
 
-	public String getImageUrl() {
-		return imageUrl;
+	public Drawable getSnapPictureDrawable() {
+		return snapPictureDrawable;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-	
-	public String getUserUrl() {
-		return userUrl;
+	public void setSnapPictureDrawable(Drawable snapPictureDrawable) {
+		this.snapPictureDrawable = snapPictureDrawable;
 	}
 
-	public void setUserUrl(String userUrl) {
-		this.userUrl = userUrl;
+	public Drawable getUserPictureDrawable() {
+		return userPictureDrawable;
+	}
+
+	public void setUserPictureDrawable(Drawable userPictureDrawable) {
+		this.userPictureDrawable = userPictureDrawable;
 	}
 
 	public String getComment() {
@@ -139,7 +140,7 @@ public class PlaceLog {
 
 	@Override
 	public String toString() {
-		return "UserActivity [id=" + id + ", username=" + username + ", challengeType=" + challengeType + ", time=" + time + ", name=" + name + ", description=" + description + ", imageUrl=" + imageUrl + ", comment=" + comment + "]";
+		return "PlaceLog [id=" + id + ", username=" + username + ", challengeType=" + challengeType + ", time=" + time + ", name=" + name + ", description=" + description + ", comment=" + comment + "]";
 	}
 
 	@Override

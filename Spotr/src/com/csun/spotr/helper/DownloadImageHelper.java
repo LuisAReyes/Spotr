@@ -3,6 +3,7 @@ package com.csun.spotr.helper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -55,8 +56,17 @@ public class DownloadImageHelper {
 		return bitmap;
 	}
 
-	public static Drawable getImageFromUrl(String url) throws Exception {
-		return Drawable.createFromStream((InputStream) new URL(url).getContent(), "src");
+	public static Drawable getImageFromUrl(String url) {
+		try {
+			return Drawable.createFromStream((InputStream) new URL(url).getContent(), "src");
+		}
+		catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

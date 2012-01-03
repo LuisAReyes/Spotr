@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/snap_picture_xml_textview_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Snap Picture"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#00AAED"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/snap_picture_xml_textview_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Snap a picture now?"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <Button
+        android:id="@+id/snap_picture_xml_button_go"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Snap a picture" />
+
+    <ImageView
+        android:id="@+id/snap_picture_xml_imageview_preview_picture"
+        android:layout_width="fill_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:src="@drawable/adium" />
+    
+    <Button
+        android:id="@+id/snap_picture_xml_button_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:enabled="false"
+        android:text="Upload picture now?" />
+    
+    
+
+</LinearLayout>

@@ -23,40 +23,40 @@ public class SpotrActivity extends Activity {
 			}
 		});
 
-		Button b3 = (Button) findViewById(R.id.test_challenge);
-		b3.setOnClickListener(new OnClickListener() {
+		Button b2 = (Button) findViewById(R.id.test_challenge);
+		b2.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.ChallengeActivity");
 				startActivity(i);
 			}
 		});
 
-		Button b4 = (Button) findViewById(R.id.test_mapview);
-		b4.setOnClickListener(new OnClickListener() {
+		Button b3 = (Button) findViewById(R.id.test_mapview);
+		b3.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.MapViewActivity");
 				startActivity(i);
 			}
 		});
 		
-		Button b6 = (Button) findViewById(R.id.test_place);
-		b6.setOnClickListener(new OnClickListener() {
+		Button b4 = (Button) findViewById(R.id.test_place);
+		b4.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.PlaceActivity");
 				startActivity(i);
 			}
 		});
 		
-		Button b7 = (Button) findViewById(R.id.test_localmapview);
-		b7 .setOnClickListener(new OnClickListener() {
+		Button b5 = (Button) findViewById(R.id.test_localmapview);
+		b5 .setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.LocalMapViewActivity");
 				startActivity(i);
 			}
 		});
 	
-		Button b8 = (Button) findViewById(R.id.test_localplace);
-		b8.setOnClickListener(new OnClickListener() {
+		Button b6 = (Button) findViewById(R.id.test_localplace);
+		b6.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.LocalPlaceActivity");
 				startActivity(i);

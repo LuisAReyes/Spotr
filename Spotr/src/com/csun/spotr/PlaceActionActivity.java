@@ -16,6 +16,7 @@ import com.csun.spotr.helper.JsonHelper;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -108,10 +109,17 @@ public class PlaceActionActivity extends Activity {
 						);
 					}
 					else if (c.getType() == Challenge.Type.WRITE_ON_WALL) {
-						
+						Intent intent = new Intent("com.csun.spotr.WriteOnWallActivity");
+						startActivity(intent);
 					}
 					else if (c.getType() == Challenge.Type.SNAP_PICTURE) {
-						
+						Intent intent = new Intent("com.csun.spotr.SnapPictureActivity");
+						Bundle extras = new Bundle();
+						extras.putString("users_id", Integer.toString(CurrentUser.getCurrentUser().getId()));
+						extras.putString("spots_id", Integer.toString(currentPlaceId));
+						extras.putString("challenges_id", Integer.toString(c.getId()));
+						intent.putExtras(extras);
+						startActivity(intent);
 					}
 					else if (c.getType() == Challenge.Type.QUESTION_ANSWER) {
 						

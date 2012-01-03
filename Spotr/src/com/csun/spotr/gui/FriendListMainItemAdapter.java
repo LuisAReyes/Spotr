@@ -57,28 +57,11 @@ public class FriendListMainItemAdapter extends BaseAdapter {
 
 		holder.textViewName.setText(users.get(position).getUsername());
 		try {
-			holder.imageViewPicture.setImageDrawable(
-				DownloadImageHelper.getImageFromUrl(users.get(position).getImageUrl()));
+			holder.imageViewPicture.setImageDrawable(DownloadImageHelper.getImageFromUrl(users.get(position).getImageUrl()));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return convertView;
 	}
-
-	/*
-	 * public android.widget.Filter getFilter() { return new
-	 * android.widget.Filter() {
-	 * 
-	 * @SuppressWarnings("unchecked")
-	 * 
-	 * @Override protected void publishResults(CharSequence constraint,
-	 * FilterResults results) { }
-	 * 
-	 * @Override protected FilterResults performFiltering(CharSequence
-	 * constraint) { FilterResults results = new FilterResults(); if (constraint
-	 * != null && constraint.toString().length() > 0) {
-	 * 
-	 * } else { } return results; } }; }
-	 */
 }

@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.csun.spotr.core.User;
 import com.csun.spotr.gui.ProfileItemAdapter;
+import com.csun.spotr.helper.DownloadImageHelper;
 import com.csun.spotr.helper.JsonHelper;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.OverlayItem;
@@ -57,7 +58,7 @@ public class ProfileActivity extends Activity {
 		Bundle extrasBundle = getIntent().getExtras();
 		currentUserId = extrasBundle.getInt("user_id");
 		
-		userPictureImageView = (ImageView) findViewById(R.id.image_view);
+		userPictureImageView = (ImageView) findViewById(R.id.profile_xml_imageview_user_picture);
 		userPictureImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				startDialog();
@@ -69,18 +70,20 @@ public class ProfileActivity extends Activity {
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == GALLERY_PICTURE) {
-			Uri selectedImageUri = data.getData();
-			String selectedImagePath = getPath(selectedImageUri);
-			Bitmap myBitmap = BitmapFactory.decodeFile(selectedImagePath);
-			ImageView myImage = (ImageView) findViewById(R.id.image_view);
-			myImage.setImageBitmap(myBitmap);
-		}
-		else if (requestCode == CAMERA_PICTURE) {
-			if (data.getExtras() != null) {
-				// here is the image from camera
-				Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-				userPictureImageView.setImageBitmap(bitmap);
+		if (resultCode == RESULT_OK) {
+			if (requestCode == GALLERY_PICTURE) {
+				Uri selectedImageUri = data.getData();
+				String selectedImagePath = getPath(selectedImageUri);
+				Bitmap myBitmap = BitmapFactory.decodeFile(selectedImagePath);
+				ImageView myImage = (ImageView) findViewById(R.id.profile_xml_imageview_user_picture);
+				myImage.setImageBitmap(myBitmap);
+			}
+			else if (requestCode == CAMERA_PICTURE) {
+				if (data.getExtras() != null) {
+					// here is the image from camera
+					Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+					userPictureImageView.setImageBitmap(bitmap);
+				}
 			}
 		}
 	}
@@ -152,10 +155,11 @@ public class ProfileActivity extends Activity {
 						array.getJSONObject(0).getInt("id"), 
 						array.getJSONObject(0).getString("username"), 
 						array.getJSONObject(0).getString("password"))
-					.challengesDone(array.getJSONObject(0).getInt("challenges_done"))
-					.placesVisited(array.getJSONObject(0).getInt("places_visited"))
-					.points(array.getJSONObject(0).getInt("points"))
-					.build();
+							.challengesDone(array.getJSONObject(0).getInt("challenges_done"))
+							.placesVisited(array.getJSONObject(0).getInt("places_visited"))
+							.points(array.getJSONObject(0).getInt("points"))
+							.imageUrl(array.getJSONObject(0).getString("user_image_url"))
+								.build();
 			}
 			catch (JSONException e) {
 				Log.e(TAG + "GetUserDetailTask.doInBackground() : ", "JSON error parsing data" + e.toString());
@@ -177,6 +181,8 @@ public class ProfileActivity extends Activity {
 		protected void onPostExecute(final User user) {
 			progressDialog.dismiss();
 			
+			userPictureImageView.setImageDrawable(DownloadImageHelper.getImageFromUrl(user.getImageUrl()));
+					
 			TextView textViewChallengesDone = (TextView) findViewById(R.id.profile_xml_textview_challenges_done);
 			textViewChallengesDone.setText(Integer.toString(user.getChallengesDone()));
 			

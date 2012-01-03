@@ -43,10 +43,10 @@ public class PlaceActivityItemAdapter extends BaseAdapter {
 	// default fields for every activity (PlaceLog)
 	public static class ItemViewHolder {
 		TableLayout  table;
-		ImageView    imageViewUserPicture;
-		TextView   	 textViewUsername;
-		TextView   	 textViewWhatUserDo;
-		TextView 	 textViewTime;
+		ImageView imageViewUserPicture;
+		TextView textViewUsername;
+		TextView textViewWhatUserDo;
+		TextView textViewTime;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -66,13 +66,7 @@ public class PlaceActivityItemAdapter extends BaseAdapter {
 		/*
 		 * TODO: Group user' tasks together to save this download image task
 		 */
-		try {
-			holder.imageViewUserPicture.setImageDrawable(DownloadImageHelper.getImageFromUrl(items.get(position).getUserUrl()));
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+		holder.imageViewUserPicture.setImageDrawable(items.get(position).getUserPictureDrawable());
 		holder.textViewUsername.setText(items.get(position).getUsername());
 		holder.textViewTime.setText("@" + items.get(position).getTime());
 		
@@ -87,12 +81,8 @@ public class PlaceActivityItemAdapter extends BaseAdapter {
 			TableRow row = new TableRow(context);	
 			ImageView pictureBox = new ImageView(context);
 			ImageView dummy = new ImageView(context);
-			try {
-				pictureBox.setImageDrawable(DownloadImageHelper.getImageFromUrl(items.get(position).getImageUrl()));
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+			
+			pictureBox.setImageDrawable(items.get(position).getSnapPictureDrawable());
 	    	// TableRow.LayoutParams textLayoutParams = new TableRow.LayoutParams();
 	    	// textLayoutParams.setMargins(100, 0, 0, 0);
 	    	// row.addView(pictureBox, textLayoutParams);
