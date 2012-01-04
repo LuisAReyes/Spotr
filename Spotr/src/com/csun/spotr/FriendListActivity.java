@@ -5,6 +5,9 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -49,5 +52,19 @@ public class FriendListActivity extends TabActivity {
 		tabHost.addTab(spec);
 		// set current tab to action
 		tabHost.setCurrentTab(0);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.all_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent = new Intent("com.csun.spotr.MainMenuActivity");
+		startActivity(intent);
+		return true;
 	}
 }

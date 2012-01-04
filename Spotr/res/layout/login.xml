@@ -28,6 +28,7 @@
             <EditText
                 android:id="@+id/login_xml_edittext_email_id"
                 android:singleLine="true"
+                android:capitalize="none"
                 android:width="200px" >
                 <requestFocus />
             </EditText>

@@ -107,7 +107,7 @@ public class WriteOnWallActivity extends Activity {
 		protected void onPostExecute(String result) {
 			progressDialog.dismiss();
 			if (result.equals("success")) {
-				Intent intent = new Intent("com.csun.spotr.PlaceActivityActivity");
+				Intent intent = new Intent("com.csun.spotr.PlaceMainActivity");
 				intent.putExtra("place_id", Integer.parseInt(spotsId));
 				startActivity(intent);
 			}

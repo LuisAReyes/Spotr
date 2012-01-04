@@ -52,29 +52,4 @@ public class RewardActivity extends Activity {
 	        }
 	    });	
 	}
-	
-	//Menu Button Selections
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.options_menu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.options_menu_xml_item_setting_Icon :
-			Intent i = new Intent("com.csun.spotr.SettingsActivity");
-			startActivity(i);
-			break;
-		case R.id.options_menu_xml_item_logout_Icon :
-			Intent k = new Intent("com.csun.spotr.LoginActivity");
-			startActivity(k);
-			break;
-		}
-		return true;
-	}
-	
-	
 }

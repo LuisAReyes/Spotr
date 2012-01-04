@@ -118,29 +118,6 @@ public class ProfileActivity extends Activity {
 		return cursor.getString(column_index);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.profile_setting_menu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent;
-		switch (item.getItemId()) {
-		case R.id.profile_setting_menu_xml_edit :
-			intent = new Intent("com.csun.spotr.ProfileEditActivity");
-			startActivity(intent);
-			break;
-		case R.id.profile_setting_menu_xml_preference :
-			intent = new Intent("com.csun.spotr.ProfilePreferenceActivity");
-			startActivity(intent);
-			break;
-		}
-		return true;
-	}
-	
 	private class GetUserDetailTask extends AsyncTask<Void, Integer, User> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
@@ -206,4 +183,26 @@ public class ProfileActivity extends Activity {
 		}
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.profile_setting_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId()) {
+		case R.id.profile_setting_menu_xml_edit :
+			intent = new Intent("com.csun.spotr.ProfileEditActivity");
+			startActivity(intent);
+			break;
+		case R.id.profile_setting_menu_xml_preference :
+			intent = new Intent("com.csun.spotr.ProfilePreferenceActivity");
+			startActivity(intent);
+			break;
+		}
+		return true;
+	}
 }

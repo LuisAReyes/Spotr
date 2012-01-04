@@ -3,13 +3,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
+    android:orientation="vertical" 
+    android:background="@drawable/the_green_background">
+   
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/air_plane" />
 
     <TableLayout
         android:layout_width="match_parent"
@@ -18,7 +19,8 @@
         <TableRow>
             <TextView
                 android:width="120px"
-                android:text="@string/signup_xml_textview_email_str" />
+                android:text="Email"
+                />
 
             <EditText
                 android:id="@+id/signup_xml_edittext_email_id"
@@ -30,7 +32,7 @@
 
         <TableRow>
             <TextView
-                android:text="@string/signup_xml_textview_password_str" />
+                android:text="Password"/>
 
             <EditText
                 android:id="@+id/signup_xml_edittext_password_id"
@@ -41,7 +43,7 @@
         
         <TableRow>
             <TextView
-                android:text="@string/signup_xml_textview_confirmpassword_str" />
+                android:text="Confirm"/>
 
             <EditText
                 android:id="@+id/signup_xml_edittext_confirmpassword_id"

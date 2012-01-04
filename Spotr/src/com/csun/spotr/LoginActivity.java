@@ -106,7 +106,7 @@ public class LoginActivity extends Activity {
 		case 0 :
 			return new 
 				AlertDialog.Builder(this)
-					.setIcon(R.drawable.ic_launcher)
+					.setIcon(R.drawable.error_circle)
 					.setTitle("Error Message")
 					.setMessage("Invalid Username/Password.\n Please try again.")
 					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -133,33 +133,34 @@ public class LoginActivity extends Activity {
 		}
 		
 		@Override
-		protected Boolean doInBackground(Void... unused) {
+		protected Boolean doInBackground(Void... voids) {
 			// get data from the our database 
-			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(LOGIN_URL, loginData);
+			JSONObject json = JsonHelper.getJsonObjectFromUrlWithData(LOGIN_URL, loginData);
+			int userId;
 			try {
-				JSONObject jsonUserInfo = array.getJSONObject(0);
-				// attempt to get data
-				jsonUserInfo.getString("username");
+				userId = json.getInt("result");
+				// fail to login
+				if (userId == -1)
+					return false;
+				
 				if (savePassword) {
 					editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
 					editor.putBoolean("savePassword", true);
-					editor.putString("username", jsonUserInfo.getString("username"));
-					editor.putString("password", jsonUserInfo.getString("password"));
+					editor.putString("username", edittextUsername.getText().toString());
+					editor.putString("password", edittextPassword.getText().toString());
 					editor.commit();
 				}
-				CurrentUser.setCurrentUser(jsonUserInfo.getInt("id"), jsonUserInfo.getString("username"), jsonUserInfo.getString("password"));
+				CurrentUser.setCurrentUser(
+					userId, 
+					edittextUsername.getText().toString(), 
+					edittextPassword.getText().toString());
 			}
 			catch (Exception e) {
-				showDialog(0);
-				return false; 
+				Log.e(TAG + "LoginTask.doInBackground(Void... voids)", "JSON error parsing data" + e.toString());
 			}
 			return true;
 		}
 
-		protected void onProgressUpdate(Integer... progress) {
-			// do nothing
-		}
-		
 		@Override
 		protected void onPostExecute(Boolean result) {
 			if (result == false) {

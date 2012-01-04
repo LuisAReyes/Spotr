@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -13,12 +14,16 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
+import com.csun.spotr.helper.JsonHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -68,12 +73,10 @@ public class SignupActivity extends Activity {
 		});
 
 		buttonSignup.setOnClickListener(new OnClickListener() {
-			String result = "";
 			public void onClick(View v) {
 				String email = edittextEmail.getText().toString();
 				String password = edittextPassword.getText().toString();
 				String confirmpassword = edittextConfirmPassword.getText().toString();
-
 				if (!email.contains("@")) {
 					showDialog(1);
 				}
@@ -81,74 +84,95 @@ public class SignupActivity extends Activity {
 					showDialog(0);
 				}
 				else {
-					ArrayList<NameValuePair> signupData = new ArrayList<NameValuePair>(2);
-					signupData.add(new BasicNameValuePair("email", email));
-					signupData.add(new BasicNameValuePair("password", password));
-
-					try {
-
-						// Connect to server
-						HttpClient httpclient = new DefaultHttpClient();
-						HttpPost httppost = new HttpPost(SIGN_UP_URL);
-
-						httppost.setEntity(new UrlEncodedFormEntity(signupData));
-						HttpResponse response = httpclient.execute(httppost);
-
-						// get response data
-						HttpEntity entity = response.getEntity();
-						InputStream is = entity.getContent();
-						BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 10);
-						StringBuilder sb = new StringBuilder();
-						String line = null;
-						while ((line = reader.readLine()) != null) {
-							sb.append(line + "\n");
-						}
-						is.close();
-
-						result = sb.toString();
-						if (result.contains("success")) {
-							showDialog(2);
-						}
-						else {
-							showDialog(3);
-						}
-					}
-
-					catch (Exception e) {
-						Log.e("log_tag", "Error: " + e.toString());
-					}
+					SignupTask task = new SignupTask();
+					task.execute();
 				}
 			}
 		});
 	}
+	
+	private class SignupTask extends AsyncTask<Void, Integer, Boolean> {
+		private List<NameValuePair> datas = new ArrayList<NameValuePair>();
+		@Override
+		protected void onPreExecute() {
+			datas.add(new BasicNameValuePair("username", edittextEmail.getText().toString()));
+			datas.add(new BasicNameValuePair("password", edittextPassword.getText().toString()));
+		}
+		
+		@Override
+		protected Boolean doInBackground(Void... voids) {
+			JSONObject json = JsonHelper.getJsonObjectFromUrlWithData(SIGN_UP_URL, datas);
+			try {
+				if (json.getString("result").equals("success"))
+					return true;
+			}
+			catch (Exception e) {
+				Log.e(TAG + "SignupTask.doInBackground(Void... voids)", "JSON error parsing data" + e.toString());
+			}
+			return false;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if (result == false) {
+				showDialog(3);
+			}
+			else {
+				showDialog(2);
+			}
+		}
+	}
+
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case 0 :
-			return new AlertDialog.Builder(this).setIcon(R.drawable.ic_launcher).setTitle("Error Message").setMessage("Confirm password does not match.\n Please try again.").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
+			return 
+				new AlertDialog.Builder(this)
+					.setIcon(R.drawable.error_circle)
+					.setTitle("Error Message")
+					.setMessage("Confirm password does not match.\n Please try again.")
+					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
 
-				}
-			}).create();
+						}
+					}).create();
+			
 		case 1 :
-			return new AlertDialog.Builder(this).setIcon(R.drawable.ic_launcher).setTitle("Error Message").setMessage("This is not a valid email address.\n Please try again.").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-
-				}
-			}).create();
+			return 
+				new AlertDialog.Builder(this)
+					.setIcon(R.drawable.error_circle)
+					.setTitle("Error Message")
+					.setMessage("This is not a valid email address.\n Please try again.")
+					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							
+						}
+					}).create();
+			
 		case 2 :
-			return new AlertDialog.Builder(this).setIcon(R.drawable.ic_launcher).setTitle("Congratz").setMessage("Your account has been created. Log in and have fun playing SPOTR.").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-					startActivity(new Intent("com.csun.spotr.LoginActivity"));
-				}
-			}).create();
+			return 
+				new AlertDialog.Builder(this)
+					.setIcon(R.drawable.bug)
+					.setTitle("Congratz")
+					.setMessage("Your account has been created. Log in and have fun playing SPOTR.")
+					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							startActivity(new Intent("com.csun.spotr.LoginActivity"));
+						}
+					}).create();
+			
 		case 3 :
-			return new AlertDialog.Builder(this).setIcon(R.drawable.ic_launcher).setTitle("Error Message").setMessage("This email has been used.\n Please try again.").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
+			return new AlertDialog.Builder(this)
+				.setIcon(R.drawable.error_circle)
+				.setTitle("Error Message")
+				.setMessage("This email has been used.\n Please try again.")
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
 
-				}
-			}).create();
+					}
+				}).create();
 		}
 		return null;
 	}

@@ -200,15 +200,15 @@ public class LocalMapViewActivity extends MapActivity {
 			manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			// assume either GPS or Network is enabled
 			// TODO: add error handling
-			
-			// prefer GPS
+			/*
 			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
 			}
-			else {
-				if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-					manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
-				}
+			*/
+			
+			// Internet is faster
+			if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+				manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
 			}
 			
 			progressDialog = new ProgressDialog(LocalMapViewActivity.this);
