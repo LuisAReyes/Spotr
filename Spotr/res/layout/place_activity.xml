@@ -9,7 +9,7 @@
     <ListView
         android:id="@+id/place_activity_xml_listview"
         android:layout_width="match_parent"
-        android:background="#FFFFFF"
+        android:background="#EDEDED"
         android:layout_height="wrap_content" >
     </ListView>
     

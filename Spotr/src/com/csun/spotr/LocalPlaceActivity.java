@@ -120,16 +120,15 @@ public class LocalPlaceActivity extends Activity {
 			// assume either GPS or Network is enabled
 			// TODO: add error handling
 			
-			// prefer GPS
-			// prefer GPS
+			/*
 			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
 			}
-			else {
-				if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-					manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
-				}
-			}
+			*/
+			// NETWORK is faster
+			if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) 
+				manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
+			
 			// display waiting dialog
 			progressDialog = new ProgressDialog(LocalPlaceActivity.this);
 			progressDialog.setMessage("Loading local places...");

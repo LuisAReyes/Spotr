@@ -12,7 +12,7 @@
 
         <Button
             android:id="@+id/test_login"
-            style="@style/my_button_3"
+            style="@style/my_button_1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -21,7 +21,7 @@
 
         <Button
             android:id="@+id/test_challenge"
-            style="@style/my_button_1"
+            style="@style/my_button_3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -29,7 +29,7 @@
 
         <Button
             android:id="@+id/test_mapview"
-            style="@style/my_button_3"
+            style="@style/my_button_2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -42,22 +42,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Google Place Activity" />
-
-        <Button
-            android:id="@+id/test_localmapview"
-            style="@style/my_button_2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Local Map View Activity" />
-
-        <Button
-            android:id="@+id/test_localplace"
-            style="@style/my_button_1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Local Place Activity" />
     </LinearLayout>
 
 </ScrollView>

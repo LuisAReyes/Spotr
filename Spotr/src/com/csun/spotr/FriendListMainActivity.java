@@ -24,6 +24,7 @@ import android.view.View;
 import com.csun.spotr.core.User;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.gui.FriendListMainItemAdapter;
+import com.csun.spotr.helper.DownloadImageHelper;
 import com.csun.spotr.helper.JsonHelper;
 
 public class FriendListMainActivity extends Activity {
@@ -64,11 +65,13 @@ public class FriendListMainActivity extends Activity {
 				try {
 					for (int i = 0; i < array.length(); ++i) { 
 						userList.add(
-							new User.Builder(
-								array.getJSONObject(i).getInt("id"),
-								array.getJSONObject(i).getString("username"),
-								array.getJSONObject(i).getString("password"))
-								.imageUrl(array.getJSONObject(i).getString("user_image_url")).build());
+								new User.Builder(
+									array.getJSONObject(i).getInt("id"),
+									array.getJSONObject(i).getString("username"),
+									array.getJSONObject(i).getString("password"))
+										.imageUrl(array.getJSONObject(i).getString("user_image_url"))
+										.imageDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("user_image_url")))
+											.build());
 						
 					}
 				}

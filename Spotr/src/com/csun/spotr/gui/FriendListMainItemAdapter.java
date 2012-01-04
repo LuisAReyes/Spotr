@@ -9,6 +9,7 @@ import com.csun.spotr.helper.DownloadImageHelper;
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -56,12 +57,7 @@ public class FriendListMainItemAdapter extends BaseAdapter {
 		}
 
 		holder.textViewName.setText(users.get(position).getUsername());
-		try {
-			holder.imageViewPicture.setImageDrawable(DownloadImageHelper.getImageFromUrl(users.get(position).getImageUrl()));
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		holder.imageViewPicture.setImageDrawable(users.get(position).getImageDrawable());
 		return convertView;
 	}
 }

@@ -101,6 +101,8 @@
          android:layout_height="wrap_content"
          android:id="@+id/main_menu_xml_slide_handle"
          android:background="@drawable/sliderup"
+         android:textColor="#1B9EE0"
+         android:textStyle="bold"
          android:text="@string/main_menu_xml_slider_notification_str">
      </Button>
        
@@ -114,10 +116,9 @@
          android:id="@+id/main_menu_xml_slide_content"
          android:layout_width="match_parent"
          android:layout_height="match_parent"
-         android:background="#000000">
+         android:background="@drawable/the_opera_background">
     </ListView>
-         
-       
+    
     </SlidingDrawer>
     
 </RelativeLayout>

@@ -46,21 +46,5 @@ public class SpotrActivity extends Activity {
 				startActivity(i);
 			}
 		});
-		
-		Button b5 = (Button) findViewById(R.id.test_localmapview);
-		b5 .setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.LocalMapViewActivity");
-				startActivity(i);
-			}
-		});
-	
-		Button b6 = (Button) findViewById(R.id.test_localplace);
-		b6.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.LocalPlaceActivity");
-				startActivity(i);
-			}
-		});
 	}
 }

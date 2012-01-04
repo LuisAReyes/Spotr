@@ -83,11 +83,8 @@ public class PlaceActivityItemAdapter extends BaseAdapter {
 			ImageView dummy = new ImageView(context);
 			
 			pictureBox.setImageDrawable(items.get(position).getSnapPictureDrawable());
-	    	// TableRow.LayoutParams textLayoutParams = new TableRow.LayoutParams();
-	    	// textLayoutParams.setMargins(100, 0, 0, 0);
-	    	// row.addView(pictureBox, textLayoutParams);
 			row.addView(dummy);
-			row.addView(pictureBox);
+	    	row.addView(pictureBox, new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 	    	holder.table.addView(row);
 		}
 		else if (items.get(position).getChallengeType().equals("WRITE_ON_WALL")) {
@@ -101,9 +98,6 @@ public class PlaceActivityItemAdapter extends BaseAdapter {
 			messageBox.setMaxLines(5);
 			ImageView dummy = new ImageView(context);
 			messageBox.setText(items.get(position).getComment());
-			// TableRow.LayoutParams textLayoutParams = new TableRow.LayoutParams();
-	    	// textLayoutParams.setMargins(100, 0, 0, 0);
-	    	// row.addView(messageBox, textLayoutParams);
 			row.addView(dummy);
 			row.addView(messageBox);
 	    	holder.table.addView(row);

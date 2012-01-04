@@ -17,8 +17,8 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 
 public class CustomHttpClient {
-	private static final String 	 TAG = "[CustomHttpClient]";
-	private static 		 HttpClient	 customHttpClient;
+	private static final String TAG = "[CustomHttpClient]";
+	private static HttpClient customHttpClient;
 	
 	/* A private Constructor prevents any other class from instantiating. */
 	private CustomHttpClient() {

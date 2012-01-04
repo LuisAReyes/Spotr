@@ -19,8 +19,6 @@ import com.google.android.maps.OverlayItem;
 /**
  * An abstract extension of ItemizedOverlay for displaying an information
  * balloon upon screen-tap of each marker overlay.
- * 
- * @author Chan Nguyen
  */
 public abstract class BalloonItemizedOverlay<Item extends OverlayItem> extends ItemizedOverlay<Item> {
 	private MapView mapView;

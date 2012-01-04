@@ -129,7 +129,7 @@ public class PlaceActionActivity extends Activity {
 					else if (c.getType() == Challenge.Type.QUESTION_ANSWER) {
 						
 					}
-					else {// c.getType == Challenge.Type.OTHER 
+					else { // c.getType == Challenge.Type.OTHER 
 					
 					}
 				}

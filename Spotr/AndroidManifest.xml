@@ -109,6 +109,7 @@
         
         <!-- Friend List Activity -->
         <activity android:name=".FriendListActivity" 
+                  android:screenOrientation="portrait"
         		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.FriendListActivity" />
@@ -118,6 +119,7 @@
 
         <!-- Friend List Main Activity -->
         <activity android:name=".FriendListMainActivity" 
+                  android:screenOrientation="portrait"
         		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.FriendListMainActivity" />
@@ -127,6 +129,7 @@
         
         <!-- Friend List Feed Activity -->
         <activity android:name=".FriendListFeedActivity" 
+                  android:screenOrientation="portrait"
         		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.FriendListFeedActivity" />
@@ -136,6 +139,7 @@
         
         <!-- Friend List Action Activity -->
         <activity android:name=".FriendListActionActivity" 
+                  android:screenOrientation="portrait"
         		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.FriendListActionActivity" />
@@ -143,7 +147,6 @@
             </intent-filter>
         </activity>
         
-       
         
         <!-- Settings Activity -->
         <activity android:name=".SettingsActivity" 

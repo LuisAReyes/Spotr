@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Vector;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 public class User {
 	// required parameters
@@ -20,6 +21,7 @@ public class User {
 	private int placesVisited;
 	private int rank;
 	private String imageUrl;
+	private Drawable imageDrawable;
 
 	public static class Builder {
 		// required parameters
@@ -34,6 +36,7 @@ public class User {
 		private int placesVisited;
 		private int rank;
 		private String imageUrl;
+		private Drawable imageDrawable;
 
 		public Builder(int id, String username, String password) {
 			// required parameters
@@ -47,6 +50,7 @@ public class User {
 			challengesDone = 0;
 			placesVisited = 0;
 			imageUrl = null;
+			imageDrawable = null;
 		}
 
 		public Builder realname(String realname) {
@@ -63,12 +67,12 @@ public class User {
 			this.points = points;
 			return this;
 		}
-		
+
 		public Builder challengesDone(int challengesDone) {
 			this.challengesDone = challengesDone;
 			return this;
 		}
-		
+
 		public Builder placesVisited(int placesVisited) {
 			this.placesVisited = placesVisited;
 			return this;
@@ -78,9 +82,14 @@ public class User {
 			this.imageUrl = imageUrl;
 			return this;
 		}
-		
+
 		public Builder rank(int rank) {
 			this.rank = rank;
+			return this;
+		}
+
+		public Builder imageDrawable(Drawable drawable) {
+			this.imageDrawable = drawable;
 			return this;
 		}
 
@@ -100,6 +109,7 @@ public class User {
 		this.placesVisited = builder.placesVisited;
 		this.rank = builder.rank;
 		this.imageUrl = builder.imageUrl;
+		this.imageDrawable = builder.imageDrawable;
 	}
 
 	public String getRealname() {
@@ -153,17 +163,25 @@ public class User {
 	public void setRank(int rank) {
 		this.rank = rank;
 	}
-	
+
 	public int getRank() {
 		return rank;
 	}
-	
+
 	public String getImageUrl() {
 		return imageUrl;
 	}
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public Drawable getImageDrawable() {
+		return imageDrawable;
+	}
+
+	public void setImageDrawable(Drawable imageDrawable) {
+		this.imageDrawable = imageDrawable;
 	}
 
 	public int getId() {
