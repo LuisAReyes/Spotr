@@ -17,10 +17,14 @@ import com.csun.spotr.helper.JsonHelper;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -196,7 +200,4 @@ public class PlaceActionActivity extends Activity {
 		}
 		
 	}
-	
-	
-
 }

@@ -1,137 +1,88 @@
 package com.csun.spotr;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.app.TabActivity;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.util.Log;
+import android.preference.Preference;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TabHost;
+import android.widget.Toast;
 
-import com.csun.spotr.core.User;
-import com.csun.spotr.singleton.CurrentUser;
-import com.csun.spotr.gui.FriendListMainItemAdapter;
-import com.csun.spotr.helper.DownloadImageHelper;
-import com.csun.spotr.helper.JsonHelper;
-
-public class FriendListMainActivity extends Activity {
+public class FriendListMainActivity extends TabActivity {
 	private static final String TAG = "[FriendListMainActivity]";
-	private static final String GET_FRIENDS_URL = "http://107.22.209.62/android/get_friends.php";
-	private ListView listViewUser = null;
-	private FriendListMainItemAdapter userItemAdapter = null;
-	private List<User> userList = null;
 	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.friend_list_main);
-		GetFriendsTask task = new GetFriendsTask();
-		task.execute();
-	}
-	
-	private class GetFriendsTask extends AsyncTask<Void, Integer, Boolean> {
-		private List<NameValuePair> userData = new ArrayList<NameValuePair>(); 
-		private ProgressDialog progressDialog = null;
-		
-		@Override
-		protected void onPreExecute() {
-			userData.add(new BasicNameValuePair("id", Integer.toString(CurrentUser.getCurrentUser().getId())));
-			// display waiting dialog
-			progressDialog = new ProgressDialog(FriendListMainActivity.this);
-			progressDialog.setMessage("Loading...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
-		}
-		
-		@Override
-		protected Boolean doInBackground(Void...voids) {
-			// initialize list of user
-			userList = new ArrayList<User>();
-			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_FRIENDS_URL, userData);
-			if (array != null) { 
-				try {
-					for (int i = 0; i < array.length(); ++i) { 
-						userList.add(
-								new User.Builder(
-									array.getJSONObject(i).getInt("users_tbl_id"),
-									array.getJSONObject(i).getString("users_tbl_username"),
-									array.getJSONObject(i).getString("users_tbl_password"))
-										.imageUrl(array.getJSONObject(i).getString("users_tbl_user_image_url"))
-										.imageDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("users_tbl_user_image_url")))
-											.build());
-						
-					}
-				}
-				catch (JSONException e) {
-					Log.e(TAG + "GetFriendTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
-				}
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		
-		@Override
-		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
-			if (result == true) {
-				listViewUser = (ListView) findViewById(R.id.friend_list_main_xml_listview_friends);
-				userItemAdapter = new FriendListMainItemAdapter(FriendListMainActivity.this, userList);
-				listViewUser.setAdapter(userItemAdapter);
-				listViewUser.setOnItemClickListener(new OnItemClickListener() {
-					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-						startDialog(userList.get(position));
-					}
-				});
-			}
-			else {
-				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListMainActivity.this).create();
-				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-				dialogMessage.setMessage("You don't have any friend yet!");
-				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				dialogMessage.show();
-			}
-		}
-			
-	}
-	
-	private void startDialog(final User user) {
-		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
-		myAlertDialog.setTitle("Friend Dialog");
-		myAlertDialog.setMessage("Pick an option");
-		myAlertDialog.setPositiveButton("Send a message", new DialogInterface.OnClickListener() {
-			// do something when the button is clicked
-			public void onClick(DialogInterface arg0, int arg1) {
-			}
-		});
+		setContentView(R.layout.friend_list);
+		Resources res = getResources(); 
+		TabHost tabHost = getTabHost(); 
+		TabHost.TabSpec spec; 
+		Intent intent; 
 
-		myAlertDialog.setNegativeButton("View profile", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface arg0, int arg1) {
-				Intent intent = new Intent("com.csun.spotr.ProfileMainActivity");
-				Bundle extras = new Bundle();
-				extras.putInt("user_id", user.getId());
-				intent.putExtras(extras);
+		// Create an Intent to launch an Activity for the tab (to be reused)
+		intent = new Intent().setClass(this, FriendListActivity.class); 
+		// Initialize a TabSpec for each tab and add it to the TabHost
+		spec = tabHost
+				.newTabSpec("All Friends")
+				.setIndicator("All Friends", res.getDrawable(R.drawable.place_activity_tab))
+				.setContent(intent);
+		tabHost.addTab(spec);
+
+		// Do the same for the other tabs
+		intent = new Intent().setClass(this, FriendListActionActivity.class);
+		spec = tabHost
+				.newTabSpec("Find")
+				.setIndicator("Find", res.getDrawable(R.drawable.place_activity_tab))
+				.setContent(intent);
+		tabHost.addTab(spec);
+
+		intent = new Intent().setClass(this, FriendListFeedActivity.class);
+		spec = tabHost
+				.newTabSpec("Friend Feeds")
+				.setIndicator("Friend Feeds", res.getDrawable(R.drawable.place_activity_tab))
+				.setContent(intent);
+		tabHost.addTab(spec);
+		// set current tab to action
+		tabHost.setCurrentTab(0);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.all_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId()) {
+			case R.id.options_menu_xml_item_setting_icon:
+				intent = new Intent("com.csun.spotr.SettingsActivity");
 				startActivity(intent);
-			}
-		});
-		myAlertDialog.show();
+				break;
+			case R.id.options_menu_xml_item_logout_icon:
+				SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
+				editor.clear();
+				editor.commit();
+				intent = new Intent("com.csun.spotr.LoginActivity");
+				startActivity(intent);
+				break;
+			case R.id.options_menu_xml_item_mainmenu_icon:
+				intent = new Intent("com.csun.spotr.MainMenuActivity");
+				startActivity(intent);
+				break;
+		}
+		return true;
 	}
 }

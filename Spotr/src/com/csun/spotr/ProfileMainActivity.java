@@ -2,6 +2,7 @@ package com.csun.spotr;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
@@ -62,8 +63,24 @@ public class ProfileMainActivity extends TabActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent = new Intent("com.csun.spotr.MainMenuActivity");
-		startActivity(intent);
+		Intent intent;
+		switch (item.getItemId()) {
+			case R.id.options_menu_xml_item_setting_icon:
+				intent = new Intent("com.csun.spotr.SettingsActivity");
+				startActivity(intent);
+				break;
+			case R.id.options_menu_xml_item_logout_icon:
+				SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
+				editor.clear();
+				editor.commit();
+				intent = new Intent("com.csun.spotr.LoginActivity");
+				startActivity(intent);
+				break;
+			case R.id.options_menu_xml_item_mainmenu_icon:
+				intent = new Intent("com.csun.spotr.MainMenuActivity");
+				startActivity(intent);
+				break;
+		}
 		return true;
 	}
 }

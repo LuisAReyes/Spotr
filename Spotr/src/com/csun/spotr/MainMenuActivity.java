@@ -45,7 +45,6 @@ public class MainMenuActivity extends Activity {
 	private static final String IGNORE_FRIEND_URL = "http://107.22.209.62/android/ignore_friend.php";
 	private List<FriendRequest> friendRequestList = null;
 	private int currentSelectedFriendId;
-	private SharedPreferences.Editor editor;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -88,7 +87,7 @@ public class MainMenuActivity extends Activity {
 		btnFriends = (Button) findViewById(R.id.main_menu_xml_button_friend_icon);
 		btnFriends.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.FriendListActivity");
+				Intent i = new Intent("com.csun.spotr.FriendListMainActivity");
 				startActivity(i);
 			}
 		});
@@ -124,32 +123,6 @@ public class MainMenuActivity extends Activity {
 		task.execute();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.options_menu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent;
-		switch (item.getItemId()) {
-		case R.id.options_menu_xml_item_setting_icon :
-			intent = new Intent("com.csun.spotr.SettingsActivity");
-			startActivity(intent);
-			break;
-		case R.id.options_menu_xml_item_logout_icon :
-			editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
-			editor.clear();
-			editor.commit();
-			intent = new Intent("com.csun.spotr.LoginActivity");
-			startActivity(intent);
-			break;
-		}
-		return true;
-	}
-	
 	private class GetFriendRequestTask extends AsyncTask<Void, Integer, Boolean> {
 		private List<NameValuePair> friendData = new ArrayList<NameValuePair>(); 
 		private ProgressDialog progressDialog = null;
@@ -293,5 +266,31 @@ public class MainMenuActivity extends Activity {
 
 			}
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.options_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId()) {
+		case R.id.options_menu_xml_item_setting_icon :
+			intent = new Intent("com.csun.spotr.SettingsActivity");
+			startActivity(intent);
+			break;
+		case R.id.options_menu_xml_item_logout_icon :
+			SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
+			editor.clear();
+			editor.commit();
+			intent = new Intent("com.csun.spotr.LoginActivity");
+			startActivity(intent);
+			break;
+		}
+		return true;
 	}
 }

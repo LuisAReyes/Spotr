@@ -15,6 +15,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -23,6 +24,9 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -280,5 +284,35 @@ public class LocalMapViewActivity extends MapActivity {
 			startActivity(intent);
 			return true;
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.all_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId()) {
+			case R.id.options_menu_xml_item_setting_icon:
+				intent = new Intent("com.csun.spotr.SettingsActivity");
+				startActivity(intent);
+				break;
+			case R.id.options_menu_xml_item_logout_icon:
+				SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
+				editor.clear();
+				editor.commit();
+				intent = new Intent("com.csun.spotr.LoginActivity");
+				startActivity(intent);
+				break;
+			case R.id.options_menu_xml_item_mainmenu_icon:
+				intent = new Intent("com.csun.spotr.MainMenuActivity");
+				startActivity(intent);
+				break;
+		}
+		return true;
 	}
 }

@@ -30,31 +30,6 @@ import android.util.Log;
 
 public class UploadFileHelper {
 	private static final String TAG = "[UploadFileHelper]";
-	private static final String URL = "http://107.22.209.62/images/upload_file_and_insert_to_database.php";
-	
-	public static boolean uploadFileTo(Bitmap bitmap) {
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		InputStream input = null;
-		bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
-		byte[] src = stream.toByteArray();
-		String byteCode = Base64.encodeBytes(src);
-		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-		nameValuePairs.add(new BasicNameValuePair("image", byteCode));
-		nameValuePairs.add(new BasicNameValuePair("file_name", "what.png"));
-		try {
-			HttpClient httpclient = CustomHttpClient.getHttpClient();
-			HttpPost httppost = new HttpPost(URL);
-			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			HttpResponse response = httpclient.execute(httppost);
-			HttpEntity entity = response.getEntity();
-			input = entity.getContent();
-		}
-		catch (Exception e) {
-			Log.e("TAG", "Error in Http connection" + e.toString());
-		}
-		Log.w(":(", "what's wrong?");
-		return true;
-	}
 	
 	public static JSONObject uploadFileToServer(String url, List<NameValuePair> datas) {
 		InputStream input = null;
@@ -62,7 +37,7 @@ public class UploadFileHelper {
 		JSONObject json = null;
 		try {
 			HttpClient httpclient = CustomHttpClient.getHttpClient();
-			HttpPost httppost = new HttpPost(URL);
+			HttpPost httppost = new HttpPost(url);
 			httppost.setEntity(new UrlEncodedFormEntity(datas));
 			HttpResponse response = httpclient.execute(httppost);
 			HttpEntity entity = response.getEntity();

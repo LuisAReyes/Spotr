@@ -55,6 +55,8 @@ public class FriendListFeedActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list_feed);
+		GetFriendFeedTask task = new GetFriendFeedTask();
+		task.execute();
     }
     
     private class GetFriendFeedTask extends AsyncTask<Void, Integer, Boolean> {
@@ -124,7 +126,7 @@ public class FriendListFeedActivity extends Activity {
 				progressDialog.dismiss();
 				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListFeedActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-				dialogMessage.setMessage("There are no activities for this place!");
+				dialogMessage.setMessage("There are no friend feeds yet!");
 				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();

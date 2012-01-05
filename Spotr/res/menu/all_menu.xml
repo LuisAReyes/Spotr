@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
     <item
-        android:id="@+id/all_menu_xml_item_main_menu"
-        android:icon="@drawable/city_map"
-        android:title="Main Menu"/>
+        android:id="@+id/options_menu_xml_item_setting_icon"
+        android:icon="@drawable/settings"
+        android:title="settings"
+        />
+    <item
+        android:id="@+id/options_menu_xml_item_mainmenu_icon"
+        android:icon="@drawable/friends"
+        android:title="main menu"
+        />
+    <item
+        android:id="@+id/options_menu_xml_item_logout_icon"
+        android:icon="@drawable/logout"
+        android:title="logout"/>
+
 </menu>
