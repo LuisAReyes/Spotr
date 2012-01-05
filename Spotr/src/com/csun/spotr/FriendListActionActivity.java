@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.core.User;
@@ -39,7 +40,7 @@ public class FriendListActionActivity extends Activity {
 	private EditText editTextSearch = null;
 	private ListView list;
 	private FriendListMainItemAdapter adapter;
-	private List<User> userList = new ArrayList<User>();
+	private List<User> userList;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,35 +49,45 @@ public class FriendListActionActivity extends Activity {
 		Button buttonSearch = (Button) findViewById(R.id.friend_list_action_xml_button_search);
 		editTextSearch = (EditText) findViewById(R.id.friend_list_action_xml_edittext_search);
 		
-		list = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
-		adapter = new FriendListMainItemAdapter(FriendListActionActivity.this, userList);
-		list.setAdapter(adapter);
-		list.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				startDialog(userList.get(position));
-			}
-		});
-		
 		// TODO: should we allow user to search on an empty string? which
-		// returns the whole list of users in
-		// our database
+		// returns the whole list of users in our database
 		buttonSearch.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				SearchFriendsTask task = new SearchFriendsTask();
-				task.execute(editTextSearch.getText().toString());
+				// hide keyboard right away
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(editTextSearch.getWindowToken(), 0);
+				// create a new list of items
+				userList = new ArrayList<User>();
+				list = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
+				adapter = new FriendListMainItemAdapter(FriendListActionActivity.this, userList);
+				list.setAdapter(adapter);
+				list.setOnItemClickListener(new OnItemClickListener() {
+					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+						startDialog(userList.get(position));
+					}
+				});
+				// start task
+				new SearchFriendsTask().execute(editTextSearch.getText().toString());
 			}
 		});
 	}
 
 	private class SearchFriendsTask extends AsyncTask<String, User, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
-
+		private ProgressDialog progressDialog = null;
 		@Override
 		protected void onPreExecute() {
+			// display waiting dialog
+			progressDialog = new ProgressDialog(FriendListActionActivity.this);
+			progressDialog.setMessage("Sending request...");
+			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(true);
+			progressDialog.show();
 		}
 		
 		@Override
 	    protected void onProgressUpdate(User... users) {
+			progressDialog.dismiss();
 			userList.add(users[0]);
 			adapter.notifyDataSetChanged();
 			// adapter.notifyDataSetInvalidated();
@@ -113,6 +124,7 @@ public class FriendListActionActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
+			progressDialog.dismiss();
 			if (result == false) {
 				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());

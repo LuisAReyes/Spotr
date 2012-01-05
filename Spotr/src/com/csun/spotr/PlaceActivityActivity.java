@@ -55,14 +55,21 @@ public class PlaceActivityActivity extends Activity {
     
     private class GetPlaceLogTask extends AsyncTask<Void, PlaceLog, Boolean> {
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>(); 
-		
+		private ProgressDialog progressDialog = null;
 		@Override
 		protected void onPreExecute() {
 			placeData.add(new BasicNameValuePair("spots_id", Integer.toString(currentPlaceId)));
+			// display waiting dialog
+			progressDialog = new ProgressDialog(PlaceActivityActivity.this);
+			progressDialog.setMessage("Sending request...");
+			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(true);
+			progressDialog.show();
 		}
 		
 		@Override
 	    protected void onProgressUpdate(PlaceLog... placeLogs) {
+			progressDialog.dismiss();
 			placeLogList.add(placeLogs[0]);
 			adapter.notifyDataSetChanged();
 			// adapter.notifyDataSetInvalidated();
@@ -100,6 +107,7 @@ public class PlaceActivityActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Boolean result) {
+			progressDialog.dismiss();
 			if (result == false) {
 				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActivityActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());

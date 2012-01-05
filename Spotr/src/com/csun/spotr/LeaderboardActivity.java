@@ -84,6 +84,7 @@ public class LeaderboardActivity extends Activity {
 		
 		@Override
 	    protected void onProgressUpdate(User... users) {
+			progressDialog.dismiss();
 			userList.add(users[0]);
 			adapter.notifyDataSetChanged();
 			// adapter.notifyDataSetInvalidated();

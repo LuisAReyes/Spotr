@@ -79,6 +79,9 @@ public class LocalMapViewActivity extends MapActivity {
 		Button changeViewButton = (Button) findViewById(R.id.mapview_xml_button_change_view);
 		Button listPlaceButton = (Button) findViewById(R.id.mapview_xml_button_places);
 		Button locateButton = (Button) findViewById(R.id.mapview_xml_button_locate);
+		
+		UpdateLocationTask task = new UpdateLocationTask();
+		task.execute();
 
 		// handle change view event
 		changeViewButton.setOnClickListener(new OnClickListener() {

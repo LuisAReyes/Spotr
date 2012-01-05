@@ -54,14 +54,21 @@ public class FriendListActivity extends Activity {
 	
 	private class GetFriendsTask extends AsyncTask<Void, User, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>(); 
-		
+		private ProgressDialog progressDialog = null;
 		@Override
 		protected void onPreExecute() {
 			userData.add(new BasicNameValuePair("id", Integer.toString(CurrentUser.getCurrentUser().getId())));
+			// display waiting dialog
+			progressDialog = new ProgressDialog(FriendListActivity.this);
+			progressDialog.setMessage("Sending request...");
+			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(true);
+			progressDialog.show();
 		}
 		
 		@Override
 	    protected void onProgressUpdate(User... users) {
+			progressDialog.dismiss();
 			userList.add(users[0]);
 			adapter.notifyDataSetChanged();
 			// adapter.notifyDataSetInvalidated();
@@ -95,6 +102,7 @@ public class FriendListActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Boolean result) {
+			progressDialog.dismiss();
 			if (result == false) {
 				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
