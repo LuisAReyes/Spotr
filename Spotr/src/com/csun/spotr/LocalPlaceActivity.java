@@ -179,16 +179,9 @@ public class LocalPlaceActivity extends Activity {
 	
 	private class GetSpotsTask extends AsyncTask<Location, Place, Boolean> {
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>(); 
-		private ProgressDialog progressDialog = null;
 		
 		@Override
 		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(LocalPlaceActivity.this);
-			progressDialog.setMessage("Loading...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
 		}
 		
 		@Override
@@ -231,7 +224,6 @@ public class LocalPlaceActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
 			if (result == false) {
 				AlertDialog dialogMessage = new AlertDialog.Builder(LocalPlaceActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());

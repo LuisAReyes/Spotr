@@ -70,16 +70,9 @@ public class FriendListActionActivity extends Activity {
 
 	private class SearchFriendsTask extends AsyncTask<String, User, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
-		private ProgressDialog progressDialog = null;
 
 		@Override
 		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(FriendListActionActivity.this);
-			progressDialog.setMessage("Loading...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
 		}
 		
 		@Override
@@ -120,7 +113,6 @@ public class FriendListActionActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
 			if (result == false) {
 				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());

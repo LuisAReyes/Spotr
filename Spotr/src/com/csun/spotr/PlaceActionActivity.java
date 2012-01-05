@@ -99,16 +99,8 @@ public class PlaceActionActivity extends Activity {
 	
 	private class GetChallengesTask extends AsyncTask<String, Challenge, Boolean> {
 		private List<NameValuePair> challengeData = new ArrayList<NameValuePair>();
-		private ProgressDialog progressDialog = null;
-
 		@Override
 		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(PlaceActionActivity.this);
-			progressDialog.setMessage("Loading...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
 		}
 		
 		@Override
@@ -149,7 +141,6 @@ public class PlaceActionActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
 			if (result == false) {
 				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActionActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
@@ -166,16 +157,9 @@ public class PlaceActionActivity extends Activity {
 	
 	private class CheckInTask extends AsyncTask<String, Integer, String> {
 		private List<NameValuePair> checkInData = new ArrayList<NameValuePair>();
-		private ProgressDialog progressDialog = null;
 
 		@Override
 		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(PlaceActionActivity.this);
-			progressDialog.setMessage("Checking in...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
 		}
 
 		@Override
@@ -215,9 +199,7 @@ public class PlaceActionActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			progressDialog.dismiss();
 			if (result.equals("success")) {
-				progressDialog.dismiss();
 				list.getChildAt(currentChosenItem).setBackgroundColor(Color.GRAY);
 			}
 		}

@@ -55,17 +55,10 @@ public class PlaceActivityActivity extends Activity {
     
     private class GetPlaceLogTask extends AsyncTask<Void, PlaceLog, Boolean> {
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>(); 
-		private  ProgressDialog progressDialog = null;
 		
 		@Override
 		protected void onPreExecute() {
 			placeData.add(new BasicNameValuePair("spots_id", Integer.toString(currentPlaceId)));
-			// display waiting dialog
-			progressDialog = new ProgressDialog(PlaceActivityActivity.this);
-			progressDialog.setMessage("Loading...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
 		}
 		
 		@Override
@@ -107,9 +100,7 @@ public class PlaceActivityActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
 			if (result == false) {
-				progressDialog.dismiss();
 				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActivityActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("There are no activities for this place!");
