@@ -16,7 +16,8 @@ import org.json.JSONObject;
 import com.csun.spotr.helper.Base64;
 import com.csun.spotr.helper.JsonHelper;
 import com.csun.spotr.helper.UploadFileHelper;
-import com.csun.spotr.singleton.PictureCountGenerator;
+import com.csun.spotr.singleton.CurrentDateTime;
+import com.csun.spotr.singleton.CurrentUser;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -117,8 +118,9 @@ public class SnapPictureActivity extends Activity {
 			String byteCode = Base64.encodeBytes(src);
 			// send encoded data to server
 			snapPictureData.add(new BasicNameValuePair("image", byteCode));
-			// send a file name
-			snapPictureData.add(new BasicNameValuePair("file_name", PictureCountGenerator.getValue()));
+			// send a file name where file name = "username" + "current date time UTC", to make sure that we have a unique id picture every time.
+			// since the username is unique, we should take advantage of this otherwise two or more users could potentially snap pictures at the same time.
+			snapPictureData.add(new BasicNameValuePair("file_name",  CurrentUser.getCurrentUser().getUsername() + CurrentDateTime.getUTCDateTime().trim() + ".png"));
 			// send the rest of data
 			snapPictureData.add(new BasicNameValuePair("users_id", usersId));
 			snapPictureData.add(new BasicNameValuePair("spots_id", spotsId));

@@ -20,9 +20,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.Preference;
 
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -43,6 +45,7 @@ public class MainMenuActivity extends Activity {
 	private static final String IGNORE_FRIEND_URL = "http://107.22.209.62/android/ignore_friend.php";
 	private List<FriendRequest> friendRequestList = null;
 	private int currentSelectedFriendId;
+	private SharedPreferences.Editor editor;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -130,14 +133,18 @@ public class MainMenuActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
 		switch (item.getItemId()) {
-		case R.id.options_menu_xml_item_setting_Icon :
-			Intent i = new Intent("com.csun.spotr.SettingsActivity");
-			startActivity(i);
+		case R.id.options_menu_xml_item_setting_icon :
+			intent = new Intent("com.csun.spotr.SettingsActivity");
+			startActivity(intent);
 			break;
-		case R.id.options_menu_xml_item_logout_Icon :
-			Intent k = new Intent("com.csun.spotr.LoginActivity");
-			startActivity(k);
+		case R.id.options_menu_xml_item_logout_icon :
+			editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
+			editor.clear();
+			editor.commit();
+			intent = new Intent("com.csun.spotr.LoginActivity");
+			startActivity(intent);
 			break;
 		}
 		return true;

@@ -95,8 +95,8 @@ public class SignupActivity extends Activity {
 		private List<NameValuePair> datas = new ArrayList<NameValuePair>();
 		@Override
 		protected void onPreExecute() {
-			datas.add(new BasicNameValuePair("username", edittextEmail.getText().toString()));
-			datas.add(new BasicNameValuePair("password", edittextPassword.getText().toString()));
+			datas.add(new BasicNameValuePair("username", edittextEmail.getText().toString().trim()));
+			datas.add(new BasicNameValuePair("password", edittextPassword.getText().toString().trim()));
 		}
 		
 		@Override

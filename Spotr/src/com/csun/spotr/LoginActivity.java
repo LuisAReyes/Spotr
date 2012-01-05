@@ -128,8 +128,8 @@ public class LoginActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			// make a pair of data for HttpPost 
-			loginData.add(new BasicNameValuePair("username", edittextUsername.getText().toString()));
-			loginData.add(new BasicNameValuePair("password", edittextPassword.getText().toString()));
+			loginData.add(new BasicNameValuePair("username", edittextUsername.getText().toString().trim()));
+			loginData.add(new BasicNameValuePair("password", edittextPassword.getText().toString().trim()));
 		}
 		
 		@Override
