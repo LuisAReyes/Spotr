@@ -44,8 +44,6 @@ public class RewardActivity extends Activity {
 
 	    gridview.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-	           //Toast.makeText(RewardActivity.this, "Reward " + position, Toast.LENGTH_SHORT).show();
-	        	
 	           Intent intent = new Intent(getApplicationContext(), RewardViewActivity.class);
 	           startActivity(intent);
 

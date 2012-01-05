@@ -66,8 +66,7 @@ public class PlaceInfoActivity extends MapActivity {
 		Bundle extrasBundle = getIntent().getExtras();
 		currentPlaceId = extrasBundle.getInt("place_id");
 		
-		GetPlaceDetailTask task = new GetPlaceDetailTask();
-		task.execute();
+		new GetPlaceDetailTask().execute();
 	}
 	
 	private class GetPlaceDetailTask extends AsyncTask<Void, Integer, Place> {

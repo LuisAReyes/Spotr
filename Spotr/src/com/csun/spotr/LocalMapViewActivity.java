@@ -49,7 +49,7 @@ import com.google.android.maps.OverlayItem;
 
 public class LocalMapViewActivity extends MapActivity {
 	private static final String TAG = "[LocalMapViewActivity]";
-	private static final String URL = "http://107.22.209.62/android/get_spots.php";
+	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
 	private static final String RADIUS = "500";
 	private MapView mapView = null;
 	private List<Overlay> mapOverlays = null;
@@ -80,9 +80,6 @@ public class LocalMapViewActivity extends MapActivity {
 		Button listPlaceButton = (Button) findViewById(R.id.mapview_xml_button_places);
 		Button locateButton = (Button) findViewById(R.id.mapview_xml_button_locate);
 
-		UpdateLocationTask task = new UpdateLocationTask();
-		task.execute("1");
-
 		// handle change view event
 		changeViewButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
@@ -95,7 +92,7 @@ public class LocalMapViewActivity extends MapActivity {
 			public void onClick(View view) {
 				itemizedOverlay.clear();
 				UpdateLocationTask task = new UpdateLocationTask();
-				task.execute("1");
+				task.execute();
 			}
 		});
 
@@ -104,44 +101,11 @@ public class LocalMapViewActivity extends MapActivity {
 			public void onClick(View view) {
 				itemizedOverlay.clear();
 				UpdateLocationTask task = new UpdateLocationTask();
-				task.execute(RADIUS);
+				task.execute();
 			}
 		});
 	}
 
-	private List<Place> filterPlaces(Location currentLocation, String radius) {
-		List<Place> placeList = new ArrayList<Place>();
-		List<NameValuePair> datas = new ArrayList<NameValuePair>();
-		datas.add(new BasicNameValuePair("latitude", Double.toString(currentLocation.getLatitude())));
-		datas.add(new BasicNameValuePair("longitude", Double.toString(currentLocation.getLongitude())));
-		datas.add(new BasicNameValuePair("radius", radius)); 
-		JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(URL, datas);
-		try {
-			for (int i = 0; i < array.length(); ++i) { 
-				Place place = new Place.Builder(
-					// require parameters
-					array.getJSONObject(i).getDouble("spots_tbl_longitude"), 
-					array.getJSONObject(i).getDouble("spots_tbl_latitude"), 
-					array.getJSONObject(i).getInt("spots_tbl_id"))
-						// optional parameters
-						.name(array.getJSONObject(i).getString("spots_tbl_name"))
-						.address(array.getJSONObject(i).getString("spots_tbl_description"))
-							.build();
-				
-				// add to list of places
-				placeList.add(place);
-				// create an item overlay based on this location
-				OverlayItem overlay = new OverlayItem(new GeoPoint((int) (place.getLatitude() * 1E6), (int) (place.getLongitude() * 1E6)), place.getName(), place.getAddress());
-				// add to item to map 
-				itemizedOverlay.addOverlay(overlay, place);
-			}
-		}
-		catch (JSONException e) {
-			Log.e(TAG + ".filterPlaces() : ", "JSON error parsing data" + e.toString());
-		}
-		return placeList;
-	}
-	
 	private void startDialog() {
 		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
 		myAlertDialog.setTitle("Map View Option");
@@ -178,52 +142,46 @@ public class LocalMapViewActivity extends MapActivity {
 		return false;
 	}
 
-	private class UpdateLocationTask extends AsyncTask<String, Integer, Void> {
-		private ProgressDialog progressDialog;
-		private Location currentLocation;
+	private class UpdateLocationTask extends AsyncTask<Void, Integer, Location> {
+		public Location currentLocation = null;
+		private ProgressDialog progressDialog = null;
 		private MyLocationListener listener;
 		private LocationManager manager;
+		
 		@Override
-		protected Void doInBackground(String... radius) {
+		protected Location doInBackground(Void...voids) {
 			// wait for a new location
-			while (currentLocation == null) {
+			while(currentLocation == null) {
+				
 			}
 			manager.removeUpdates(listener);
-			filterPlaces(currentLocation, radius[0]);
-			return null;
+			return currentLocation;
 		}
-
+		
 		@Override
 		protected void onPreExecute() {
 			listener = new MyLocationListener();
 			manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-			// assume either GPS or Network is enabled
-			// TODO: add error handling
-			/*
-			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-				manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
-			}
-			*/
-			
-			// Internet is faster
-			if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			// NETWORK is faster
+			if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) 
 				manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
-			}
 			
+			// display waiting dialog
 			progressDialog = new ProgressDialog(LocalMapViewActivity.this);
-			progressDialog.setMessage("Loading...");
+			progressDialog.setMessage("Loading Google signal...");
 			progressDialog.setIndeterminate(true);
 			progressDialog.setCancelable(true);
 			progressDialog.show();
 		}
-
+	
 		@Override
-		protected void onPostExecute(Void unused) {
+		protected void onPostExecute(Location location) {
 			progressDialog.dismiss();
-			mapController.animateTo(new GeoPoint((int) (currentLocation.getLatitude() * 1E6), (int) (currentLocation.getLongitude() * 1E6)));
+			mapController.animateTo(new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6)));
 			mapController.setZoom(16);
+			new GetSpotsTask().execute(location);
 		}
-
+		
 		public class MyLocationListener implements LocationListener {
 			public void onLocationChanged(Location location) {
 				// update new location
@@ -243,7 +201,77 @@ public class LocalMapViewActivity extends MapActivity {
 			}
 		}
 	}
-
+	
+	private class GetSpotsTask extends AsyncTask<Location, Place, Boolean> {
+		private List<NameValuePair> placeData = new ArrayList<NameValuePair>(); 
+		private ProgressDialog progressDialog = null;
+		
+		@Override
+		protected void onPreExecute() {
+			// display waiting dialog
+			progressDialog = new ProgressDialog(LocalMapViewActivity.this);
+			progressDialog.setMessage("Loading...");
+			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(true);
+			progressDialog.show();
+		}
+		
+		@Override
+	    protected void onProgressUpdate(Place... places) {
+			OverlayItem overlay = new OverlayItem(
+				new GeoPoint((int) (places[0].getLatitude() * 1E6), (int) (places[0].getLongitude() * 1E6)), places[0].getName(), places[0].getAddress());
+			// add to item to map 
+			itemizedOverlay.addOverlay(overlay, places[0]);
+	    }
+		
+		@Override
+		protected Boolean doInBackground(Location...locations) {
+			placeData.add(new BasicNameValuePair("latitude", Double.toString(locations[0].getLatitude())));
+			placeData.add(new BasicNameValuePair("longitude", Double.toString(locations[0].getLongitude())));
+			placeData.add(new BasicNameValuePair("radius", RADIUS)); 
+			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_SPOTS_URL, placeData);
+			if (array != null) { 
+				try {
+					for (int i = 0; i < array.length(); ++i) { 
+						publishProgress(
+							new Place.Builder(
+								// require parameters
+								array.getJSONObject(i).getDouble("spots_tbl_longitude"), 
+								array.getJSONObject(i).getDouble("spots_tbl_latitude"), 
+								array.getJSONObject(i).getInt("spots_tbl_id"))
+									// optional parameters
+									.name(array.getJSONObject(i).getString("spots_tbl_name"))
+									.address(array.getJSONObject(i).getString("spots_tbl_description"))
+										.build());
+					}
+				}
+				catch (JSONException e) {
+					Log.e(TAG + "GetFriendTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+				}
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			progressDialog.dismiss();
+			if (result == false) {
+				AlertDialog dialogMessage = new AlertDialog.Builder(LocalMapViewActivity.this).create();
+				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
+				dialogMessage.setMessage("There are no places at this location");
+				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				dialogMessage.show();
+			}
+		}
+	}
+	
 	private class MyItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 		private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
 		private List<Place> places = new ArrayList<Place>();

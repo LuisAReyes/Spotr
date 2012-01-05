@@ -29,10 +29,10 @@ import android.widget.ListView;
 public class PlaceActivityActivity extends Activity {
 	private static final String TAG = "[PlaceActivityActivity]";
 	private static final String GET_PLACELOG_URL = "http://107.22.209.62/android/get_activities.php";
-	private List<PlaceLog> placeLogList;
 	private int currentPlaceId = 0;
 	private ListView list = null;
 	private PlaceActivityItemAdapter adapter = null;
+	private List<PlaceLog> placeLogList = new ArrayList<PlaceLog>();
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,11 +42,18 @@ public class PlaceActivityActivity extends Activity {
         Bundle extrasBundle = getIntent().getExtras();
 		currentPlaceId = extrasBundle.getInt("place_id");
 		
-		GetPlaceLogTask task = new GetPlaceLogTask();
-		task.execute();
+		list = (ListView) findViewById(R.id.place_activity_xml_listview);
+		adapter = new PlaceActivityItemAdapter(PlaceActivityActivity.this, placeLogList);
+		list.setAdapter(adapter);
+		list.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			}
+		});
+		// run task
+		new GetPlaceLogTask().execute();
     }
     
-    private class GetPlaceLogTask extends AsyncTask<Void, Integer, Boolean> {
+    private class GetPlaceLogTask extends AsyncTask<Void, PlaceLog, Boolean> {
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>(); 
 		private  ProgressDialog progressDialog = null;
 		
@@ -62,13 +69,19 @@ public class PlaceActivityActivity extends Activity {
 		}
 		
 		@Override
+	    protected void onProgressUpdate(PlaceLog... placeLogs) {
+			placeLogList.add(placeLogs[0]);
+			adapter.notifyDataSetChanged();
+			// adapter.notifyDataSetInvalidated();
+	    }
+		
+		@Override
 		protected Boolean doInBackground(Void...voids) {
-			placeLogList = new ArrayList<PlaceLog>();
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_PLACELOG_URL, placeData);
 			if (array != null) { 
 				try {
 					for (int i = 0; i < array.length(); ++i) { 
-						placeLogList.add(
+						publishProgress(
 							new PlaceLog.Builder(array.getJSONObject(i).getInt("activity_tbl_id"),
 								array.getJSONObject(i).getString("users_tbl_username"),
 								array.getJSONObject(i).getString("challenges_tbl_type"),
@@ -94,17 +107,8 @@ public class PlaceActivityActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Boolean result) {
-			if (result == true) {
-				progressDialog.dismiss();
-				list = (ListView) findViewById(R.id.place_activity_xml_listview);
-				adapter = new PlaceActivityItemAdapter(PlaceActivityActivity.this, placeLogList);
-				list.setAdapter(adapter);
-				list.setOnItemClickListener(new OnItemClickListener() {
-					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					}
-				});
-			}
-			else {
+			progressDialog.dismiss();
+			if (result == false) {
 				progressDialog.dismiss();
 				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActivityActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());

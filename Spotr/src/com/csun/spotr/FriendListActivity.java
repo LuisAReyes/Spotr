@@ -30,18 +30,29 @@ import com.csun.spotr.helper.JsonHelper;
 public class FriendListActivity extends Activity {
 	private static final String TAG = "[FriendListActivity]";
 	private static final String GET_FRIENDS_URL = "http://107.22.209.62/android/get_friends.php";
-	private ListView listViewUser = null;
-	private FriendListMainItemAdapter userItemAdapter = null;
-	private List<User> userList = null;
+	private ListView list = null;
+	private FriendListMainItemAdapter adapter;
+	private List<User> userList = new ArrayList<User>();
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list_main);
-		GetFriendsTask task = new GetFriendsTask();
-		task.execute();
+		
+		// initialize list view
+		list = (ListView) findViewById(R.id.friend_list_main_xml_listview_friends);
+		adapter = new FriendListMainItemAdapter(FriendListActivity.this, userList);
+		list.setAdapter(adapter);
+		list.setVisibility(View.VISIBLE);
+		list.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				startDialog(userList.get(position));
+			}
+		});
+		// run task
+		new GetFriendsTask().execute();
 	}
 	
-	private class GetFriendsTask extends AsyncTask<Void, Integer, Boolean> {
+	private class GetFriendsTask extends AsyncTask<Void, User, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>(); 
 		private ProgressDialog progressDialog = null;
 		
@@ -57,22 +68,26 @@ public class FriendListActivity extends Activity {
 		}
 		
 		@Override
+	    protected void onProgressUpdate(User... users) {
+			userList.add(users[0]);
+			adapter.notifyDataSetChanged();
+			// adapter.notifyDataSetInvalidated();
+	    }
+		
+		@Override
 		protected Boolean doInBackground(Void...voids) {
 			// initialize list of user
-			userList = new ArrayList<User>();
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_FRIENDS_URL, userData);
 			if (array != null) { 
 				try {
 					for (int i = 0; i < array.length(); ++i) { 
-						userList.add(
-								new User.Builder(
+						publishProgress(new User.Builder(
 									array.getJSONObject(i).getInt("users_tbl_id"),
 									array.getJSONObject(i).getString("users_tbl_username"),
 									array.getJSONObject(i).getString("users_tbl_password"))
 										.imageUrl(array.getJSONObject(i).getString("users_tbl_user_image_url"))
 										.imageDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("users_tbl_user_image_url")))
 											.build());
-						
 					}
 				}
 				catch (JSONException e) {
@@ -88,17 +103,7 @@ public class FriendListActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
-			if (result == true) {
-				listViewUser = (ListView) findViewById(R.id.friend_list_main_xml_listview_friends);
-				userItemAdapter = new FriendListMainItemAdapter(FriendListActivity.this, userList);
-				listViewUser.setAdapter(userItemAdapter);
-				listViewUser.setOnItemClickListener(new OnItemClickListener() {
-					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-						startDialog(userList.get(position));
-					}
-				});
-			}
-			else {
+			if (result == false) {
 				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("You don't have any friend yet!");

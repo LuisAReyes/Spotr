@@ -24,30 +24,18 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.ListView;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class FriendListFeedActivity extends Activity {
 	private static final String TAG = "[FriendListFeedActivity]";
 	private static final String GET_FRIEND_FEED_URL = "http://107.22.209.62/android/get_friend_feeds.php";
-	private List<FriendFeed> friendFeedList = null;
+	private List<FriendFeed> friendFeedList = new ArrayList<FriendFeed>();
 	private ListView list;
 	private FriendFeedItemAdapter adapter;
 	
@@ -55,11 +43,18 @@ public class FriendListFeedActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list_feed);
-		GetFriendFeedTask task = new GetFriendFeedTask();
-		task.execute();
+		
+		list = (ListView) findViewById(R.id.friend_list_feed_xml_listview);
+		adapter = new FriendFeedItemAdapter(FriendListFeedActivity.this, friendFeedList);
+		list.setAdapter(adapter);
+		list.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			}
+		});
+		new GetFriendFeedTask().execute();
     }
     
-    private class GetFriendFeedTask extends AsyncTask<Void, Integer, Boolean> {
+    private class GetFriendFeedTask extends AsyncTask<Void, FriendFeed, Boolean> {
 		private List<NameValuePair> datas = new ArrayList<NameValuePair>(); 
 		private  ProgressDialog progressDialog = null;
 		
@@ -74,14 +69,20 @@ public class FriendListFeedActivity extends Activity {
 		}
 		
 		@Override
+		  protected void onProgressUpdate(FriendFeed... feeds) {
+			friendFeedList.add(feeds[0]);
+			adapter.notifyDataSetChanged();
+			// adapter.notifyDataSetInvalidated();
+	    }
+		
+		@Override
 		protected Boolean doInBackground(Void...voids) {
 			datas.add(new BasicNameValuePair("users_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
-			friendFeedList = new ArrayList<FriendFeed>();
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_FRIEND_FEED_URL, datas);
 			if (array != null) { 
 				try {
 					for (int i = 0; i < array.length(); ++i) { 
-						friendFeedList.add(
+						publishProgress(
 							new FriendFeed.Builder(
 									// required parameters
 									array.getJSONObject(i).getInt("activity_tbl_id"),
@@ -97,7 +98,6 @@ public class FriendListFeedActivity extends Activity {
 										.friendPictureDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("users_tbl_user_image_url")))
 										.activityComment(array.getJSONObject(i).getString("activity_tbl_comment"))
 											.build());
-						
 					}
 				}
 				catch (JSONException e) {
@@ -112,18 +112,8 @@ public class FriendListFeedActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Boolean result) {
-			if (result == true) {
-				progressDialog.dismiss();
-				list = (ListView) findViewById(R.id.friend_list_feed_xml_listview);
-				adapter = new FriendFeedItemAdapter(FriendListFeedActivity.this, friendFeedList);
-				list.setAdapter(adapter);
-				list.setOnItemClickListener(new OnItemClickListener() {
-					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					}
-				});
-			}
-			else {
-				progressDialog.dismiss();
+			progressDialog.dismiss();
+			if (result == false) {
 				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListFeedActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("There are no friend feeds yet!");

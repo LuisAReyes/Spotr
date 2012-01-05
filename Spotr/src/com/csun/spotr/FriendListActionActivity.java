@@ -37,13 +37,26 @@ public class FriendListActionActivity extends Activity {
 	private static final String SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
 	private static final String SEND_REQUEST_URL = "http://107.22.209.62/android/send_friend_request.php";
 	private EditText editTextSearch = null;
-
+	private ListView list;
+	private FriendListMainItemAdapter adapter;
+	private List<User> userList = new ArrayList<User>();
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list_action);
 		Button buttonSearch = (Button) findViewById(R.id.friend_list_action_xml_button_search);
 		editTextSearch = (EditText) findViewById(R.id.friend_list_action_xml_edittext_search);
+		
+		list = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
+		adapter = new FriendListMainItemAdapter(FriendListActionActivity.this, userList);
+		list.setAdapter(adapter);
+		list.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				startDialog(userList.get(position));
+			}
+		});
+		
 		// TODO: should we allow user to search on an empty string? which
 		// returns the whole list of users in
 		// our database
@@ -55,9 +68,8 @@ public class FriendListActionActivity extends Activity {
 		});
 	}
 
-	private class SearchFriendsTask extends AsyncTask<String, Integer, Boolean> {
+	private class SearchFriendsTask extends AsyncTask<String, User, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
-		private List<User> userList = new ArrayList<User>();
 		private ProgressDialog progressDialog = null;
 
 		@Override
@@ -69,30 +81,35 @@ public class FriendListActionActivity extends Activity {
 			progressDialog.setCancelable(true);
 			progressDialog.show();
 		}
-
+		
+		@Override
+	    protected void onProgressUpdate(User... users) {
+			userList.add(users[0]);
+			adapter.notifyDataSetChanged();
+			// adapter.notifyDataSetInvalidated();
+	    }
+		
 		@Override
 		protected Boolean doInBackground(String... text) {
 			userData.add(new BasicNameValuePair("text", text[0].toString()));
 			userData.add(new BasicNameValuePair("users_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
-			userList = new ArrayList<User>();
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(SEARCH_FRIENDS_URL, userData);
 			if (array != null) {
 				try {
 					for (int i = 0; i < array.length(); ++i) {
-						userList.add(
+						publishProgress(
 								new User.Builder(
 									// required parameters
 									array.getJSONObject(i).getInt("users_tbl_id"),
 									array.getJSONObject(i).getString("users_tbl_username"),
 									array.getJSONObject(i).getString("users_tbl_password"))
-										// optional parameters
 										.imageUrl(array.getJSONObject(i).getString("users_tbl_user_image_url"))
 										.imageDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("users_tbl_user_image_url")))
 											.build());
 					}
 				}
 				catch (JSONException e) {
-					Log.e(TAG + "GetUserTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+					Log.e(TAG + "SearchFriendTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
 				}
 				return true;
 			}
@@ -104,17 +121,7 @@ public class FriendListActionActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
-			if (result == true) {
-				ListView listViewUser = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
-				FriendListMainItemAdapter userItemAdapter = new FriendListMainItemAdapter(FriendListActionActivity.this, userList);
-				listViewUser.setAdapter(userItemAdapter);
-				listViewUser.setOnItemClickListener(new OnItemClickListener() {
-					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-						startDialog(userList.get(position));
-					}
-				});
-			}
-			else {
+			if (result == false) {
 				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("No name match this search criteria. Please try again!");

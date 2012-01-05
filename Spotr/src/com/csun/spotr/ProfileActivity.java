@@ -65,8 +65,7 @@ public class ProfileActivity extends Activity {
 			}
 		});
 		
-		GetUserDetailTask task = new GetUserDetailTask();
-		task.execute();
+		new GetUserDetailTask().execute();
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -121,6 +120,16 @@ public class ProfileActivity extends Activity {
 	private class GetUserDetailTask extends AsyncTask<Void, Integer, User> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
+		
+		@Override
+		protected void onPreExecute() {
+			// display waiting dialog
+			progressDialog = new ProgressDialog(ProfileActivity.this);
+			progressDialog.setMessage("Loading ...");
+			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(true);
+			progressDialog.show();
+		}
 
 		@Override
 		protected User doInBackground(Void...voids) {
@@ -147,41 +156,32 @@ public class ProfileActivity extends Activity {
 		}
 		
 		@Override
-		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(ProfileActivity.this);
-			progressDialog.setMessage("Loading ...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
-		}
-	
-		@Override
 		protected void onPostExecute(final User user) {
 			progressDialog.dismiss();
 			
-			userPictureImageView.setImageDrawable(DownloadImageHelper.getImageFromUrl(user.getImageUrl()));
-					
-			TextView textViewChallengesDone = (TextView) findViewById(R.id.profile_xml_textview_challenges_done);
-			textViewChallengesDone.setText(Integer.toString(user.getChallengesDone()));
-			
-			TextView textViewPlacesVisited = (TextView) findViewById(R.id.profile_xml_textview_places_visited);
-			textViewPlacesVisited.setText(Integer.toString(user.getPlacesVisited()));
-			
-			TextView textViewPoints = (TextView) findViewById(R.id.profile_xml_textview_points);
-			textViewPoints.setText(Integer.toString(user.getPoints()));
-			
-			List<String> headers = new ArrayList<String>();
-			List<String> bodies = new ArrayList<String>();
-			
-			headers.add("Name");
-			bodies.add(user.getUsername());
-			headers.add("Password");
-			bodies.add(user.getPassword());
-			
-			profileList = (ListView) findViewById(R.id.profile_xml_listview_items);
-			adapter = new ProfileItemAdapter(ProfileActivity.this, headers, bodies);
-			profileList.setAdapter(adapter);
+			if (user != null) {
+				userPictureImageView.setImageDrawable(DownloadImageHelper.getImageFromUrl(user.getImageUrl()));
+				TextView textViewChallengesDone = (TextView) findViewById(R.id.profile_xml_textview_challenges_done);
+				textViewChallengesDone.setText(Integer.toString(user.getChallengesDone()));
+				
+				TextView textViewPlacesVisited = (TextView) findViewById(R.id.profile_xml_textview_places_visited);
+				textViewPlacesVisited.setText(Integer.toString(user.getPlacesVisited()));
+				
+				TextView textViewPoints = (TextView) findViewById(R.id.profile_xml_textview_points);
+				textViewPoints.setText(Integer.toString(user.getPoints()));
+				
+				List<String> headers = new ArrayList<String>();
+				List<String> bodies = new ArrayList<String>();
+				
+				headers.add("Name");
+				bodies.add(user.getUsername());
+				headers.add("Password");
+				bodies.add(user.getPassword());
+				
+				profileList = (ListView) findViewById(R.id.profile_xml_listview_items);
+				adapter = new ProfileItemAdapter(ProfileActivity.this, headers, bodies);
+				profileList.setAdapter(adapter);
+			}
 		}
 	}
 	

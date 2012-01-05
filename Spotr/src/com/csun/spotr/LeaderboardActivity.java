@@ -52,18 +52,26 @@ public class LeaderboardActivity extends Activity {
 	private static final String GET_USERS_URL = "http://107.22.209.62/android/get_users.php";
 	private ListView list = null;
 	private LeaderboardItemAdapter adapter = null;
+	private List<User> userList = new ArrayList<User>();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.leaderboard);
-		GetUsersTask task = new GetUsersTask();
-		task.execute();
+		// initialize list view
+		list = (ListView) findViewById(R.id.leaderboard_xml_listview_users);
+		adapter = new LeaderboardItemAdapter(LeaderboardActivity.this, userList);
+		list.setAdapter(adapter);
+		list.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// handle click 
+			}
+		});
+		new GetUsersTask().execute();
 	}
 	
-	private class GetUsersTask extends AsyncTask<Void, Integer, List<User>> {
+	private class GetUsersTask extends AsyncTask<Void, User, Boolean> {
 		private  ProgressDialog progressDialog = null;
-		
 		@Override
 		protected void onPreExecute() {
 			// display waiting dialog
@@ -75,41 +83,44 @@ public class LeaderboardActivity extends Activity {
 		}
 		
 		@Override
-		protected List<User> doInBackground(Void...voids) {
-			List<User> userList = new ArrayList<User>();
+	    protected void onProgressUpdate(User... users) {
+			userList.add(users[0]);
+			adapter.notifyDataSetChanged();
+			// adapter.notifyDataSetInvalidated();
+	    }
+		
+		@Override
+		protected Boolean doInBackground(Void...voids) {
 			JSONArray array = JsonHelper.getJsonArrayFromUrl(GET_USERS_URL);
-			try {
-				for (int i = 0; i < array.length(); ++i) { 
-					userList.add(
-						new User.Builder(
-							// required parameters
-							array.getJSONObject(i).getInt("users_tbl_id"),
-							array.getJSONObject(i).getString("users_tbl_username"),
-							array.getJSONObject(i).getString("users_tbl_password"))
-								// optional parameters
-								.challengesDone(array.getJSONObject(i).getInt("users_tbl_challenges_done"))
-								.placesVisited(array.getJSONObject(i).getInt("users_tbl_places_visited"))
-								.rank(array.getJSONObject(i).getInt("users_tbl_rank"))
-									.build());
+			if (array != null) { 
+				try {
+					for (int i = 0; i < array.length(); ++i) { 
+						publishProgress(
+							new User.Builder(
+								// required parameters
+								array.getJSONObject(i).getInt("users_tbl_id"),
+								array.getJSONObject(i).getString("users_tbl_username"),
+								array.getJSONObject(i).getString("users_tbl_password"))
+									// optional parameters
+									.challengesDone(array.getJSONObject(i).getInt("users_tbl_challenges_done"))
+									.placesVisited(array.getJSONObject(i).getInt("users_tbl_places_visited"))
+									.rank(array.getJSONObject(i).getInt("users_tbl_rank"))
+										.build());
+					}
 				}
+				catch (JSONException e) {
+					Log.e(TAG + "GetFriendTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+				}
+				return true;
 			}
-			catch (JSONException e) {
-				Log.e(TAG + "GetFriendTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+			else {
+				return false;
 			}
-			return userList;
 		}
 		
 		@Override
-		protected void onPostExecute(List<User> userList) {
+		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
-			list = (ListView) findViewById(R.id.leaderboard_xml_listview_users);
-			adapter = new LeaderboardItemAdapter(LeaderboardActivity.this, userList);
-			list.setAdapter(adapter);
-			list.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					// handle click 
-				}
-			});
 		}
 	}
 	
