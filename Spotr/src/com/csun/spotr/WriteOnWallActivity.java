@@ -51,7 +51,7 @@ public class WriteOnWallActivity extends Activity {
 			public void onClick(View v) {
 				message = editTextMessage.getText().toString();
 				if (message.length() > 0) {
-					UploadMessageTask task = new UploadMessageTask();
+					WriteOnWallTask task = new WriteOnWallTask();
 					task.execute();
 				}
 				else {
@@ -73,7 +73,7 @@ public class WriteOnWallActivity extends Activity {
 		dialogMessage.show();	
 	}
 	
-	private class UploadMessageTask extends AsyncTask<Void, Integer, String> {
+	private class WriteOnWallTask extends AsyncTask<Void, Integer, String> {
 		ProgressDialog progressDialog = new ProgressDialog(WriteOnWallActivity.this);
 		private List<NameValuePair> messageData = new ArrayList<NameValuePair>();
 		@Override

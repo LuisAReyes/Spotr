@@ -69,15 +69,15 @@ public class PlaceActivityActivity extends Activity {
 				try {
 					for (int i = 0; i < array.length(); ++i) { 
 						placeLogList.add(
-							new PlaceLog.Builder(array.getJSONObject(i).getInt("id"),
-								array.getJSONObject(i).getString("username"),
-								array.getJSONObject(i).getString("type"),
-								array.getJSONObject(i).getString("created"))
-									.name(array.getJSONObject(i).getString("name"))
-									.comment(array.getJSONObject(i).getString("comment"))
-									.description(array.getJSONObject(i).getString("description"))
-									.userPictureDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("user_image_url")))
-									.snapPictureDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("snap_picture_url")))
+							new PlaceLog.Builder(array.getJSONObject(i).getInt("activity_tbl_id"),
+								array.getJSONObject(i).getString("users_tbl_username"),
+								array.getJSONObject(i).getString("challenges_tbl_type"),
+								array.getJSONObject(i).getString("activity_tbl_created"))
+									.name(array.getJSONObject(i).getString("challenges_tbl_name"))
+									.comment(array.getJSONObject(i).getString("activity_tbl_comment"))
+									.description(array.getJSONObject(i).getString("challenges_tbl_description"))
+									.userPictureDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("users_tbl_user_image_url")))
+									.snapPictureDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("activity_tbl_snap_picture_url")))
 										.build());
 						
 					}

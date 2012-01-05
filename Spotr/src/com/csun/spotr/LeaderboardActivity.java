@@ -77,13 +77,15 @@ public class LeaderboardActivity extends Activity {
 				for (int i = 0; i < array.length(); ++i) { 
 					userList.add(
 						new User.Builder(
-							array.getJSONObject(i).getInt("id"),
-							array.getJSONObject(i).getString("username"),
-							array.getJSONObject(i).getString("password"))
-							.challengesDone(array.getJSONObject(i).getInt("challenges_done"))
-							.placesVisited(array.getJSONObject(i).getInt("places_visited"))
-							.rank(array.getJSONObject(i).getInt("rank"))
-							.build());
+							// required parameters
+							array.getJSONObject(i).getInt("users_tbl_id"),
+							array.getJSONObject(i).getString("users_tbl_username"),
+							array.getJSONObject(i).getString("users_tbl_password"))
+								// optional parameters
+								.challengesDone(array.getJSONObject(i).getInt("users_tbl_challenges_done"))
+								.placesVisited(array.getJSONObject(i).getInt("users_tbl_places_visited"))
+								.rank(array.getJSONObject(i).getInt("users_tbl_rank"))
+									.build());
 				}
 			}
 			catch (JSONException e) {

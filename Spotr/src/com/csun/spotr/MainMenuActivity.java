@@ -174,10 +174,10 @@ public class MainMenuActivity extends Activity {
 					for (int i = 0; i < array.length(); ++i) { 
 						friendRequestList.add(
 							new FriendRequest(
-								array.getJSONObject(i).getInt("friend_id"),
-								array.getJSONObject(i).getString("username"),
-								array.getJSONObject(i).getString("friend_message"),
-								array.getJSONObject(i).getString("time")));
+								array.getJSONObject(i).getInt("user_requests_tbl_friend_id"),
+								array.getJSONObject(i).getString("users_tbl_username"),
+								array.getJSONObject(i).getString("user_requests_tbl_friend_message"),
+								array.getJSONObject(i).getString("user_requests_tbl_time")));
 					}
 				}
 				catch (JSONException e) {

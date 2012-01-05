@@ -33,8 +33,8 @@ public class RewardActivity extends Activity {
 		btnMainMenu = (Button) findViewById(R.id.reward_xml_button_mainmenu);
 		btnMainMenu.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.MainMenuActivity");
-				startActivity(i);
+				Intent intent = new Intent("com.csun.spotr.MainMenuActivity");
+				startActivity(intent);
 			}
 		});
 		

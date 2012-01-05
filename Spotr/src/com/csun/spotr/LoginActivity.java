@@ -150,6 +150,7 @@ public class LoginActivity extends Activity {
 					editor.putString("password", edittextPassword.getText().toString());
 					editor.commit();
 				}
+				// set current user
 				CurrentUser.setCurrentUser(
 					userId, 
 					edittextUsername.getText().toString(), 

@@ -168,11 +168,14 @@ public class LocalPlaceActivity extends Activity {
 				for (int i = 0; i < array.length(); ++i) { 
 					// create a place
 					placeList.add(new Place.Builder(
-						array.getJSONObject(i).getDouble("longitude"),
-						array.getJSONObject(i).getDouble("latitude"),
-						array.getJSONObject(i).getInt("id"))
-							.name(array.getJSONObject(i).getString("name"))
-							.address(array.getJSONObject(i).getString("description")).build());
+						// require parameters
+						array.getJSONObject(i).getDouble("spots_tbl_longitude"), 
+						array.getJSONObject(i).getDouble("spots_tbl_latitude"), 
+						array.getJSONObject(i).getInt("spots_tbl_id"))
+							// optional parameters
+							.name(array.getJSONObject(i).getString("spots_tbl_name"))
+							.address(array.getJSONObject(i).getString("spots_tbl_description"))
+								.build());
 				}
 			}
 			catch (JSONException e) {

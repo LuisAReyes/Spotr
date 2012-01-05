@@ -112,23 +112,18 @@ public class LocalMapViewActivity extends MapActivity {
 		datas.add(new BasicNameValuePair("longitude", Double.toString(currentLocation.getLongitude())));
 		datas.add(new BasicNameValuePair("radius", radius)); 
 		JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(URL, datas);
-		
-		int id = 0;
-		double longitude = 0.0;
-		double latitude = 0.0;
-		String name = "";
-		String description = "";
-		
 		try {
 			for (int i = 0; i < array.length(); ++i) { 
-				JSONObject temp = array.getJSONObject(i);
-				id = temp.getInt("id");
-				longitude = temp.getDouble("longitude");
-				latitude = temp.getDouble("latitude");
-				name = temp.getString("name");
-				description = temp.getString("description");
-				// create a place
-				Place place = new Place.Builder(longitude, latitude, id).name(name).address(description).build();
+				Place place = new Place.Builder(
+					// require parameters
+					array.getJSONObject(i).getDouble("spots_tbl_longitude"), 
+					array.getJSONObject(i).getDouble("spots_tbl_latitude"), 
+					array.getJSONObject(i).getInt("spots_tbl_id"))
+						// optional parameters
+						.name(array.getJSONObject(i).getString("spots_tbl_name"))
+						.address(array.getJSONObject(i).getString("spots_tbl_description"))
+							.build();
+				
 				// add to list of places
 				placeList.add(place);
 				// create an item overlay based on this location

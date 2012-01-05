@@ -73,12 +73,14 @@ public class PlaceActionActivity extends Activity {
 				for (int i = 0; i < array.length(); ++i) {
 					Challenge c = 
 						new Challenge.Builder(
-							array.getJSONObject(i).getInt("id"), 
-							Challenge.returnType(array.getJSONObject(i).getString("type")),
-							array.getJSONObject(i).getInt("points")) 
-							.name(array.getJSONObject(i).getString("name"))
-							.description(array.getJSONObject(i).getString("description"))
-							.build();
+								// required parameters
+								array.getJSONObject(i).getInt("challenges_tbl_id"), 
+								Challenge.returnType(array.getJSONObject(i).getString("challenges_tbl_type")),
+								array.getJSONObject(i).getInt("challenges_tbl_points")) 
+									// optional parameters
+									.name(array.getJSONObject(i).getString("challenges_tbl_name"))
+									.description(array.getJSONObject(i).getString("challenges_tbl_description"))
+										.build();
 					// add a challenge
 					challengeList.add(c);
 				}

@@ -49,13 +49,13 @@ public class FriendListActionActivity extends Activity {
 		// our database
 		buttonSearch.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				GetUserTask task = new GetUserTask();
+				SearchFriendsTask task = new SearchFriendsTask();
 				task.execute(editTextSearch.getText().toString());
 			}
 		});
 	}
 
-	private class GetUserTask extends AsyncTask<String, Integer, Boolean> {
+	private class SearchFriendsTask extends AsyncTask<String, Integer, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
 		private List<User> userList = new ArrayList<User>();
 		private ProgressDialog progressDialog = null;
@@ -81,11 +81,13 @@ public class FriendListActionActivity extends Activity {
 					for (int i = 0; i < array.length(); ++i) {
 						userList.add(
 								new User.Builder(
-									array.getJSONObject(i).getInt("id"),
-									array.getJSONObject(i).getString("username"),
-									array.getJSONObject(i).getString("password"))
-										.imageUrl(array.getJSONObject(i).getString("user_image_url"))
-										.imageDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("user_image_url")))
+									// required parameters
+									array.getJSONObject(i).getInt("users_tbl_id"),
+									array.getJSONObject(i).getString("users_tbl_username"),
+									array.getJSONObject(i).getString("users_tbl_password"))
+										// optional parameters
+										.imageUrl(array.getJSONObject(i).getString("users_tbl_user_image_url"))
+										.imageDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("users_tbl_user_image_url")))
 											.build());
 					}
 				}
@@ -142,7 +144,7 @@ public class FriendListActionActivity extends Activity {
 				if (editTextMessage.getText() != null) {
 					message = editTextMessage.getText().toString();
 				}
-				SendRequestTask task = new SendRequestTask();
+				SendFriendRequestTask task = new SendFriendRequestTask();
 				task.execute(
 					Integer.toString(CurrentUser.getCurrentUser().getId()),
 					Integer.toString(user.getId()), 
@@ -159,7 +161,7 @@ public class FriendListActionActivity extends Activity {
 	}
 	
 	
-	private class SendRequestTask extends AsyncTask<String, Integer, Boolean> {
+	private class SendFriendRequestTask extends AsyncTask<String, Integer, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
 

@@ -38,7 +38,7 @@ import android.widget.Toast;
 
 public class SnapPictureActivity extends Activity {
 	private static final String TAG = "[SnapPictureActivity]";
-	private static final String SNAP_PICTURE_URL = "http://107.22.209.62/images/upload_file_and_insert_to_database.php";
+	private static final String SNAP_PICTURE_URL = "http://107.22.209.62/images/upload_picture.php";
 	private Button buttonGo;
 	private Button buttonNext;
 	private ImageView imageViewPreview;
@@ -134,7 +134,7 @@ public class SnapPictureActivity extends Activity {
 				result = json.getString("result");
 			} 
 			catch (JSONException e) {
-				Log.e(TAG + "SnapPictureTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+				Log.e(TAG + "UploadPictueTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
 			}
 			return result;
 		}

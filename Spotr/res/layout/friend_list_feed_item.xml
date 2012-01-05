@@ -1,0 +1,64 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/friend_list_feed_item_xml_tablelayout_table"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TableRow>
+
+        <ImageView
+            android:id="@+id/friend_list_feed_item_xml_imageview_user_picture"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="6dp"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/friend_list_feed_item_xml_textview_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+    </TableRow>
+
+    <TableRow>
+
+        <ImageView android:layout_marginRight="6dp" />
+
+        <TextView
+            android:id="@+id/friend_list_feed_item_xml_textview_what_user_do"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black" />
+    </TableRow>
+
+    <TableRow>
+
+        <ImageView android:layout_marginRight="6dp" />
+
+        <TextView
+            android:id="@+id/friend_list_feed_item_xml_textview_where"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold"
+            android:textColor="#BF0030" />
+    </TableRow>
+    
+    <TableRow>
+
+        <ImageView android:layout_marginRight="6dp" />
+
+        <TextView
+            android:id="@+id/friend_list_feed_item_xml_textview_at_what_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold"
+            android:textColor="#0A88AB" />
+    </TableRow>
+    
+    
+
+</TableLayout>

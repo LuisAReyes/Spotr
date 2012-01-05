@@ -80,16 +80,17 @@ public class PlaceInfoActivity extends MapActivity {
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_SPOT_DETAIL_URL, placeData);
 			Place place = null;
 			try {
-				JSONObject temp = array.getJSONObject(0);
-				int id = temp.getInt("id");
-				double longitude = temp.getDouble("longitude");
-				double latitude = temp.getDouble("latitude");
-				String name = temp.getString("name");
-				String description = temp.getString("description");
-				String phone = temp.getString("phone");
 				// create a place
-				place = new Place.Builder(longitude, latitude, id).name(name).address(description).phoneNumber(phone).build();
-				// add to list of places
+				place = new Place.Builder(
+					// required parameters
+					array.getJSONObject(0).getDouble("spots_tbl_longitude"), 
+					array.getJSONObject(0).getDouble("spots_tbl_latitude"), 
+					array.getJSONObject(0).getInt("spots_tbl_id"))
+						// optional parameters
+						.name(array.getJSONObject(0).getString("spots_tbl_name"))
+						.address(array.getJSONObject(0).getString("spots_tbl_description"))
+						.phoneNumber(array.getJSONObject(0).getString("spots_tbl_phone"))
+							.build();
 			}
 			catch (JSONException e) {
 				Log.e(TAG + ".filterPlaces() : ", "JSON error parsing data" + e.toString());

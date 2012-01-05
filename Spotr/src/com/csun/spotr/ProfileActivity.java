@@ -129,13 +129,15 @@ public class ProfileActivity extends Activity {
 			User user = null;
 			try {
 				user = new User.Builder( 
-						array.getJSONObject(0).getInt("id"), 
-						array.getJSONObject(0).getString("username"), 
-						array.getJSONObject(0).getString("password"))
-							.challengesDone(array.getJSONObject(0).getInt("challenges_done"))
-							.placesVisited(array.getJSONObject(0).getInt("places_visited"))
-							.points(array.getJSONObject(0).getInt("points"))
-							.imageUrl(array.getJSONObject(0).getString("user_image_url"))
+						// required parameters
+						array.getJSONObject(0).getInt("users_tbl_id"), 
+						array.getJSONObject(0).getString("users_tbl_username"), 
+						array.getJSONObject(0).getString("users_tbl_password"))
+							// optional parameters
+							.challengesDone(array.getJSONObject(0).getInt("users_tbl_challenges_done"))
+							.placesVisited(array.getJSONObject(0).getInt("users_tbl_places_visited"))
+							.points(array.getJSONObject(0).getInt("users_tbl_points"))
+							.imageUrl(array.getJSONObject(0).getString("users_tbl_user_image_url")) // TODO: change to Drawable
 								.build();
 			}
 			catch (JSONException e) {
