@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android" >
+    <ImageView 
+        android:layout_marginRight="6dp" />
+   
+    <ImageView 
+        android:id="@+id/snap_picture_row_item_xml_imageview_picture"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        />
+ 
+</TableRow>

@@ -111,7 +111,7 @@ public class SnapPictureActivity extends Activity {
 			// create a stream
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			// compress picture and add to stream (PNG)
-			takenPictureBitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
+			takenPictureBitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
 			// create raw data src
 			byte[] src = stream.toByteArray();
 			// encode it

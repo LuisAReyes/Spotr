@@ -45,6 +45,8 @@ public class FriendFeedItemAdapter extends BaseAdapter {
 		TextView textViewWhatUserDo;
 		TextView textViewWhere;
 		TextView textViewTime;
+		ImageView imageViewSnapPictureBox;
+		TextView textViewWriteOnWallMessageBox;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -72,33 +74,19 @@ public class FriendFeedItemAdapter extends BaseAdapter {
 		}
 		else if (items.get(position).getChallengeType() == Challenge.Type.SNAP_PICTURE) {
 			holder.textViewWhatUserDo.setText("has snap a picture.");
-			/*
-			 * Add a picture box
-			 */
-			TableRow row = new TableRow(context);	
-			ImageView pictureBox = new ImageView(context);
-			ImageView dummy = new ImageView(context);
-			
-			pictureBox.setImageDrawable(items.get(position).getActivitySnapPictureDrawable());
-			row.addView(dummy);
-	    	row.addView(pictureBox, new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-	    	holder.table.addView(row);
+			// add picture box
+			View rowView = inflater.inflate(R.layout.snap_picture_row_item, null);
+			holder.imageViewSnapPictureBox = (ImageView) rowView.findViewById(R.id.snap_picture_row_item_xml_imageview_picture);
+			holder.imageViewSnapPictureBox.setImageDrawable(items.get(position).getActivitySnapPictureDrawable());
+			holder.table.addView(rowView);
 		}
 		else if (items.get(position).getChallengeType() == Challenge.Type.WRITE_ON_WALL) {
 			holder.textViewWhatUserDo.setText("has written a message on wall.");
-			/*
-			 * Add a message box
-			 */
-			TableRow row = new TableRow(context);	
-			TextView messageBox = new TextView(context);
-			messageBox.setSingleLine(false);
-			messageBox.setMaxLines(5);
-			ImageView dummy = new ImageView(context);
-			messageBox.setText(items.get(position).getActivityComment());
-			row.addView(dummy);
-			row.addView(messageBox);
-	    	holder.table.addView(row);
-	
+			// add message box
+			View rowView = inflater.inflate(R.layout.write_on_wall_row_item, null);
+			holder.textViewWriteOnWallMessageBox = (TextView) rowView.findViewById(R.id.write_on_wall_row_item_xml_textview_wall_message);
+			holder.textViewWriteOnWallMessageBox.setText(items.get(position).getActivityComment());
+	    	holder.table.addView(rowView);
 		}
 		else if (items.get(position).getChallengeType() == Challenge.Type.QUESTION_ANSWER) {
 			holder.textViewWhatUserDo.setText("has answered a question.");
