@@ -8,6 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.R.color;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -68,6 +70,20 @@ public class LeaderboardActivity extends Activity {
 			}
 		});
 		new GetUsersTask().execute();
+		
+		Button buttonWhere = (Button) findViewById(R.id.leaderboard_xml_button_where_am_i);
+		buttonWhere.setOnClickListener(new OnClickListener() {
+			public void onClick(final View v) {
+				// run new task
+				list.post(new Runnable() {
+					public void run() {
+						list.setSelection(CurrentUser.getSelectedPosition());
+						list.getChildAt(CurrentUser.getSelectedPosition()).setBackgroundColor(Color.RED);
+						v.setEnabled(false);
+						v.setBackgroundColor(color.transparent);
+				}});
+			}
+		});
 	}
 	
 	private class GetUsersTask extends AsyncTask<Void, User, Boolean> {
@@ -105,6 +121,7 @@ public class LeaderboardActivity extends Activity {
 									// optional parameters
 									.challengesDone(array.getJSONObject(i).getInt("users_tbl_challenges_done"))
 									.placesVisited(array.getJSONObject(i).getInt("users_tbl_places_visited"))
+									.points(array.getJSONObject(i).getInt("users_tbl_points"))
 									.rank(array.getJSONObject(i).getInt("users_tbl_rank"))
 										.build());
 					}
@@ -122,6 +139,8 @@ public class LeaderboardActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
+			
+
 		}
 	}
 	

@@ -1,67 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" 
-    android:background="@drawable/the_leader_background">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content"
+	android:orientation="vertical">
 
-    <TableLayout
-        android:id="@+id/leaderboard_xml_tablelayout_table"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-		>
+    <LinearLayout
+        android:id="@+id/leaderboard_xml_linearlayout_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#1BAFE0"
+        android:orientation="horizontal">
 
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/leaderboard_xml_textview_rank"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingRight="2dp"
+            android:text="Rank"
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/leaderboard_xml_textview_rank"
-            	android:padding="2dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:text="Rank" />
+        <TextView
+            android:id="@+id/leaderboard_xml_textview_username"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Username"
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/leaderboard_xml_textview_username"
-            	android:padding="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:text="Username" />
+        <TextView
+            android:id="@+id/leaderboard_xml_textview_cd"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CD"
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/leaderboard_xml_textview_cd"
-            	android:padding="5dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:text="CD" />
+        <TextView
+            android:id="@+id/leaderboard_xml_textview_pv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="PV"
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/leaderboard_xml_textview_pv"
-            	android:padding="5dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:text="PV" />
+        <TextView
+            android:id="@+id/leaderboard_xml_textview_pts"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Pts"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/leaderboard_xml_textview_pts"
-            	android:padding="5dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:text="Pts" />
-        </TableRow>
-    </TableLayout>
-    
     <ListView
+        android:layout_below="@id/leaderboard_xml_linearlayout_title"
         android:id="@+id/leaderboard_xml_listview_users"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/the_leaderboard_background" >
+        android:background="@drawable/the_place_background" >
     </ListView>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/leaderboard_xml_linearlayout_bottom_control"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <Button
+            android:id="@+id/leaderboard_xml_button_where_am_i"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Where am I?" />
+    </LinearLayout>
+
+</RelativeLayout>

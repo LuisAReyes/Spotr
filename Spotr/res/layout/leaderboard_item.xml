@@ -6,37 +6,38 @@
 
     <TextView
         android:id="@+id/leaderboard_item_xml_textview_rank"
-        android:text="1"
-        android:textColor="#FFBC05"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingRight="2dp"
+        android:textColor="#FFBC05" />
 
     <TextView
         android:id="@+id/leaderboard_item_xml_textview_username"
-        android:text="username"
-        android:paddingLeft="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+		/>
 
     <TextView
         android:id="@+id/leaderboard_item_xml_textview_cd"
-        android:text="10"
-        android:paddingLeft="100dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        />
 
     <TextView
         android:id="@+id/leaderboard_item_xml_textview_pv"
-        android:text="15"
-        android:paddingLeft="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        />
 
     <TextView
         android:id="@+id/leaderboard_item_xml_textview_pts"
-        android:text="1000"
-        android:paddingLeft="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        />
 
 </LinearLayout>
