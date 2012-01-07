@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.csun.spotr.R;
 import com.csun.spotr.core.User;
-import com.csun.spotr.helper.DownloadImageHelper;
+import com.csun.spotr.helper.ImageHelper;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -57,7 +57,7 @@ public class FriendListMainItemAdapter extends BaseAdapter {
 		}
 
 		holder.textViewName.setText(users.get(position).getUsername());
-		holder.imageViewPicture.setImageDrawable(users.get(position).getImageDrawable());
+		holder.imageViewPicture.setImageURI(users.get(position).getImageUri());
 		return convertView;
 	}
 }

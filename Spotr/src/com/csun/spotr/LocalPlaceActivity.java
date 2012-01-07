@@ -10,6 +10,7 @@ import android.app.ProgressDialog;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,7 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.csun.spotr.helper.DownloadImageHelper;
+import com.csun.spotr.helper.ImageHelper;
 import com.csun.spotr.helper.GooglePlaceHelper;
 import com.csun.spotr.helper.JsonHelper;
 import com.csun.spotr.singleton.CurrentUser;
@@ -51,15 +52,17 @@ import com.csun.spotr.gui.PlaceItemAdapter;
 import com.google.android.maps.GeoPoint;
 
 public class LocalPlaceActivity extends Activity {
-	private static final String TAG = "[LocalPlaceActivity]";
+	private static final String TAG = "(LocalPlaceActivity)";
 	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
 	private static final String	RADIUS = "100";
 	private ListView list;
 	private PlaceItemAdapter adapter;
 	private List<Place> placeList = new ArrayList<Place>();
+	private Location lastKnownLocation = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.v(TAG, "I'm created!");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.place);
 		// make sure keyboard of edit text do not populate
@@ -88,6 +91,7 @@ public class LocalPlaceActivity extends Activity {
 				extras.putInt("place_id", placeList.get(position).getId());
 				intent.putExtras(extras);
 				startActivity(intent);
+				onPause();
 			}
 		});
 	}
@@ -123,6 +127,7 @@ public class LocalPlaceActivity extends Activity {
 			while(currentLocation == null) {
 				
 			}
+			lastKnownLocation = currentLocation;
 			manager.removeUpdates(listener);
 			return currentLocation;
 		}
@@ -145,7 +150,7 @@ public class LocalPlaceActivity extends Activity {
 			
 			// display waiting dialog
 			progressDialog = new ProgressDialog(LocalPlaceActivity.this);
-			progressDialog.setMessage("Loading Google signal...");
+			progressDialog.setMessage("Finding location...");
 			progressDialog.setIndeterminate(true);
 			progressDialog.setCancelable(true);
 			progressDialog.show();
@@ -182,6 +187,7 @@ public class LocalPlaceActivity extends Activity {
 		
 		@Override
 		protected void onPreExecute() {
+			Log.v(TAG, "loading places from database...");
 		}
 		
 		@Override
@@ -267,5 +273,29 @@ public class LocalPlaceActivity extends Activity {
 				break;
 		}
 		return true;
+	}
+	
+	@Override
+	public void onRestart() {
+		Log.v(TAG, "I'm restarted!");
+		super.onRestart();
+	}
+	
+	@Override 
+	public void onStop() {
+		Log.v(TAG, "I'm stopped!");
+		super.onStop();
+	}
+	
+	@Override
+    public void onPause() {
+		Log.v(TAG, "I'm paused!");
+		super.onPause();
+	}
+	
+	@Override
+    public void onDestroy() {
+		Log.v(TAG, "I'm destroyed!");
+        super.onDestroy();
 	}
 }

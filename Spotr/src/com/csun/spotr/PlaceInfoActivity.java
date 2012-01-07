@@ -23,12 +23,17 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -121,7 +126,7 @@ public class PlaceInfoActivity extends MapActivity {
 			location.setText("[" + Double.toString(place.getLatitude()) + ", " + Double.toString(place.getLongitude()) + "]");
 			
 			ImageView image = (ImageView) findViewById(R.id.place_info_xml_imageview_picture);
-			image.setImageResource(R.drawable.leopard_monitor);
+			image.setImageResource(R.drawable.ic_launcher);
 			
 			Button phone = (Button) findViewById(R.id.place_info_xml_button_phone_number);
 			phone.setText("(" + place.getPhoneNumber().substring(0, 3) + ")-" + place.getPhoneNumber().substring(3, 6) + "-" + place.getPhoneNumber().substring(6));
@@ -174,5 +179,38 @@ public class PlaceInfoActivity extends MapActivity {
 		protected boolean onBalloonTap(int index, OverlayItem item) {
 			return true;
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.all_menu, menu);
+		return true;
+	}
+	
+    @Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId()) {
+			case R.id.options_menu_xml_item_setting_icon:
+				intent = new Intent("com.csun.spotr.SettingsActivity");
+				startActivity(intent);
+				finish();
+				break;
+			case R.id.options_menu_xml_item_logout_icon:
+				SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
+				editor.clear();
+				editor.commit();
+				intent = new Intent("com.csun.spotr.LoginActivity");
+				startActivity(intent);
+				finish();
+				break;
+			case R.id.options_menu_xml_item_mainmenu_icon:
+				intent = new Intent("com.csun.spotr.MainMenuActivity");
+				startActivity(intent);
+				finish();
+				break;
+		}
+		return true;
 	}
 }

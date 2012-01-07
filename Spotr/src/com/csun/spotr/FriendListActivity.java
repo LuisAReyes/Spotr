@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +12,14 @@ import org.json.JSONException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore.Images.Media;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -24,11 +29,11 @@ import android.view.View;
 import com.csun.spotr.core.User;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.gui.FriendListMainItemAdapter;
-import com.csun.spotr.helper.DownloadImageHelper;
+import com.csun.spotr.helper.ImageHelper;
 import com.csun.spotr.helper.JsonHelper;
 
 public class FriendListActivity extends Activity {
-	private static final String TAG = "[FriendListActivity]";
+	private static final String TAG = "(FriendListActivity)";
 	private static final String GET_FRIENDS_URL = "http://107.22.209.62/android/get_friends.php";
 	private ListView list = null;
 	private FriendListMainItemAdapter adapter;
@@ -85,8 +90,7 @@ public class FriendListActivity extends Activity {
 									array.getJSONObject(i).getInt("users_tbl_id"),
 									array.getJSONObject(i).getString("users_tbl_username"),
 									array.getJSONObject(i).getString("users_tbl_password"))
-										.imageUrl(array.getJSONObject(i).getString("users_tbl_user_image_url"))
-										.imageDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("users_tbl_user_image_url")))
+										.imageUri(constructUriFromBitmap(ImageHelper.downloadImage(array.getJSONObject(i).getString("users_tbl_user_image_url"))))
 											.build());
 					}
 				}
@@ -118,6 +122,8 @@ public class FriendListActivity extends Activity {
 			
 	}
 	
+	
+	
 	private void startDialog(final User user) {
 		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
 		myAlertDialog.setTitle("Friend Dialog");
@@ -135,8 +141,44 @@ public class FriendListActivity extends Activity {
 				extras.putInt("user_id", user.getId());
 				intent.putExtras(extras);
 				startActivity(intent);
+				finish();
 			}
 		});
 		myAlertDialog.show();
+	}
+	
+	private Uri constructUriFromBitmap(Bitmap bitmap) {
+		if (bitmap == null)
+			return null;
+		
+		ContentValues values = new ContentValues(1);
+		values.put(Media.MIME_TYPE, "image/jpeg");
+		Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
+		try {
+		    OutputStream outStream = getContentResolver().openOutputStream(uri);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 10, outStream);
+		    outStream.close();
+		} 
+		catch (Exception e) {
+		    Log.e(TAG, "exception while writing image", e);
+		}
+		bitmap.recycle();
+		return uri;
+	}
+	
+	@Override
+    public void onPause() {
+		Log.v(TAG, "I'm paused!");
+		super.onPause();
+	}
+	
+	@Override
+    public void onDestroy() {
+		Log.v(TAG, "I'm destroyed!");
+		// clean up
+        for (User user : userList) {
+        	getContentResolver().delete(user.getImageUri(), null, null);
+        }
+        super.onDestroy();
 	}
 }

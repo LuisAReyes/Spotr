@@ -62,8 +62,7 @@
         android:layout_below="@id/leaderboard_xml_linearlayout_title"
         android:id="@+id/leaderboard_xml_listview_users"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/the_place_background" >
+        android:layout_height="wrap_content">
     </ListView>
 
     <LinearLayout

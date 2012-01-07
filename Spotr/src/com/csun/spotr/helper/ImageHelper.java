@@ -12,7 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
-public class DownloadImageHelper {
+public class ImageHelper {
 	private static final String TAG = "[DownloadImageHelper]";
 	private static URLConnection connection;
 	private static URL url;

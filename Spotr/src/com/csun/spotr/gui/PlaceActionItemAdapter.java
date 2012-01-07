@@ -66,15 +66,15 @@ public class PlaceActionItemAdapter extends BaseAdapter {
 		holder.pointTextView.setText(Integer.toString(items.get(position).getPoints()));
 		
 		if (items.get(position).getType() == Challenge.Type.CHECK_IN)
-			holder.iconImageView.setImageResource(R.drawable.adium);
+			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
 		else if (items.get(position).getType() == Challenge.Type.SNAP_PICTURE) 
-			holder.iconImageView.setImageResource(R.drawable.monkey);
+			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
 		else if (items.get(position).getType() == Challenge.Type.WRITE_ON_WALL)
-			holder.iconImageView.setImageResource(R.drawable.circus_car);
+			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
 		else if (items.get(position).getType() == Challenge.Type.WRITE_ON_WALL)
-			holder.iconImageView.setImageResource(R.drawable.elephant);
+			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
 		else 
-			holder.iconImageView.setImageResource(R.drawable.funshine_bear);
+			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
 		
 		return convertView;
 	}

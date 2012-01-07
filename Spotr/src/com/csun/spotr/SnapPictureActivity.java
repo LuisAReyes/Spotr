@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -46,7 +47,7 @@ public class SnapPictureActivity extends Activity {
 	private Button buttonGo;
 	private Button buttonNext;
 	private ImageView imageViewPreview;
-	private Bitmap takenPictureBitmap;
+	private Bitmap takenPictureBitmap = null;
 	private String usersId;
 	private String spotsId;
 	private String challengesId;
@@ -133,6 +134,7 @@ public class SnapPictureActivity extends Activity {
 			snapPictureData.add(new BasicNameValuePair("comment", comment));
 			// get JSON to check result
 			JSONObject json = UploadFileHelper.uploadFileToServer(SNAP_PICTURE_URL, snapPictureData);
+		
 			String result = "";
 			try {
 				result = json.getString("result");
@@ -160,6 +162,14 @@ public class SnapPictureActivity extends Activity {
 		inflater.inflate(R.menu.all_menu, menu);
 		return true;
 	}
+	
+	@Override
+	public void onDestroy() {
+		if (takenPictureBitmap  != null)
+			takenPictureBitmap.recycle();
+		
+		super.onDestroy();
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -175,6 +185,7 @@ public class SnapPictureActivity extends Activity {
 				editor.commit();
 				intent = new Intent("com.csun.spotr.LoginActivity");
 				startActivity(intent);
+				finish();
 				break;
 			case R.id.options_menu_xml_item_mainmenu_icon:
 				intent = new Intent("com.csun.spotr.MainMenuActivity");

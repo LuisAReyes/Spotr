@@ -9,18 +9,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.csun.spotr.R;
 import com.csun.spotr.core.Challenge;
 import com.csun.spotr.core.FriendFeed;
 
-public class FriendFeedItemAdapter extends BaseAdapter {
+public class FriendListFeedItemAdapter extends BaseAdapter {
 	private List<FriendFeed> items;
 	private Activity context;
 	
-	public FriendFeedItemAdapter(Activity context, List<FriendFeed> items) {
+	public FriendListFeedItemAdapter(Activity context, List<FriendFeed> items) {
 		this.context = context;
 		this.items = items;
 	}
@@ -50,8 +49,9 @@ public class FriendFeedItemAdapter extends BaseAdapter {
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ItemViewHolder holder;
+		ItemViewHolder holder = null;
 		LayoutInflater inflater = context.getLayoutInflater();
+
 		convertView = inflater.inflate(R.layout.friend_list_feed_item, null);
 		// create holder
 		holder = new ItemViewHolder();
@@ -63,8 +63,8 @@ public class FriendFeedItemAdapter extends BaseAdapter {
 		holder.textViewWhere = (TextView) convertView.findViewById(R.id.friend_list_feed_item_xml_textview_where);
 		holder.textViewTime = (TextView) convertView.findViewById(R.id.friend_list_feed_item_xml_textview_at_what_time);
 		convertView.setTag(holder);
-		
-		holder.imageViewUserPicture.setImageDrawable(items.get(position).getFriendPictureDrawable());
+
+		holder.imageViewUserPicture.setImageURI(items.get(position).getFriendPictureUri());
 		holder.textViewUsername.setText(items.get(position).getFriendName());
 		holder.textViewWhere.setText("at " + items.get(position).getPlaceName());
 		holder.textViewTime.setText("@" + items.get(position).getActivityTime());
@@ -77,7 +77,7 @@ public class FriendFeedItemAdapter extends BaseAdapter {
 			// add picture box
 			View rowView = inflater.inflate(R.layout.snap_picture_row_item, null);
 			holder.imageViewSnapPictureBox = (ImageView) rowView.findViewById(R.id.snap_picture_row_item_xml_imageview_picture);
-			holder.imageViewSnapPictureBox.setImageDrawable(items.get(position).getActivitySnapPictureDrawable());
+			holder.imageViewSnapPictureBox.setImageURI(items.get(position).getActivitySnapPictureUri());
 			holder.table.addView(rowView);
 		}
 		else if (items.get(position).getChallengeType() == Challenge.Type.WRITE_ON_WALL) {

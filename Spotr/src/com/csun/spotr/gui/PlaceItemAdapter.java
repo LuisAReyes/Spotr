@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.csun.spotr.core.Place;
-import com.csun.spotr.helper.DownloadImageHelper;
+import com.csun.spotr.helper.ImageHelper;
 
 public class PlaceItemAdapter extends BaseAdapter {
 	private Activity 		context;
@@ -68,12 +68,7 @@ public class PlaceItemAdapter extends BaseAdapter {
 		holder.nameTextView.setText(places.get(position).getName());
 		holder.typesTextView.setText(places.get(position).getAddress());
 		holder.ratingTextView.setText(Integer.toString(places.get(position).getRating()));
-		/*
-		 * This task is to consuming
-		 * TODO: find a workaround to handle the image
-		 */
-		// holder.mapIconImageView.setImageBitmap(DownloadImageHelper.downloadImage(places.get(position).getIconUrl()));
-		holder.mapIconImageView.setImageResource(R.drawable.adium);
+		holder.mapIconImageView.setImageResource(R.drawable.ic_launcher);
 		return convertView;
 	}
 

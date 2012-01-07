@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" 
-    android:background="@drawable/the_challenge_background">
+	>
 
     <TextView
         android:id="@+id/snap_picture_xml_textview_title"
@@ -34,7 +34,7 @@
         android:layout_width="fill_parent"
         android:layout_height="300dp"
         android:layout_gravity="center"
-        android:src="@drawable/mamooth" />
+        android:src="@drawable/ic_launcher" />
     
     <Button
         android:id="@+id/snap_picture_xml_button_next"
@@ -44,6 +44,4 @@
         android:enabled="false"
         android:text="Upload picture now?" />
     
-    
-
 </LinearLayout>

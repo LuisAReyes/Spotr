@@ -3,14 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" 
-    android:background="@drawable/map_background">
+    >
 
     <ImageView
         android:id="@+id/login_xml_imageview_logo_icon"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/dossier" />
+        android:src="@drawable/ic_launcher" />
 
 
     <TableLayout

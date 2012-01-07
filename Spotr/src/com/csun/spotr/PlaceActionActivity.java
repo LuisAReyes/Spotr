@@ -19,17 +19,22 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class PlaceActionActivity extends Activity {
-	private static final String TAG = "[PlaceActionActivity]";
+	private static final String TAG = "(PlaceActionActivity)";
 	private static final String GET_CHALLENGES_URL = "http://107.22.209.62/android/get_challenges_from_place.php";
 	private static final String DO_CHECK_IN_URL = "http://107.22.209.62/android/do_check_in.php";
 	private int currentPlaceId;
@@ -203,5 +208,63 @@ public class PlaceActionActivity extends Activity {
 				list.getChildAt(currentChosenItem).setBackgroundColor(Color.GRAY);
 			}
 		}
+	}
+	
+	/*
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+	    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+	        startActivity(new Intent(getApplicationContext(), LocalPlaceActivity.class));
+	        finish();
+	        return true;
+	    }
+
+	    return super.onKeyDown(keyCode, event);
+	}
+	*/
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.all_menu, menu);
+		return true;
+	}
+	
+    @Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId()) {
+			case R.id.options_menu_xml_item_setting_icon:
+				intent = new Intent("com.csun.spotr.SettingsActivity");
+				startActivity(intent);
+				finish();
+				break;
+			case R.id.options_menu_xml_item_logout_icon:
+				SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
+				editor.clear();
+				editor.commit();
+				intent = new Intent("com.csun.spotr.LoginActivity");
+				startActivity(intent);
+				finish();
+				break;
+			case R.id.options_menu_xml_item_mainmenu_icon:
+				intent = new Intent("com.csun.spotr.MainMenuActivity");
+				startActivity(intent);
+				finish();
+				break;
+		}
+		return true;
+	}
+    
+    @Override
+    public void onPause() {
+		Log.v(TAG, "I'm paused!");
+		super.onPause();
+	}
+	
+	@Override
+    public void onDestroy() {
+		Log.v(TAG, "I'm destroyed!");
+        super.onDestroy();
 	}
 }

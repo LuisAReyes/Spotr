@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,17 +13,25 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore.Images.Media;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -30,17 +39,17 @@ import android.view.inputmethod.InputMethodManager;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.core.User;
 import com.csun.spotr.gui.FriendListMainItemAdapter;
-import com.csun.spotr.helper.DownloadImageHelper;
+import com.csun.spotr.helper.ImageHelper;
 import com.csun.spotr.helper.JsonHelper;
 
 public class FriendListActionActivity extends Activity {
-	private static final String TAG = "FriendListActionActivity";
+	private static final String TAG = "(FriendListActionActivity)";
 	private static final String SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
 	private static final String SEND_REQUEST_URL = "http://107.22.209.62/android/send_friend_request.php";
 	private EditText editTextSearch = null;
-	private ListView list;
-	private FriendListMainItemAdapter adapter;
-	private List<User> userList;
+	private ListView list = null;
+	private FriendListMainItemAdapter adapter = null;
+	private List<User> userList = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -101,15 +110,12 @@ public class FriendListActionActivity extends Activity {
 			if (array != null) {
 				try {
 					for (int i = 0; i < array.length(); ++i) {
-						publishProgress(
-								new User.Builder(
-									// required parameters
-									array.getJSONObject(i).getInt("users_tbl_id"),
-									array.getJSONObject(i).getString("users_tbl_username"),
-									array.getJSONObject(i).getString("users_tbl_password"))
-										.imageUrl(array.getJSONObject(i).getString("users_tbl_user_image_url"))
-										.imageDrawable(DownloadImageHelper.getImageFromUrl(array.getJSONObject(i).getString("users_tbl_user_image_url")))
-											.build());
+						publishProgress(new User.Builder(
+								array.getJSONObject(i).getInt("users_tbl_id"),
+								array.getJSONObject(i).getString("users_tbl_username"),
+								array.getJSONObject(i).getString("users_tbl_password"))
+									.imageUri(constructUriFromBitmap(ImageHelper.downloadImage(array.getJSONObject(i).getString("users_tbl_user_image_url"))))
+										.build());
 					}
 				}
 				catch (JSONException e) {
@@ -230,4 +236,64 @@ public class FriendListActionActivity extends Activity {
 			}
 		}
 	}
+	
+	private Uri constructUriFromBitmap(Bitmap bitmap) {
+		ContentValues values = new ContentValues(1);
+		values.put(Media.MIME_TYPE, "image/jpeg");
+		Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
+		try {
+		    OutputStream outStream = getContentResolver().openOutputStream(uri);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 1, outStream);
+		    outStream.close();
+		} 
+		catch (Exception e) {
+		    Log.e(TAG, "exception while writing image", e);
+		}
+		bitmap.recycle();
+		return uri;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId()) {
+			case R.id.options_menu_xml_item_setting_icon:
+				intent = new Intent("com.csun.spotr.SettingsActivity");
+				startActivity(intent);
+				finish();
+				break;
+			case R.id.options_menu_xml_item_logout_icon:
+				SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
+				editor.clear();
+				editor.commit();
+				intent = new Intent("com.csun.spotr.LoginActivity");
+				startActivity(intent);
+				finish();
+				break;
+			case R.id.options_menu_xml_item_mainmenu_icon:
+				intent = new Intent("com.csun.spotr.MainMenuActivity");
+				startActivity(intent);
+				finish();
+				break;
+		}
+		return true;
+	}
+	
+	@Override
+    public void onPause() {
+		Log.v(TAG, "I'm paused!");
+        super.onPause();
+	}
+	
+	@Override
+    public void onDestroy() {
+		Log.v(TAG, "I'm destroyed!");
+		if (userList != null) {
+	        for (User user : userList) {
+	        	getContentResolver().delete(user.getImageUri(), null, null);
+	        }
+		}
+        super.onDestroy();
+	}
+	
 }

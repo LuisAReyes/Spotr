@@ -31,6 +31,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -292,5 +293,16 @@ public class MainMenuActivity extends Activity {
 			break;
 		}
 		return true;
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+	    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+	        startActivity(new Intent("com.csun.spotr.LoginActivity"));
+	        finish();
+	        return true;
+	    }
+
+	    return super.onKeyDown(keyCode, event);
 	}
 }

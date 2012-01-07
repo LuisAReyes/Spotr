@@ -5,19 +5,17 @@ import java.util.List;
 import java.util.Random;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.csun.spotr.R;
+import com.csun.spotr.core.Challenge;
 import com.csun.spotr.core.PlaceLog;
-import com.csun.spotr.helper.DownloadImageHelper;
 
 public class PlaceActivityItemAdapter extends BaseAdapter {
 	private List<PlaceLog> items;
@@ -68,22 +66,22 @@ public class PlaceActivityItemAdapter extends BaseAdapter {
 		/*
 		 * TODO: Group user' tasks together to save this download image task
 		 */
-		holder.imageViewUserPicture.setImageDrawable(items.get(position).getUserPictureDrawable());
+		holder.imageViewUserPicture.setImageURI(items.get(position).getUserPictureUri());
 		holder.textViewUsername.setText(items.get(position).getUsername());
 		holder.textViewTime.setText("@" + items.get(position).getTime());
 		
-		if (items.get(position).getChallengeType().equals("CHECK_IN")) {
+		if (items.get(position).getChallengeType() == Challenge.Type.CHECK_IN) {
 			holder.textViewWhatUserDo.setText("has checked in.");
 		}
-		else if (items.get(position).getChallengeType().equals("SNAP_PICTURE")) {
+		else if (items.get(position).getChallengeType() == Challenge.Type.SNAP_PICTURE) {
 			holder.textViewWhatUserDo.setText("has snap a picture.");
 			// add picture box
 			View rowView = inflater.inflate(R.layout.snap_picture_row_item, null);
 			holder.imageViewSnapPictureBox = (ImageView) rowView.findViewById(R.id.snap_picture_row_item_xml_imageview_picture);
-			holder.imageViewSnapPictureBox.setImageDrawable(items.get(position).getSnapPictureDrawable());
+			holder.imageViewSnapPictureBox.setImageURI(items.get(position).getSnapPictureUri());
 			holder.table.addView(rowView);
 		}
-		else if (items.get(position).getChallengeType().equals("WRITE_ON_WALL")) {
+		else if (items.get(position).getChallengeType() == Challenge.Type.WRITE_ON_WALL) {
 			holder.textViewWhatUserDo.setText("has written a message on wall.");
 			// add message box
 			View rowView = inflater.inflate(R.layout.write_on_wall_row_item, null);
@@ -91,7 +89,7 @@ public class PlaceActivityItemAdapter extends BaseAdapter {
 			holder.textViewWriteOnWallMessageBox.setText(items.get(position).getComment());
 			holder.table.addView(rowView);
 		}
-		else if (items.get(position).getChallengeType().equals("QUESTION_ANSWER")) {
+		else if (items.get(position).getChallengeType() == Challenge.Type.QUESTION_ANSWER) {
 			holder.textViewWhatUserDo.setText("has answered a question.");
 		}
 		else { // Challenge.Type.OTHER

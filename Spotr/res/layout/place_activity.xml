@@ -4,7 +4,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" 
-    android:background="@drawable/the_background"
     >
     <ListView
         android:id="@+id/place_activity_xml_listview"

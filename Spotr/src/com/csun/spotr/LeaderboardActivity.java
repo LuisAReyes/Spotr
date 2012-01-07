@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,7 +51,7 @@ import com.csun.spotr.gui.LeaderboardItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
 public class LeaderboardActivity extends Activity {
-	private static final String TAG = "[LeaderboardActivity]";
+	private static final String TAG = "(LeaderboardActivity)";
 	private static final String GET_USERS_URL = "http://107.22.209.62/android/get_users.php";
 	private ListView list = null;
 	private LeaderboardItemAdapter adapter = null;
@@ -150,7 +151,7 @@ public class LeaderboardActivity extends Activity {
 		inflater.inflate(R.menu.all_menu, menu);
 		return true;
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
@@ -158,6 +159,7 @@ public class LeaderboardActivity extends Activity {
 			case R.id.options_menu_xml_item_setting_icon:
 				intent = new Intent("com.csun.spotr.SettingsActivity");
 				startActivity(intent);
+				finish();
 				break;
 			case R.id.options_menu_xml_item_logout_icon:
 				SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
@@ -165,12 +167,26 @@ public class LeaderboardActivity extends Activity {
 				editor.commit();
 				intent = new Intent("com.csun.spotr.LoginActivity");
 				startActivity(intent);
+				finish();
 				break;
 			case R.id.options_menu_xml_item_mainmenu_icon:
 				intent = new Intent("com.csun.spotr.MainMenuActivity");
 				startActivity(intent);
+				finish();
 				break;
 		}
 		return true;
+	}
+
+	@Override
+    public void onPause() {
+		Log.v(TAG, "I'm paused!");
+        super.onPause();
+	}
+	
+	@Override
+    public void onDestroy() {
+		Log.v(TAG, "I'm destroyed!");
+        super.onDestroy();
 	}
 }

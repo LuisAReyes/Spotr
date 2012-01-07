@@ -37,7 +37,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.core.Place;
 import com.csun.spotr.gui.BalloonItemizedOverlay;
-import com.csun.spotr.helper.DownloadImageHelper;
+import com.csun.spotr.helper.ImageHelper;
 import com.csun.spotr.helper.GooglePlaceHelper;
 import com.csun.spotr.helper.JsonHelper;
 import com.google.android.maps.GeoPoint;

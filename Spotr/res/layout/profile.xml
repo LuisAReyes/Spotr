@@ -2,7 +2,7 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
-    android:background="@drawable/the_black_background">
+	>
 
     <TableRow >
         <LinearLayout
@@ -18,7 +18,7 @@
                 android:layout_marginRight="2dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/hottub" />
+                android:src="@drawable/ic_launcher" />
 
             <TableLayout
                 android:layout_width="200dp"

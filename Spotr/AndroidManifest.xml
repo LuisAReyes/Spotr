@@ -159,6 +159,7 @@
         
         <!-- Place Activity -->
         <activity android:name=".PlaceActivity" 
+            	  android:screenOrientation="portrait"
             	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.PlaceActivity" />
@@ -168,6 +169,7 @@
         
         <!-- Local Place Activity -->
         <activity android:name=".LocalPlaceActivity" 
+            	  android:screenOrientation="portrait"
             	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.LocalPlaceActivity" />
@@ -177,6 +179,7 @@
             
         <!-- Place Main Activity -->
         <activity android:name=".PlaceMainActivity" 
+            	  android:screenOrientation="portrait"
             	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.PlaceMainActivity" />
@@ -186,6 +189,7 @@
         
         <!-- Place Action Activity -->
         <activity android:name=".PlaceActionActivity" 
+            	  android:screenOrientation="portrait"
             	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.PlaceActionActivity" />
@@ -195,8 +199,8 @@
         
         <!-- Place Activity Activity -->
         <activity android:name=".PlaceActivityActivity" 
-            	  android:configChanges="orientation|keyboardHidden"
-            	  android:screenOrientation="portrait">
+            	  android:screenOrientation="portrait"
+            	  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.PlaceActivityActivity" />
                 <category android:name="android.intent.category.DEFAULT" />

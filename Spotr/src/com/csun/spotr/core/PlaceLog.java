@@ -1,39 +1,36 @@
 package com.csun.spotr.core;
 
-import android.graphics.drawable.Drawable;
-import android.widget.TextView.BufferType;
-
-import com.csun.spotr.gui.UserActivityItemAdapter;
+import android.net.Uri;
 
 public class PlaceLog {
 	// required parameters
 	private final int id;
 	private final String username;
-	private final String challengeType;
+	private final Challenge.Type challengeType;
 	private final String time;
 
 	// optional parameters
 	private String name;
 	private String description;
-	private Drawable snapPictureDrawable;
-	private Drawable userPictureDrawable;
+	private Uri snapPictureUri = null;
+	private Uri userPictureUri = null;
 	private String comment;
 
 	public static class Builder {
 		// required parameters
 		private final int id;
 		private final String username;
-		private final String challengeType;
+		private final Challenge.Type challengeType;
 		private final String time;
 
 		// optional parameters
 		private String name = "";
 		private String description = "";
-		private Drawable snapPictureDrawable = null;
-		private Drawable userPictureDrawable = null;
+		private Uri snapPictureUri = null;
+		private Uri userPictureUri = null;
 		private String comment = "";
 
-		public Builder(int id, String username, String challengeType, String time) {
+		public Builder(int id, String username, Challenge.Type challengeType, String time) {
 			this.id = id;
 			this.username = username;
 			this.challengeType = challengeType;
@@ -50,13 +47,13 @@ public class PlaceLog {
 			return this;
 		}
 
-		public Builder userPictureDrawable(Drawable drawable) {
-			this.userPictureDrawable = drawable;
+		public Builder userPictureUri(Uri uri) {
+			this.userPictureUri = uri;
 			return this;
 		}
 
-		public Builder snapPictureDrawable(Drawable drawable) {
-			this.snapPictureDrawable = drawable;
+		public Builder snapPictureUri(Uri uri) {
+			this.snapPictureUri = uri;
 			return this;
 		}
 
@@ -77,8 +74,8 @@ public class PlaceLog {
 		this.time = builder.time;
 		this.name = builder.name;
 		this.description = builder.description;
-		this.userPictureDrawable = builder.userPictureDrawable;
-		this.snapPictureDrawable = builder.snapPictureDrawable;
+		this.userPictureUri = builder.userPictureUri;
+		this.snapPictureUri = builder.snapPictureUri;
 		this.comment = builder.comment;
 	}
 
@@ -98,20 +95,20 @@ public class PlaceLog {
 		this.description = description;
 	}
 
-	public Drawable getSnapPictureDrawable() {
-		return snapPictureDrawable;
+	public Uri getSnapPictureUri() {
+		return snapPictureUri;
 	}
 
-	public void setSnapPictureDrawable(Drawable snapPictureDrawable) {
-		this.snapPictureDrawable = snapPictureDrawable;
+	public void setSnapPictureUri(Uri uri) {
+		this.snapPictureUri = uri;
 	}
 
-	public Drawable getUserPictureDrawable() {
-		return userPictureDrawable;
+	public Uri getUserPictureUri() {
+		return userPictureUri;
 	}
 
-	public void setUserPictureDrawable(Drawable userPictureDrawable) {
-		this.userPictureDrawable = userPictureDrawable;
+	public void setUserPictureUri(Uri uri) {
+		this.userPictureUri = uri;
 	}
 
 	public String getComment() {
@@ -130,7 +127,7 @@ public class PlaceLog {
 		return username;
 	}
 
-	public String getChallengeType() {
+	public Challenge.Type getChallengeType() {
 		return challengeType;
 	}
 

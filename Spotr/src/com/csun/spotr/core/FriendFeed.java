@@ -1,6 +1,7 @@
 package com.csun.spotr.core;
 
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
 public class FriendFeed {
 	// required parameters
@@ -15,14 +16,13 @@ public class FriendFeed {
 	// optional parameter
 	private String challengeName;
 	private String challengeDescription;
-	private Drawable activitySnapPictureDrawable;
-	private Drawable friendPictureDrawable;
+	private Uri activitySnapPictureUri = null;
+	private Uri friendPictureUri = null;
 	private String activityComment;
 
 	public static class Builder {
 		// required parameters
-		private final int activityId; // in case we want to handle the detail of
-										// this activity
+		private final int activityId; 
 		private final int friendId;
 		private final String friendName;
 		private final Challenge.Type challengeType;
@@ -32,8 +32,8 @@ public class FriendFeed {
 		// optional parameter
 		private String challengeName;
 		private String challengeDescription;
-		private Drawable activitySnapPictureDrawable;
-		private Drawable friendPictureDrawable;
+		private Uri activitySnapPictureUri = null;
+		private Uri friendPictureUri = null;
 		private String activityComment;
 
 		public Builder(int activityId, int friendId, String friendName, Challenge.Type challengeType, String activityTime, String placeName) {
@@ -55,13 +55,13 @@ public class FriendFeed {
 			return this;
 		}
 
-		public Builder activitySnapPictureDrawable(Drawable activitySnapPictureDrawable) {
-			this.activitySnapPictureDrawable = activitySnapPictureDrawable;
+		public Builder activitySnapPictureUri(Uri uri) {
+			this.activitySnapPictureUri = uri;
 			return this;
 		}
 
-		public Builder friendPictureDrawable(Drawable friendPicDrawable) {
-			this.friendPictureDrawable = friendPicDrawable;
+		public Builder friendPictureUri(Uri uri) {
+			this.friendPictureUri = uri;
 			return this;
 		}
 
@@ -85,8 +85,8 @@ public class FriendFeed {
 
 		this.challengeName = builder.challengeName;
 		this.challengeDescription = builder.challengeDescription;
-		this.activitySnapPictureDrawable = builder.activitySnapPictureDrawable;
-		this.friendPictureDrawable = builder.friendPictureDrawable;
+		this.activitySnapPictureUri = builder.activitySnapPictureUri;
+		this.friendPictureUri = builder.friendPictureUri;
 		this.activityComment = builder.activityComment;
 	}
 
@@ -106,20 +106,20 @@ public class FriendFeed {
 		this.challengeDescription = challengeDescription;
 	}
 
-	public Drawable getActivitySnapPictureDrawable() {
-		return activitySnapPictureDrawable;
+	public Uri getActivitySnapPictureUri() {
+		return activitySnapPictureUri;
 	}
 
-	public void setActivitySnapPictureDrawable(Drawable activitySnapPictureDrawable) {
-		this.activitySnapPictureDrawable = activitySnapPictureDrawable;
+	public void setActivitySnapPictureUri(Uri uri) {
+		this.activitySnapPictureUri = uri;
 	}
 
-	public Drawable getFriendPictureDrawable() {
-		return friendPictureDrawable;
+	public Uri getFriendPictureUri() {
+		return friendPictureUri;
 	}
 
-	public void setFriendPictureDrawable(Drawable friendPictureDrawable) {
-		this.friendPictureDrawable = friendPictureDrawable;
+	public void setFriendPictureUri(Uri uri) {
+		this.friendPictureUri = uri;
 	}
 
 	public String getActivityComment() {
