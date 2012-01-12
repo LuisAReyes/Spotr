@@ -2,63 +2,56 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" 
+    android:orientation="vertical"
+    android:background="@drawable/bg_0"
     >
 
     <ImageView
         android:id="@+id/login_xml_imageview_logo_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="239px"
+        android:layout_height="77px"
+        android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/logo_0" />
+
+		<EditText
+			android:id="@+id/login_xml_edittext_email_id"
+			android:singleLine="true"
+			android:capitalize="none"
+			android:layout_marginTop="10dp"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:hint="@string/login_xml_textview_email_str" >
+			<requestFocus />
+		</EditText>
 
 
-    <TableLayout
-        android:layout_width="452dp"
-        android:layout_height="537dp" >
+		<EditText
+			android:id="@+id/login_xml_edittext_password_id"
+			android:singleLine="true"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:hint="@string/login_xml_textview_password_str" />
 
-        <TableRow >
 
-            <TextView
-                android:text="@string/login_xml_textview_email_str"
-                android:textColor="#0CBFFA"
-                android:textStyle="bold"
-                android:width="120px" />
+	    <TableLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" >
 
-            <EditText
-                android:id="@+id/login_xml_edittext_email_id"
-                android:singleLine="true"
-                android:capitalize="none"
-                android:width="200px" >
-                <requestFocus />
-            </EditText>
-        </TableRow>
+        <TableRow android:gravity="center" >
 
-        <TableRow >
-            <TextView
-                android:text="@string/login_xml_textview_password_str"
-                android:textColor="#0CBFFA"
-                android:textStyle="bold"
-                android:width="120px" />
-
-            <EditText
-                android:id="@+id/login_xml_edittext_password_id"
-                android:singleLine="true"
-                android:width="200px" />
-        </TableRow>
-
-        <TableRow >
-
-            <TextView />
+        <TextView />
 
             <CheckBox
                 android:id="@+id/login_xml_checkbox_remember_password"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/login_xml_checkbox_remember_password_str" />
+                android:text="@string/login_xml_checkbox_remember_password_str"
+                android:textColor="#604d4d" />
+
         </TableRow>
 
-        <TableRow >
+        <TableRow android:gravity="center" >
 
             <TextView />
 
@@ -66,29 +59,33 @@
                 android:id="@+id/login_xml_checkbox_visible_characters"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+				android:textColor="#604d4d"
                 android:text="@string/login_xml_checkbox_visible_password_str" />
-        </TableRow>
+        
+		</TableRow>
 
         <TableRow
+            android:layout_marginTop="14dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="100dp">
         </TableRow>
 
-        <TableRow >
+        <TableRow android:gravity="center" >
 
             <TextView />
             <Button
                 android:id="@+id/login_xml_button_login"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/login_xml_button_login_str" />
         </TableRow>
 
-        <TableRow >
+        <TableRow android:gravity="center" >
+
             <TextView />
             <Button 
                 android:id="@+id/login_xml_button_signup"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/login_xml_button_signup_str"/>
         </TableRow>
@@ -101,5 +98,13 @@
             <TextView />
         </TableRow>
     </TableLayout>
+    
+    <TextView
+        android:gravity="center"
+	    android:text="@string/login_xml_textview_version_str"
+	    android:textColor="#A61C1C"
+	    android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+	    android:textStyle="bold" />
 
 </LinearLayout>

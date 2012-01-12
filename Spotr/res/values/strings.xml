@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">The Spotr</string>
     <!-- login.xml -->
-    <string name="login_xml_textview_email_str">Email</string>
+    <string name="login_xml_textview_email_str">Login (usually email)</string>
     <string name="login_xml_textview_password_str">Password</string>
     <string name="login_xml_checkbox_remember_password_str">Remember password</string>
     <string name="login_xml_checkbox_visible_password_str">Show visible password</string>
@@ -65,4 +65,5 @@
         <item>Fifteen</item>
         <item>Sixteen</item>
     </string-array>
+    <string name="login_xml_textview_version_str">V1.0</string>
 </resources>
