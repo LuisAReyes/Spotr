@@ -41,6 +41,7 @@ public class LoginActivity extends Activity {
 	private boolean prefsSavePassword = false;
 	private boolean passwordVisible = false;
 	private boolean savePassword = false;
+	private LoginTask task = null;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,7 +80,7 @@ public class LoginActivity extends Activity {
 
 		buttonLogin.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				LoginTask task = new LoginTask();
+				task = new LoginTask();
 				task.execute();
 			}
 		});
@@ -125,7 +126,7 @@ public class LoginActivity extends Activity {
 		finish();
 	}
 	
-	private class LoginTask extends AsyncTask<Void, Integer, Boolean> {
+	public class LoginTask extends AsyncTask<Void, Integer, Boolean> {
 		private List<NameValuePair> loginData = new ArrayList<NameValuePair>();
 		@Override
 		protected void onPreExecute() {
@@ -184,5 +185,9 @@ public class LoginActivity extends Activity {
 	    }
 
 	    return super.onKeyDown(keyCode, event);
+	}
+	
+	public LoginTask getLoginTask() {
+		return task;
 	}
 }
