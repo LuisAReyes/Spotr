@@ -79,7 +79,7 @@ public class WriteOnWallActivity extends Activity {
 	
 	private class WriteOnWallTask extends AsyncTask<Void, Integer, String> {
 		ProgressDialog progressDialog = new ProgressDialog(WriteOnWallActivity.this);
-		private List<NameValuePair> messageData = new ArrayList<NameValuePair>();
+		private List<NameValuePair> clientData = new ArrayList<NameValuePair>();
 		@Override
 		protected void onPreExecute() {
 			// display waiting dialog
@@ -92,11 +92,11 @@ public class WriteOnWallActivity extends Activity {
 
 		@Override
 		protected String doInBackground(Void... voids) {
-			messageData.add(new BasicNameValuePair("users_id", usersId));
-			messageData.add(new BasicNameValuePair("spots_id", spotsId));
-			messageData.add(new BasicNameValuePair("challenges_id", challengesId));
-			messageData.add(new BasicNameValuePair("comment", message));
-			JSONObject json = JsonHelper.getJsonObjectFromUrlWithData(WRITE_ON_WALL_URL, messageData);
+			clientData.add(new BasicNameValuePair("users_id", usersId));
+			clientData.add(new BasicNameValuePair("spots_id", spotsId));
+			clientData.add(new BasicNameValuePair("challenges_id", challengesId));
+			clientData.add(new BasicNameValuePair("comment", message));
+			JSONObject json = JsonHelper.getJsonObjectFromUrlWithData(WRITE_ON_WALL_URL, clientData);
 			String result = "";
 			try {
 				result = json.getString("result");

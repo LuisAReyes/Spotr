@@ -44,9 +44,9 @@ import android.widget.Toast;
 public class SnapPictureActivity extends Activity {
 	private static final String TAG = "[SnapPictureActivity]";
 	private static final String SNAP_PICTURE_URL = "http://107.22.209.62/images/upload_picture.php";
-	private Button buttonGo;
-	private Button buttonNext;
-	private ImageView imageViewPreview;
+	private Button buttonGo = null;
+	private Button buttonNext = null;
+	private ImageView imageViewPreview = null;
 	private Bitmap takenPictureBitmap = null;
 	private String usersId;
 	private String spotsId;
@@ -100,12 +100,13 @@ public class SnapPictureActivity extends Activity {
 
 	private class UploadPictueTask extends AsyncTask<Void, Integer, String> {
 		ProgressDialog progressDialog = new ProgressDialog(SnapPictureActivity.this);
-		private List<NameValuePair> snapPictureData = new ArrayList<NameValuePair>();
+		private List<NameValuePair> clientData = new ArrayList<NameValuePair>();
+		
 		@Override
 		protected void onPreExecute() {
 			// display waiting dialog
 			progressDialog = new ProgressDialog(SnapPictureActivity.this);
-			progressDialog.setMessage("Loading...");
+			progressDialog.setMessage("Uploading picture...");
 			progressDialog.setIndeterminate(true);
 			progressDialog.setCancelable(true);
 			progressDialog.show();
@@ -122,18 +123,18 @@ public class SnapPictureActivity extends Activity {
 			// encode it
 			String byteCode = Base64.encodeBytes(src);
 			// send encoded data to server
-			snapPictureData.add(new BasicNameValuePair("image", byteCode));
+			clientData.add(new BasicNameValuePair("image", byteCode));
 			// send a file name where file name = "username" + "current date time UTC", to make sure that we have a unique id picture every time.
 			// since the username is unique, we should take advantage of this otherwise two or more users could potentially snap pictures at the same time.
-			snapPictureData.add(new BasicNameValuePair("file_name",  CurrentUser.getCurrentUser().getUsername() + CurrentDateTime.getUTCDateTime().trim() + ".png"));
+			clientData.add(new BasicNameValuePair("file_name",  CurrentUser.getCurrentUser().getUsername() + CurrentDateTime.getUTCDateTime().trim() + ".png"));
 			// send the rest of data
-			snapPictureData.add(new BasicNameValuePair("users_id", usersId));
-			snapPictureData.add(new BasicNameValuePair("spots_id", spotsId));
-			snapPictureData.add(new BasicNameValuePair("challenges_id", challengesId));
+			clientData.add(new BasicNameValuePair("users_id", usersId));
+			clientData.add(new BasicNameValuePair("spots_id", spotsId));
+			clientData.add(new BasicNameValuePair("challenges_id", challengesId));
 			// TODO: comment should be added
-			snapPictureData.add(new BasicNameValuePair("comment", comment));
+			clientData.add(new BasicNameValuePair("comment", comment));
 			// get JSON to check result
-			JSONObject json = UploadFileHelper.uploadFileToServer(SNAP_PICTURE_URL, snapPictureData);
+			JSONObject json = UploadFileHelper.uploadFileToServer(SNAP_PICTURE_URL, clientData);
 		
 			String result = "";
 			try {
@@ -165,8 +166,10 @@ public class SnapPictureActivity extends Activity {
 	
 	@Override
 	public void onDestroy() {
-		if (takenPictureBitmap  != null)
-			takenPictureBitmap.recycle();
+		if (takenPictureBitmap != null) {
+			takenPictureBitmap.recycle(); 
+			takenPictureBitmap = null;
+		}
 		
 		super.onDestroy();
 	}

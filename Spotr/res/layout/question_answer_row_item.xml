@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android" >
+    <ImageView 
+        android:layout_marginRight="6dp" />
+   
+    <TextView 
+        android:id="@+id/question_answer_row_item_xml_textview_user_answer"
+        
+     />
+</TableRow>

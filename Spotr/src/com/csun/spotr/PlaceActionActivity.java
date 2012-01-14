@@ -90,7 +90,14 @@ public class PlaceActionActivity extends Activity {
 					startActivity(intent);
 				}
 				else if (c.getType() == Challenge.Type.QUESTION_ANSWER) {
-					
+					Intent intent = new Intent("com.csun.spotr.QuestionAnswerActivity");
+					Bundle extras = new Bundle();
+					extras.putString("users_id", Integer.toString(CurrentUser.getCurrentUser().getId()));
+					extras.putString("spots_id", Integer.toString(currentPlaceId));
+					extras.putString("challenges_id", Integer.toString(c.getId()));
+					extras.putString("question_description", c.getDescription());
+					intent.putExtras(extras);
+					startActivity(intent);
 				}
 				else { // c.getType == Challenge.Type.OTHER 
 				

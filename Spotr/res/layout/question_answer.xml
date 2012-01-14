@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/question_answer_xml_textview_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Question and Answer"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#C40434"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/question_answer_xml_textview_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Question go here"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <EditText
+        android:id="@+id/question_answer_xml_edittext_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Write your answer here"
+        android:inputType="textMultiLine" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/question_answer_xml_button_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Submit your answer?" />
+
+</LinearLayout>

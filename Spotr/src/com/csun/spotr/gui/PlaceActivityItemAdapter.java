@@ -47,6 +47,7 @@ public class PlaceActivityItemAdapter extends BaseAdapter {
 		TextView textViewTime;
 		ImageView imageViewSnapPictureBox;
 		TextView textViewWriteOnWallMessageBox;
+		TextView textViewUserAnswer;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -91,6 +92,10 @@ public class PlaceActivityItemAdapter extends BaseAdapter {
 		}
 		else if (items.get(position).getChallengeType() == Challenge.Type.QUESTION_ANSWER) {
 			holder.textViewWhatUserDo.setText("has answered a question.");
+			View rowView = inflater.inflate(R.layout.question_answer_row_item, null);
+			holder.textViewUserAnswer = (TextView) rowView.findViewById(R.id.question_answer_row_item_xml_textview_user_answer);
+			holder.textViewUserAnswer.setText(items.get(position).getComment());
+			holder.table.addView(rowView);
 		}
 		else { // Challenge.Type.OTHER
 			holder.textViewWhatUserDo.setText("has done some other challenges.");
