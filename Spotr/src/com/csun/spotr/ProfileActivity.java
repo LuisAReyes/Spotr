@@ -49,12 +49,19 @@ public class ProfileActivity extends Activity {
 	private static final String GET_USER_DETAIL_URL = "http://107.22.209.62/android/get_user_detail.php";
 	private static final int CAMERA_PICTURE = 111;
 	private static final int GALLERY_PICTURE = 222;
-	private ImageView userPictureImageView = null;
-	private ListView profileList = null;
+	private ListView listViewProfile = null;
 	private ProfileItemAdapter adapter = null;
 	private int currentUserId = 0;
 	private User user = null;
-	
+	private GetUserDetailTask task = null;
+	private Bitmap bitmapUserPicture = null;
+	private ImageView imageViewUserPicture = null;
+	private TextView textViewChallengesDone = null;
+	private TextView textViewPlacesVisited = null;
+	private TextView textViewPoints = null;
+	private List<String> headers = new ArrayList<String>();
+	private List<String> bodies = new ArrayList<String>();
+				
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,14 +71,15 @@ public class ProfileActivity extends Activity {
 		Bundle extrasBundle = getIntent().getExtras();
 		currentUserId = extrasBundle.getInt("user_id");
 		
-		userPictureImageView = (ImageView) findViewById(R.id.profile_xml_imageview_user_picture);
-		userPictureImageView.setOnClickListener(new OnClickListener() {
+		imageViewUserPicture = (ImageView) findViewById(R.id.profile_xml_imageview_user_picture);
+		imageViewUserPicture.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				startDialog();
 			}
 		});
 		
-		new GetUserDetailTask().execute();
+		task = new GetUserDetailTask();
+		task.execute();
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -79,15 +87,14 @@ public class ProfileActivity extends Activity {
 			if (requestCode == GALLERY_PICTURE) {
 				Uri selectedImageUri = data.getData();
 				String selectedImagePath = getPath(selectedImageUri);
-				Bitmap myBitmap = BitmapFactory.decodeFile(selectedImagePath);
-				ImageView myImage = (ImageView) findViewById(R.id.profile_xml_imageview_user_picture);
-				myImage.setImageBitmap(myBitmap);
+				bitmapUserPicture = BitmapFactory.decodeFile(selectedImagePath);
+				imageViewUserPicture.setImageBitmap(bitmapUserPicture);
 			}
 			else if (requestCode == CAMERA_PICTURE) {
 				if (data.getExtras() != null) {
 					// here is the image from camera
-					Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-					userPictureImageView.setImageBitmap(bitmap);
+					bitmapUserPicture = (Bitmap) data.getExtras().get("data");
+					imageViewUserPicture.setImageBitmap(bitmapUserPicture);
 				}
 			}
 		}
@@ -126,6 +133,7 @@ public class ProfileActivity extends Activity {
 	private class GetUserDetailTask extends AsyncTask<Void, Integer, User> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
+		private JSONArray array = null;
 		
 		@Override
 		protected void onPreExecute() {
@@ -133,14 +141,14 @@ public class ProfileActivity extends Activity {
 			progressDialog = new ProgressDialog(ProfileActivity.this);
 			progressDialog.setMessage("Loading ...");
 			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 		}
 
 		@Override
 		protected User doInBackground(Void...voids) {
 			userData.add(new BasicNameValuePair("user_id", Integer.toString(currentUserId)));
-			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_USER_DETAIL_URL, userData);
+			array = JsonHelper.getJsonArrayFromUrlWithData(GET_USER_DETAIL_URL, userData);
 			try {
 				user = new User.Builder( 
 						// required parameters
@@ -164,28 +172,35 @@ public class ProfileActivity extends Activity {
 		protected void onPostExecute(final User user) {
 			progressDialog.dismiss();
 			if (user != null) {
-				userPictureImageView.setImageURI(user.getImageUri());
-				TextView textViewChallengesDone = (TextView) findViewById(R.id.profile_xml_textview_challenges_done);
+				imageViewUserPicture.setImageURI(user.getImageUri());
+				
+				textViewChallengesDone = (TextView) findViewById(R.id.profile_xml_textview_challenges_done);
 				textViewChallengesDone.setText(Integer.toString(user.getChallengesDone()));
 				
-				TextView textViewPlacesVisited = (TextView) findViewById(R.id.profile_xml_textview_places_visited);
+				textViewPlacesVisited = (TextView) findViewById(R.id.profile_xml_textview_places_visited);
 				textViewPlacesVisited.setText(Integer.toString(user.getPlacesVisited()));
 				
-				TextView textViewPoints = (TextView) findViewById(R.id.profile_xml_textview_points);
+				textViewPoints = (TextView) findViewById(R.id.profile_xml_textview_points);
 				textViewPoints.setText(Integer.toString(user.getPoints()));
 				
-				List<String> headers = new ArrayList<String>();
-				List<String> bodies = new ArrayList<String>();
+				headers = new ArrayList<String>();
+				bodies = new ArrayList<String>();
 				
 				headers.add("Name");
 				bodies.add(user.getUsername());
 				headers.add("Password");
 				bodies.add(user.getPassword());
 				
-				profileList = (ListView) findViewById(R.id.profile_xml_listview_items);
+				listViewProfile = (ListView) findViewById(R.id.profile_xml_listview_items);
 				adapter = new ProfileItemAdapter(ProfileActivity.this, headers, bodies);
-				profileList.setAdapter(adapter);
+				listViewProfile.setAdapter(adapter);
 			}
+			
+			progressDialog = null;
+			userData = null;
+			array = null;
+			
+			System.gc();
 		}
 	}
 	
@@ -196,15 +211,22 @@ public class ProfileActivity extends Activity {
 		ContentValues values = new ContentValues(1);
 		values.put(Media.MIME_TYPE, "image/jpeg");
 		Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
+		OutputStream outStream;
+		
 		try {
-		    OutputStream outStream = getContentResolver().openOutputStream(uri);
+		    outStream = getContentResolver().openOutputStream(uri);
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 30, outStream);
 		    outStream.close();
 		} 
 		catch (Exception e) {
 		    Log.e(TAG, "exception while writing image", e);
 		}
+		
 		bitmap.recycle();
+		bitmap = null;
+		outStream = null;
+		
+		System.gc();
 		return uri;
 	}
 	
@@ -252,18 +274,25 @@ public class ProfileActivity extends Activity {
 	@Override
     public void onDestroy() {
 		Log.v(TAG, "I'm destroyed!");
-		if (user != null)
+		if (user != null) {
 			getContentResolver().delete(user.getImageUri(), null, null);
-        super.onDestroy();
-	}
-	    
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event)  {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			startActivity(new Intent("com.csun.spotr.MainMenuActivity"));
-		    finish();
-		    return true;
+			user.setImageUri(null);
 		}
-		return super.onKeyDown(keyCode, event);
+		
+		if (bitmapUserPicture != null) {
+			bitmapUserPicture.recycle();
+			bitmapUserPicture = null;
+		}
+		
+		listViewProfile = null;
+		adapter = null;
+		user = null;
+		imageViewUserPicture = null;
+		textViewChallengesDone = null;
+		textViewPlacesVisited = null;
+		textViewPoints = null;
+		
+		System.gc();
+        super.onDestroy();
 	}
 }

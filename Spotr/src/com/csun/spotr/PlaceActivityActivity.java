@@ -29,7 +29,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -73,18 +72,16 @@ public class PlaceActivityActivity extends Activity {
 			placeData.add(new BasicNameValuePair("spots_id", Integer.toString(currentPlaceId)));
 			// display waiting dialog
 			progressDialog = new ProgressDialog(PlaceActivityActivity.this);
-			progressDialog.setMessage("Sending request...");
+			progressDialog.setMessage("Loading place activities...please wait!");
 			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 		}
 		
 		@Override
 	    protected void onProgressUpdate(PlaceLog... placeLogs) {
-			progressDialog.dismiss();
 			placeLogList.add(placeLogs[0]);
 			adapter.notifyDataSetChanged();
-			// adapter.notifyDataSetInvalidated();
 	    }
 		
 		@Override

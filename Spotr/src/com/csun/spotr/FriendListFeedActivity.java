@@ -47,8 +47,9 @@ public class FriendListFeedActivity extends Activity {
 	private static final String TAG = "(FriendListFeedActivity)";
 	private static final String GET_FRIEND_FEED_URL = "http://107.22.209.62/android/get_friend_feeds.php";
 	private List<FriendFeed> friendFeedList = new ArrayList<FriendFeed>();
-	private ListView list;
-	private FriendListFeedItemAdapter adapter;
+	private ListView list = null;
+	private FriendListFeedItemAdapter adapter = null;
+	private GetFriendFeedTask task = null;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,35 +63,35 @@ public class FriendListFeedActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			}
 		});
-		new GetFriendFeedTask().execute();
+		task = new GetFriendFeedTask();
+		task.execute();
     }
     
     private class GetFriendFeedTask extends AsyncTask<Void, FriendFeed, Boolean> {
 		private List<NameValuePair> datas = new ArrayList<NameValuePair>(); 
 		private ProgressDialog progressDialog = null;
+		private JSONArray array = null;
 		
 		@Override
 		protected void onPreExecute() {
 			datas.add(new BasicNameValuePair("users_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
 			// display waiting dialog
 			progressDialog = new ProgressDialog(FriendListFeedActivity.this);
-			progressDialog.setMessage("Sending request...");
+			progressDialog.setMessage("Loading friends' feeds...please wait!");
 			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 		}
 		
 		@Override
 		  protected void onProgressUpdate(FriendFeed... feeds) {
-			progressDialog.dismiss();
 			friendFeedList.add(feeds[0]);
 			adapter.notifyDataSetChanged();
-			// adapter.notifyDataSetInvalidated();
 	    }
 		
 		@Override
 		protected Boolean doInBackground(Void...voids) {
-			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_FRIEND_FEED_URL, datas);
+			array = JsonHelper.getJsonArrayFromUrlWithData(GET_FRIEND_FEED_URL, datas);
 			if (array != null) { 
 				try {
 					for (int i = 0; i < array.length(); ++i) { 
@@ -147,6 +148,10 @@ public class FriendListFeedActivity extends Activity {
 				});
 				dialogMessage.show();
 			}
+			progressDialog = null;
+			datas = null;
+			array = null;
+			System.gc();
 		}
 			
 	}
@@ -155,8 +160,9 @@ public class FriendListFeedActivity extends Activity {
 		ContentValues values = new ContentValues(1);
 		values.put(Media.MIME_TYPE, "image/jpeg");
 		Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
+		OutputStream outStream;
 		try {
-		    OutputStream outStream = getContentResolver().openOutputStream(uri);
+		    outStream = getContentResolver().openOutputStream(uri);
 			bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outStream);
 		    outStream.close();
 		} 
@@ -164,6 +170,9 @@ public class FriendListFeedActivity extends Activity {
 		    Log.e(TAG, "exception while writing image", e);
 		}
 		bitmap.recycle();
+		bitmap = null;
+		outStream = null;
+		System.gc();
 		return uri;
 	}
     
@@ -212,11 +221,20 @@ public class FriendListFeedActivity extends Activity {
 		// clean up
     	Log.v(TAG, "I'm destroyed!");
         for (FriendFeed feed: friendFeedList) {
-        	if (feed.getChallengeType() == Challenge.Type.SNAP_PICTURE)
+        	if (feed.getChallengeType() == Challenge.Type.SNAP_PICTURE) {
         		getContentResolver().delete(feed.getActivitySnapPictureUri(), null, null);
-        	if (feed.getFriendPictureUri() != null)
+        		feed.setActivitySnapPictureUri(null);
+        	}	
+        	
+        	if (feed.getFriendPictureUri() != null) {
         		getContentResolver().delete(feed.getFriendPictureUri(), null, null);
+        		feed.setFriendPictureUri(null);
+        	}
         }
+        list = null;
+        adapter = null;
+        friendFeedList = null;
+        System.gc();
         super.onDestroy();
 	}
 }

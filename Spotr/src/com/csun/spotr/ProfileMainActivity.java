@@ -12,10 +12,12 @@ import android.widget.TabHost;
 
 public class ProfileMainActivity extends TabActivity {
 	private static final String TAG = "[ProfileMainActivity]";
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.place_main);
+		
 		Resources res = getResources(); 
 		TabHost tabHost = getTabHost(); 
 		TabHost.TabSpec spec; 

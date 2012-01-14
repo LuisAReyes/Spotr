@@ -36,6 +36,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 
+import com.csun.spotr.singleton.CurrentUriList;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.core.User;
 import com.csun.spotr.gui.FriendListMainItemAdapter;
@@ -46,16 +47,18 @@ public class FriendListActionActivity extends Activity {
 	private static final String TAG = "(FriendListActionActivity)";
 	private static final String SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
 	private static final String SEND_REQUEST_URL = "http://107.22.209.62/android/send_friend_request.php";
-	private EditText editTextSearch = null;
 	private ListView list = null;
 	private FriendListMainItemAdapter adapter = null;
 	private List<User> userList = null;
+	private Button buttonSearch = null;
+	private EditText editTextSearch = null;
+	private SearchFriendsTask task = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list_action);
-		Button buttonSearch = (Button) findViewById(R.id.friend_list_action_xml_button_search);
+		buttonSearch = (Button) findViewById(R.id.friend_list_action_xml_button_search);
 		editTextSearch = (EditText) findViewById(R.id.friend_list_action_xml_edittext_search);
 		
 		// TODO: should we allow user to search on an empty string? which
@@ -65,6 +68,17 @@ public class FriendListActionActivity extends Activity {
 				// hide keyboard right away
 				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(editTextSearch.getWindowToken(), 0);
+				
+				// clean up
+				if (userList != null) {
+					if (userList != null) {
+				        for (User user : userList) {
+				        	getContentResolver().delete(user.getImageUri(), null, null);
+				        	user.setImageUri(null);
+				        }
+					}
+				}
+				
 				// create a new list of items
 				userList = new ArrayList<User>();
 				list = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
@@ -75,8 +89,10 @@ public class FriendListActionActivity extends Activity {
 						startDialog(userList.get(position));
 					}
 				});
+				
 				// start task
-				new SearchFriendsTask().execute(editTextSearch.getText().toString());
+				task = new SearchFriendsTask();
+				task.execute(editTextSearch.getText().toString());
 			}
 		});
 	}
@@ -84,29 +100,28 @@ public class FriendListActionActivity extends Activity {
 	private class SearchFriendsTask extends AsyncTask<String, User, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
+		private JSONArray array = null;
 		@Override
 		protected void onPreExecute() {
 			// display waiting dialog
 			progressDialog = new ProgressDialog(FriendListActionActivity.this);
-			progressDialog.setMessage("Sending request...");
+			progressDialog.setMessage("Searching...please wait!");
 			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 		}
 		
 		@Override
 	    protected void onProgressUpdate(User... users) {
-			progressDialog.dismiss();
 			userList.add(users[0]);
 			adapter.notifyDataSetChanged();
-			// adapter.notifyDataSetInvalidated();
 	    }
 		
 		@Override
 		protected Boolean doInBackground(String... text) {
 			userData.add(new BasicNameValuePair("text", text[0].toString()));
 			userData.add(new BasicNameValuePair("users_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
-			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(SEARCH_FRIENDS_URL, userData);
+			array = JsonHelper.getJsonArrayFromUrlWithData(SEARCH_FRIENDS_URL, userData);
 			if (array != null) {
 				try {
 					for (int i = 0; i < array.length(); ++i) {
@@ -131,8 +146,9 @@ public class FriendListActionActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
+			AlertDialog dialogMessage;
 			if (result == false) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
+				dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("No name match this search criteria. Please try again!");
 				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
@@ -142,6 +158,13 @@ public class FriendListActionActivity extends Activity {
 				});
 				dialogMessage.show();	
 			}
+			
+			progressDialog = null;
+			dialogMessage = null;
+			userData = null;
+			array = null;
+			
+			System.gc();
 		}
 	}
 
@@ -181,6 +204,7 @@ public class FriendListActionActivity extends Activity {
 	private class SendFriendRequestTask extends AsyncTask<String, Integer, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
+		private JSONObject json = null;
 
 		@Override
 		protected void onPreExecute() {
@@ -197,7 +221,7 @@ public class FriendListActionActivity extends Activity {
 			userData.add(new BasicNameValuePair("users_id", datas[0].toString()));
 			userData.add(new BasicNameValuePair("friend_id", datas[1].toString()));
 			userData.add(new BasicNameValuePair("friend_message", datas[2].toString()));
-			JSONObject json = JsonHelper.getJsonObjectFromUrlWithData(SEND_REQUEST_URL, userData);
+			json = JsonHelper.getJsonObjectFromUrlWithData(SEND_REQUEST_URL, userData);
 			try {
 				if (json.getString("result").equals("success")) {
 					return true;
@@ -211,9 +235,10 @@ public class FriendListActionActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
+			AlertDialog dialogMessage = null;
 			progressDialog.dismiss();
 			if (result == true) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
+				dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("Request has been sent succesfully");
 				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
@@ -224,7 +249,7 @@ public class FriendListActionActivity extends Activity {
 				dialogMessage.show();	
 			}
 			else {
-				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
+				dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("Fail to send request");
 				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
@@ -234,6 +259,12 @@ public class FriendListActionActivity extends Activity {
 				});
 				dialogMessage.show();	
 			}
+		
+			progressDialog = null;
+			dialogMessage = null;
+			userData = null;
+			json = null;
+			System.gc();
 		}
 	}
 	
@@ -241,15 +272,21 @@ public class FriendListActionActivity extends Activity {
 		ContentValues values = new ContentValues(1);
 		values.put(Media.MIME_TYPE, "image/jpeg");
 		Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
+		OutputStream outStream;
+		
 		try {
-		    OutputStream outStream = getContentResolver().openOutputStream(uri);
+		    outStream = getContentResolver().openOutputStream(uri);
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 1, outStream);
 		    outStream.close();
 		} 
 		catch (Exception e) {
 		    Log.e(TAG, "exception while writing image", e);
 		}
+		
 		bitmap.recycle();
+		bitmap = null;
+		outStream = null;
+		System.gc();
 		return uri;
 	}
 	
@@ -291,9 +328,18 @@ public class FriendListActionActivity extends Activity {
 		if (userList != null) {
 	        for (User user : userList) {
 	        	getContentResolver().delete(user.getImageUri(), null, null);
+	        	user.setImageUri(null);
 	        }
 		}
+		
+		list = null;
+		adapter = null;
+		userList = null; 
+		list = null;
+		buttonSearch = null;
+		editTextSearch = null;
+		task = null;
+		System.gc();
         super.onDestroy();
 	}
-	
 }

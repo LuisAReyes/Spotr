@@ -15,10 +15,13 @@ import com.csun.spotr.helper.JsonHelper;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
@@ -29,11 +32,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 	private static final String TAG = "[LoginActivity]";
 	private static final String LOGIN_URL = "http://107.22.209.62/android/login.php";
+	private static final int LOGIN_ERROR = 0;
+	private static final int CONNECTION_ERROR = 1;
+	
 	private EditText edittextUsername;
 	private EditText edittextPassword;
 	private SharedPreferences prefs;
@@ -59,7 +64,15 @@ public class LoginActivity extends Activity {
 		edittextUsername = (EditText) findViewById(R.id.login_xml_edittext_email_id);
 		Button buttonLogin = (Button) findViewById(R.id.login_xml_button_login);
 		Button buttonSignup = (Button) findViewById(R.id.login_xml_button_signup);
-
+		
+		// check Internet connection
+		if (isNetworkAvailableAndConnected() == false) {
+			showDialog(CONNECTION_ERROR);
+			buttonLogin.setEnabled(false);
+			buttonSignup.setEnabled(false);
+		}
+	
+		// check saved password
 		if (prefsSavePassword) {
 			edittextUsername.append(prefsUsername);
 			edittextPassword.append(prefsPassword);
@@ -106,7 +119,7 @@ public class LoginActivity extends Activity {
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
-		case 0 :
+		case LOGIN_ERROR :
 			return new 
 				AlertDialog.Builder(this)
 					.setIcon(R.drawable.error_circle)
@@ -117,6 +130,18 @@ public class LoginActivity extends Activity {
 							
 						}
 					}).create();
+		
+		case CONNECTION_ERROR: 
+			return new 
+					AlertDialog.Builder(this)
+						.setIcon(R.drawable.error_circle)
+						.setTitle("Error network connection")
+						.setMessage("Please turn on your network connection and try again!")
+						.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+								
+							}
+						}).create();
 		}
 		return null;
 	}
@@ -168,7 +193,7 @@ public class LoginActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			if (result == false) {
-				showDialog(0);
+				showDialog(LOGIN_ERROR);
 			}
 			else {
 				startActivity(new Intent("com.csun.spotr.MainMenuActivity"));
@@ -189,5 +214,20 @@ public class LoginActivity extends Activity {
 	
 	public LoginTask getLoginTask() {
 		return task;
+	}
+	
+	private boolean isNetworkAvailableAndConnected() {
+		ConnectivityManager conManager =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = conManager.getActiveNetworkInfo();
+		if (networkInfo == null) {
+			return false;
+		}
+		else if (!networkInfo.isConnected()) {
+			return false;
+		}
+		else if (!networkInfo.isAvailable()) {
+			return false;
+		}
+		return true;
 	}
 }

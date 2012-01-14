@@ -166,8 +166,10 @@ public class LocalMapViewActivity extends MapActivity {
 			listener = new MyLocationListener();
 			manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			// NETWORK is faster
-			if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) 
+			if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 				manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
+				// manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
+			}
 			
 			// display waiting dialog
 			progressDialog = new ProgressDialog(LocalMapViewActivity.this);

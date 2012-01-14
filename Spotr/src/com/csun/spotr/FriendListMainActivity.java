@@ -25,6 +25,7 @@ public class FriendListMainActivity extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list);
+		
 		Resources res = getResources(); 
 		TabHost tabHost = getTabHost(); 
 		TabHost.TabSpec spec; 

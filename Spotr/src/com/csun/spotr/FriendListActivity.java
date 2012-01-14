@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.csun.spotr.core.User;
+import com.csun.spotr.singleton.CurrentUriList;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.gui.FriendListMainItemAdapter;
 import com.csun.spotr.helper.ImageHelper;
@@ -36,8 +37,9 @@ public class FriendListActivity extends Activity {
 	private static final String TAG = "(FriendListActivity)";
 	private static final String GET_FRIENDS_URL = "http://107.22.209.62/android/get_friends.php";
 	private ListView list = null;
-	private FriendListMainItemAdapter adapter;
+	private FriendListMainItemAdapter adapter = null;
 	private List<User> userList = new ArrayList<User>();
+	private GetFriendsTask task = null;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,35 +56,36 @@ public class FriendListActivity extends Activity {
 			}
 		});
 		// run task
-		new GetFriendsTask().execute();
+		task = new GetFriendsTask();
+		task.execute();
 	}
 	
 	private class GetFriendsTask extends AsyncTask<Void, User, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>(); 
 		private ProgressDialog progressDialog = null;
+		private JSONArray array = null;
+		
 		@Override
 		protected void onPreExecute() {
 			userData.add(new BasicNameValuePair("id", Integer.toString(CurrentUser.getCurrentUser().getId())));
 			// display waiting dialog
 			progressDialog = new ProgressDialog(FriendListActivity.this);
-			progressDialog.setMessage("Sending request...");
+			progressDialog.setMessage("Loading friends...please wait");
 			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 		}
 		
 		@Override
 	    protected void onProgressUpdate(User... users) {
-			progressDialog.dismiss();
 			userList.add(users[0]);
 			adapter.notifyDataSetChanged();
-			// adapter.notifyDataSetInvalidated();
 	    }
 		
 		@Override
 		protected Boolean doInBackground(Void...voids) {
 			// initialize list of user
-			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_FRIENDS_URL, userData);
+			array = JsonHelper.getJsonArrayFromUrlWithData(GET_FRIENDS_URL, userData);
 			if (array != null) { 
 				try {
 					for (int i = 0; i < array.length(); ++i) { 
@@ -107,8 +110,9 @@ public class FriendListActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
+			AlertDialog dialogMessage = null;
 			if (result == false) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActivity.this).create();
+				dialogMessage = new AlertDialog.Builder(FriendListActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("You don't have any friend yet!");
 				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
@@ -118,11 +122,15 @@ public class FriendListActivity extends Activity {
 				});
 				dialogMessage.show();
 			}
-		}
 			
+			progressDialog = null;
+			dialogMessage = null;
+			userData = null;
+			array = null;
+			
+			System.gc();
+		}
 	}
-	
-	
 	
 	private void startDialog(final User user) {
 		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
@@ -154,15 +162,21 @@ public class FriendListActivity extends Activity {
 		ContentValues values = new ContentValues(1);
 		values.put(Media.MIME_TYPE, "image/jpeg");
 		Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
+		OutputStream outStream;
 		try {
-		    OutputStream outStream = getContentResolver().openOutputStream(uri);
+		    outStream = getContentResolver().openOutputStream(uri);
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 10, outStream);
 		    outStream.close();
 		} 
 		catch (Exception e) {
 		    Log.e(TAG, "exception while writing image", e);
 		}
+		
 		bitmap.recycle();
+		bitmap = null;
+		outStream = null;
+		
+		System.gc();
 		return uri;
 	}
 	
@@ -178,7 +192,15 @@ public class FriendListActivity extends Activity {
 		// clean up
         for (User user : userList) {
         	getContentResolver().delete(user.getImageUri(), null, null);
+        	user.setImageUri(null);
         }
+        
+        list = null;
+		adapter = null;
+		userList = null;
+		task = null;
+		
+		System.gc();
         super.onDestroy();
 	}
 }
