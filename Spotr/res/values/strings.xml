@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">The Spotr</string>
+    <string name="app_name">SPOTr</string>
     <!-- login.xml -->
     <string name="login_xml_textview_email_str">Login (usually email)</string>
     <string name="login_xml_textview_password_str">Password</string>
@@ -8,6 +8,7 @@
     <string name="login_xml_checkbox_visible_password_str">Show visible password</string>
     <string name="login_xml_button_login_str">Log In</string>
     <string name="login_xml_button_signup_str">Sign Up</string> 
+    <string name="login_xml_textview_version_str">V1.0</string>
     <string name="login_xml_hyperlink_signup_str"><a href="http://107.22.209.62/web_app/register.php">Sign Up</a></string>
         
     <!-- signup.xml - Tu Tran 11/9/2011-->
@@ -29,7 +30,7 @@
     <string name="main_menu_xml_button_friend_str">Friends</string>
     <string name="main_menu_xml_button_challenge_str">Challenges</string>
     <string name="main_menu_xml_button_spot_str">Spots</string>    
-    <string name="main_menu_xml_slider_notification_str">Notification</string>
+    <string name="main_menu_xml_slider_notification_str">Notifications</string>
     
     <!-- options_menu.xml -->
     <string name="options_menu_xml_item_logout_str">Logout</string>
@@ -65,5 +66,4 @@
         <item>Fifteen</item>
         <item>Sixteen</item>
     </string-array>
-    <string name="login_xml_textview_version_str">V1.0</string>
 </resources>

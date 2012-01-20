@@ -3,14 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg_0"
+    android:background="@drawable/background_selector"
     >
 
     <ImageView
         android:id="@+id/login_xml_imageview_logo_icon"
         android:layout_width="239px"
         android:layout_height="77px"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/logo_0" />
 
