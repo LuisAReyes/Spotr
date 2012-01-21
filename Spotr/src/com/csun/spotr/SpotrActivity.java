@@ -4,19 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Window;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
 public class SpotrActivity extends Activity {
-	private static final String TAG = "[SpotrActivity]";
+	private static final String TAG = "(SpotrActivity)";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 
 		Button b1 = (Button) findViewById(R.id.test_login);
@@ -39,14 +37,6 @@ public class SpotrActivity extends Activity {
 		b3.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent i = new Intent("com.csun.spotr.MapViewActivity");
-				startActivity(i);
-			}
-		});
-		
-		Button b4 = (Button) findViewById(R.id.test_place);
-		b4.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.PlaceActivity");
 				startActivity(i);
 			}
 		});

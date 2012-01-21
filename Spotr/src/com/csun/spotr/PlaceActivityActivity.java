@@ -10,9 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.adapter.PlaceActivityItemAdapter;
 import com.csun.spotr.core.Challenge;
 import com.csun.spotr.core.PlaceLog;
-import com.csun.spotr.gui.PlaceActivityItemAdapter;
 import com.csun.spotr.helper.ImageHelper;
 import com.csun.spotr.helper.JsonHelper;
 

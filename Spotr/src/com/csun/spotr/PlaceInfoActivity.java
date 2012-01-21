@@ -9,8 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.csun.spotr.adapter.BalloonItemizedOverlay;
 import com.csun.spotr.core.Place;
-import com.csun.spotr.gui.BalloonItemizedOverlay;
 import com.csun.spotr.helper.JsonHelper;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -93,8 +93,12 @@ public class PlaceInfoActivity extends MapActivity {
 						// optional parameters
 						.name(array.getJSONObject(0).getString("spots_tbl_name"))
 						.address(array.getJSONObject(0).getString("spots_tbl_description"))
-						.phoneNumber(array.getJSONObject(0).getString("spots_tbl_phone"))
 							.build();
+				
+				
+				// if (!array.getJSONObject(0).getString("spots_tbl_phone").equals("")) {
+					// place.setPhoneNumber(array.getJSONObject(0).getString("spots_tbl_phone"));
+				// }
 			}
 			catch (JSONException e) {
 				Log.e(TAG + ".filterPlaces() : ", "JSON error parsing data" + e.toString());
@@ -128,8 +132,9 @@ public class PlaceInfoActivity extends MapActivity {
 			ImageView image = (ImageView) findViewById(R.id.place_info_xml_imageview_picture);
 			image.setImageResource(R.drawable.ic_launcher);
 			
+			
 			Button phone = (Button) findViewById(R.id.place_info_xml_button_phone_number);
-			phone.setText("(" + place.getPhoneNumber().substring(0, 3) + ")-" + place.getPhoneNumber().substring(3, 6) + "-" + place.getPhoneNumber().substring(6));
+			phone.setText("(818)-222-3333");
 			
 			OverlayItem overlay = new OverlayItem(new GeoPoint((int) (place.getLatitude() * 1E6), (int) (place.getLongitude() * 1E6)), place.getName(), place.getAddress());
 			itemizedOverlay.addOverlay(overlay, place);

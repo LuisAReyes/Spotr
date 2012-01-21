@@ -10,8 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.csun.spotr.adapter.ProfileItemAdapter;
 import com.csun.spotr.core.User;
-import com.csun.spotr.gui.ProfileItemAdapter;
 import com.csun.spotr.helper.ImageHelper;
 import com.csun.spotr.helper.JsonHelper;
 import com.google.android.maps.GeoPoint;

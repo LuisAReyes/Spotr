@@ -11,9 +11,9 @@ import org.json.JSONObject;
 
 import com.csun.spotr.singleton.CurrentUriList;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.adapter.FriendRequestItemAdapter;
 import com.csun.spotr.core.FriendRequest;
 import com.csun.spotr.core.User;
-import com.csun.spotr.gui.FriendRequestItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
 import android.app.Activity;
@@ -119,7 +119,7 @@ public class MainMenuActivity extends Activity {
 		btnSpots = (Button) findViewById(R.id.main_menu_xml_button_spot_icon);
 		btnSpots.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.LocalPlaceActivity");
+				Intent i = new Intent("com.csun.spotr.PlaceActivity");
 				startActivity(i);
 			}
 		});

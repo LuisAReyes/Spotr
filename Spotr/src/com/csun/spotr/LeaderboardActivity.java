@@ -45,9 +45,9 @@ import android.graphics.Color;
 import android.widget.Button;
 
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.adapter.FriendListMainItemAdapter;
+import com.csun.spotr.adapter.LeaderboardItemAdapter;
 import com.csun.spotr.core.User;
-import com.csun.spotr.gui.FriendListMainItemAdapter;
-import com.csun.spotr.gui.LeaderboardItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
 public class LeaderboardActivity extends Activity {

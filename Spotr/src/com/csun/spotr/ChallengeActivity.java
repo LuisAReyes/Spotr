@@ -7,7 +7,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.csun.spotr.gui.ChallengeItemAdapter;
+import com.csun.spotr.adapter.ChallengeItemAdapter;
 
 public class ChallengeActivity extends Activity {
 	private static final String TAG = "[ChallengeActivity]";

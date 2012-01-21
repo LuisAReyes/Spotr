@@ -1,6 +1,6 @@
 package com.csun.spotr;
 
-import com.csun.spotr.gui.RewardImageAdapter;
+import com.csun.spotr.adapter.RewardImageAdapter;
 
 import android.app.Activity;
 import android.app.Dialog;

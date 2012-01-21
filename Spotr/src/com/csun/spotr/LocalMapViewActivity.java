@@ -35,8 +35,8 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.adapter.BalloonItemizedOverlay;
 import com.csun.spotr.core.Place;
-import com.csun.spotr.gui.BalloonItemizedOverlay;
 import com.csun.spotr.helper.ImageHelper;
 import com.csun.spotr.helper.GooglePlaceHelper;
 import com.csun.spotr.helper.JsonHelper;
@@ -50,7 +50,7 @@ import com.google.android.maps.OverlayItem;
 public class LocalMapViewActivity extends MapActivity {
 	private static final String TAG = "[LocalMapViewActivity]";
 	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
-	private static final String RADIUS = "500";
+	private static final String RADIUS = "100";
 	private MapView mapView = null;
 	private List<Overlay> mapOverlays = null;
 	private MyItemizedOverlay itemizedOverlay = null;

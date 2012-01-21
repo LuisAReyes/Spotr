@@ -23,24 +23,23 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore.Images.Media;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 
-import com.csun.spotr.singleton.CurrentUriList;
+import com.csun.spotr.core.adapter_item.UserItem;
 import com.csun.spotr.singleton.CurrentUser;
-import com.csun.spotr.core.User;
-import com.csun.spotr.gui.FriendListMainItemAdapter;
-import com.csun.spotr.helper.ImageHelper;
+import com.csun.spotr.adapter.UserItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
 public class FriendListActionActivity extends Activity {
@@ -48,59 +47,93 @@ public class FriendListActionActivity extends Activity {
 	private static final String SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
 	private static final String SEND_REQUEST_URL = "http://107.22.209.62/android/send_friend_request.php";
 	private ListView list = null;
-	private FriendListMainItemAdapter adapter = null;
-	private List<User> userList = null;
+	private UserItemAdapter adapter = null;
+	private List<UserItem> userItemList = null;
 	private Button buttonSearch = null;
 	private EditText editTextSearch = null;
 	private SearchFriendsTask task = null;
-	
+
+	private boolean loading = true;
+	private int prevTotal = 0;
+	private final int threshHold = 10;
+	private int counter = 0;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list_action);
 		buttonSearch = (Button) findViewById(R.id.friend_list_action_xml_button_search);
 		editTextSearch = (EditText) findViewById(R.id.friend_list_action_xml_edittext_search);
-		
+
 		// TODO: should we allow user to search on an empty string? which
 		// returns the whole list of users in our database
 		buttonSearch.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// hide keyboard right away
-				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(editTextSearch.getWindowToken(), 0);
-				
-				// clean up
-				if (userList != null) {
-					if (userList != null) {
-				        for (User user : userList) {
-				        	getContentResolver().delete(user.getImageUri(), null, null);
-				        	user.setImageUri(null);
-				        }
-					}
-				}
-				
+
 				// create a new list of items
-				userList = new ArrayList<User>();
 				list = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
-				adapter = new FriendListMainItemAdapter(FriendListActionActivity.this, userList);
+				/*
+				 * View footerView =
+				 * ((LayoutInflater)FriendListActionActivity.this
+				 * .getSystemService
+				 * (Context.LAYOUT_INFLATER_SERVICE)).inflate(R.
+				 * layout.listview_footer, null, false);
+				 * list.addFooterView(footerView);
+				 */
+				counter = 0;
+				userItemList = new ArrayList<UserItem>();
+				adapter = new UserItemAdapter(FriendListActionActivity.this, userItemList);
 				list.setAdapter(adapter);
 				list.setOnItemClickListener(new OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-						startDialog(userList.get(position));
+						startDialog(userItemList.get(position));
 					}
 				});
-				
+
 				// start task
-				task = new SearchFriendsTask();
-				task.execute(editTextSearch.getText().toString());
+				task = new SearchFriendsTask(editTextSearch.getText().toString(), true);
+				task.execute(counter);
+
+				list.setOnScrollListener(new OnScrollListener() {
+					public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+						if (loading) {
+							if (totalItemCount > prevTotal) {
+								loading = false;
+								prevTotal = totalItemCount;
+								Log.d(TAG, Integer.toString(totalItemCount));
+							}
+						}
+
+						if (!loading && ((totalItemCount - visibleItemCount) <= (firstVisibleItem + threshHold))) {
+							counter += 10;
+							loading = true;
+							new SearchFriendsTask(editTextSearch.getText().toString(), false).execute(counter);
+						}
+					}
+
+					public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+					}
+				});
 			}
 		});
 	}
 
-	private class SearchFriendsTask extends AsyncTask<String, User, Boolean> {
-		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
+	private class SearchFriendsTask extends AsyncTask<Integer, UserItem, Boolean> {
+		private List<NameValuePair> clientData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
 		private JSONArray array = null;
+		private final String criteria;
+		private boolean displayDialogFlag;
+
+		public SearchFriendsTask(String criteria, boolean flag) {
+			this.criteria = criteria;
+			displayDialogFlag = flag;
+		}
+
 		@Override
 		protected void onPreExecute() {
 			// display waiting dialog
@@ -110,31 +143,27 @@ public class FriendListActionActivity extends Activity {
 			progressDialog.setCancelable(false);
 			progressDialog.show();
 		}
-		
+
 		@Override
-	    protected void onProgressUpdate(User... users) {
-			userList.add(users[0]);
+		protected void onProgressUpdate(UserItem... users) {
+			userItemList.add(users[0]);
 			adapter.notifyDataSetChanged();
-	    }
-		
+		}
+
 		@Override
-		protected Boolean doInBackground(String... text) {
-			userData.add(new BasicNameValuePair("text", text[0].toString()));
-			userData.add(new BasicNameValuePair("users_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
-			array = JsonHelper.getJsonArrayFromUrlWithData(SEARCH_FRIENDS_URL, userData);
+		protected Boolean doInBackground(Integer... offsets) {
+			clientData.add(new BasicNameValuePair("text", criteria));
+			clientData.add(new BasicNameValuePair("users_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
+			clientData.add(new BasicNameValuePair("offset", Integer.toString(offsets[0])));
+			array = JsonHelper.getJsonArrayFromUrlWithData(SEARCH_FRIENDS_URL, clientData);
 			if (array != null) {
 				try {
 					for (int i = 0; i < array.length(); ++i) {
-						publishProgress(new User.Builder(
-								array.getJSONObject(i).getInt("users_tbl_id"),
-								array.getJSONObject(i).getString("users_tbl_username"),
-								array.getJSONObject(i).getString("users_tbl_password"))
-									.imageUri(constructUriFromBitmap(ImageHelper.downloadImage(array.getJSONObject(i).getString("users_tbl_user_image_url"))))
-										.build());
+						publishProgress(new UserItem(array.getJSONObject(i).getInt("users_tbl_id"), array.getJSONObject(i).getString("users_tbl_username"), array.getJSONObject(i).getString("users_tbl_user_image_url")));
 					}
 				}
 				catch (JSONException e) {
-					Log.e(TAG + "SearchFriendTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+					Log.e(TAG + "SearchFriendTask.doInBackGround(Integer... offsets) : ", "JSON error parsing data" + e.toString());
 				}
 				return true;
 			}
@@ -146,9 +175,8 @@ public class FriendListActionActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
-			AlertDialog dialogMessage;
-			if (result == false) {
-				dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
+			if (result == false && displayDialogFlag == true) {
+				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("No name match this search criteria. Please try again!");
 				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
@@ -156,19 +184,12 @@ public class FriendListActionActivity extends Activity {
 						dialog.dismiss();
 					}
 				});
-				dialogMessage.show();	
+				dialogMessage.show();
 			}
-			
-			progressDialog = null;
-			dialogMessage = null;
-			userData = null;
-			array = null;
-			
-			System.gc();
 		}
 	}
 
-	private void startDialog(final User user) {
+	private void startDialog(final UserItem user) {
 		AlertDialog.Builder builder;
 		Context c = this;
 		final AlertDialog dialog;
@@ -185,10 +206,7 @@ public class FriendListActionActivity extends Activity {
 					message = editTextMessage.getText().toString();
 				}
 				SendFriendRequestTask task = new SendFriendRequestTask();
-				task.execute(
-					Integer.toString(CurrentUser.getCurrentUser().getId()),
-					Integer.toString(user.getId()), 
-					message);
+				task.execute(Integer.toString(CurrentUser.getCurrentUser().getId()), Integer.toString(user.getId()), message);
 			}
 		});
 
@@ -199,8 +217,7 @@ public class FriendListActionActivity extends Activity {
 		dialog = builder.create();
 		dialog.show();
 	}
-	
-	
+
 	private class SendFriendRequestTask extends AsyncTask<String, Integer, Boolean> {
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
@@ -226,7 +243,7 @@ public class FriendListActionActivity extends Activity {
 				if (json.getString("result").equals("success")) {
 					return true;
 				}
-			} 
+			}
 			catch (JSONException e) {
 				Log.e(TAG + "SnapPictureTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
 			}
@@ -246,7 +263,7 @@ public class FriendListActionActivity extends Activity {
 						dialog.dismiss();
 					}
 				});
-				dialogMessage.show();	
+				dialogMessage.show();
 			}
 			else {
 				dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
@@ -257,9 +274,9 @@ public class FriendListActionActivity extends Activity {
 						dialog.dismiss();
 					}
 				});
-				dialogMessage.show();	
+				dialogMessage.show();
 			}
-		
+
 			progressDialog = null;
 			dialogMessage = null;
 			userData = null;
@@ -267,79 +284,43 @@ public class FriendListActionActivity extends Activity {
 			System.gc();
 		}
 	}
-	
-	private Uri constructUriFromBitmap(Bitmap bitmap) {
-		ContentValues values = new ContentValues(1);
-		values.put(Media.MIME_TYPE, "image/jpeg");
-		Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
-		OutputStream outStream;
-		
-		try {
-		    outStream = getContentResolver().openOutputStream(uri);
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 1, outStream);
-		    outStream.close();
-		} 
-		catch (Exception e) {
-		    Log.e(TAG, "exception while writing image", e);
-		}
-		
-		bitmap.recycle();
-		bitmap = null;
-		outStream = null;
-		System.gc();
-		return uri;
-	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
 		switch (item.getItemId()) {
-			case R.id.options_menu_xml_item_setting_icon:
-				intent = new Intent("com.csun.spotr.SettingsActivity");
-				startActivity(intent);
-				finish();
-				break;
-			case R.id.options_menu_xml_item_logout_icon:
-				SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
-				editor.clear();
-				editor.commit();
-				intent = new Intent("com.csun.spotr.LoginActivity");
-				startActivity(intent);
-				finish();
-				break;
-			case R.id.options_menu_xml_item_mainmenu_icon:
-				intent = new Intent("com.csun.spotr.MainMenuActivity");
-				startActivity(intent);
-				finish();
-				break;
+		case R.id.options_menu_xml_item_setting_icon :
+			intent = new Intent("com.csun.spotr.SettingsActivity");
+			startActivity(intent);
+			finish();
+			break;
+		case R.id.options_menu_xml_item_logout_icon :
+			SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
+			editor.clear();
+			editor.commit();
+			intent = new Intent("com.csun.spotr.LoginActivity");
+			startActivity(intent);
+			finish();
+			break;
+		case R.id.options_menu_xml_item_mainmenu_icon :
+			intent = new Intent("com.csun.spotr.MainMenuActivity");
+			startActivity(intent);
+			finish();
+			break;
 		}
 		return true;
 	}
-	
+
 	@Override
-    public void onPause() {
+	public void onPause() {
 		Log.v(TAG, "I'm paused!");
-        super.onPause();
+		super.onPause();
 	}
-	
+
 	@Override
-    public void onDestroy() {
+	public void onDestroy() {
 		Log.v(TAG, "I'm destroyed!");
-		if (userList != null) {
-	        for (User user : userList) {
-	        	getContentResolver().delete(user.getImageUri(), null, null);
-	        	user.setImageUri(null);
-	        }
-		}
-		
-		list = null;
-		adapter = null;
-		userList = null; 
-		list = null;
-		buttonSearch = null;
-		editTextSearch = null;
-		task = null;
-		System.gc();
-        super.onDestroy();
+		adapter.imageLoader.clearCache();
+		super.onDestroy();
 	}
 }
