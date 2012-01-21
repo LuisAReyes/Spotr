@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Friend Profile Page"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageView
+        android:id="@+id/friend_profile_xml_friend_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nick Name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/friend_profile_xml_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="..."
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Challenges Done"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/friend_profile_xml_challenges_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="..."
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Places Visited"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/friend_profile_xml_places_visited"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="..."
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Points"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/friend_profile_xml_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="..."
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    
+
+</LinearLayout>

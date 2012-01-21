@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.TabHost;
 
 public class PlaceMainActivity extends TabActivity {
-	private static final String TAG = "[PlaceMainActivity]";
+	private final String TAG = "[PlaceMainActivity]";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

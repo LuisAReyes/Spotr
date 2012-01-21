@@ -12,7 +12,7 @@ import org.json.JSONException;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.adapter.PlaceActivityItemAdapter;
 import com.csun.spotr.core.Challenge;
-import com.csun.spotr.core.PlaceLog;
+import com.csun.spotr.core.adapter_item.PlaceFeedItem;
 import com.csun.spotr.helper.ImageHelper;
 import com.csun.spotr.helper.JsonHelper;
 
@@ -38,12 +38,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class PlaceActivityActivity extends Activity {
-	private static final String TAG = "(PlaceActivityActivity)";
-	private static final String GET_PLACELOG_URL = "http://107.22.209.62/android/get_activities.php";
+	private final String TAG = "(PlaceActivityActivity)";
+	private final String GET_PLACELOG_URL = "http://107.22.209.62/android/get_activities.php";
 	private int currentPlaceId = 0;
 	private ListView list = null;
 	private PlaceActivityItemAdapter adapter = null;
-	private List<PlaceLog> placeLogList = new ArrayList<PlaceLog>();
+	private List<PlaceFeedItem> placeLogList = new ArrayList<PlaceFeedItem>();
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class PlaceActivityActivity extends Activity {
 		new GetPlaceLogTask().execute();
     }
     
-    private class GetPlaceLogTask extends AsyncTask<Void, PlaceLog, Boolean> {
+    private class GetPlaceLogTask extends AsyncTask<Void, PlaceFeedItem, Boolean> {
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>(); 
 		private ProgressDialog progressDialog = null;
 		@Override
@@ -79,7 +79,7 @@ public class PlaceActivityActivity extends Activity {
 		}
 		
 		@Override
-	    protected void onProgressUpdate(PlaceLog... placeLogs) {
+	    protected void onProgressUpdate(PlaceFeedItem... placeLogs) {
 			placeLogList.add(placeLogs[0]);
 			adapter.notifyDataSetChanged();
 	    }
@@ -102,7 +102,7 @@ public class PlaceActivityActivity extends Activity {
 						}
 						
 						publishProgress(
-							new PlaceLog.Builder(array.getJSONObject(i).getInt("activity_tbl_id"),
+							new PlaceFeedItem.Builder(array.getJSONObject(i).getInt("activity_tbl_id"),
 								array.getJSONObject(i).getString("users_tbl_username"),
 								Challenge.returnType(array.getJSONObject(i).getString("challenges_tbl_type")),
 								array.getJSONObject(i).getString("activity_tbl_created"))
@@ -195,7 +195,7 @@ public class PlaceActivityActivity extends Activity {
     public void onDestroy() {
     	Log.v(TAG, "I'm destroyed!");
     	if (placeLogList != null) {
-	        for (PlaceLog log: placeLogList) {
+	        for (PlaceFeedItem log: placeLogList) {
 	        	if (log.getChallengeType() == Challenge.Type.SNAP_PICTURE)
 	        		getContentResolver().delete(log.getSnapPictureUri(), null, null);
 	        	

@@ -1,25 +1,15 @@
 package com.csun.spotr;
 
-import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TabHost;
-import android.widget.Toast;
 
 public class FriendListMainActivity extends TabActivity {
-	private static final String TAG = "[FriendListMainActivity]";
+	private final String TAG = "(FriendListMainActivity)";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

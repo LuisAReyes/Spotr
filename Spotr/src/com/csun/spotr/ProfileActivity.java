@@ -8,14 +8,11 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.csun.spotr.adapter.ProfileItemAdapter;
 import com.csun.spotr.core.User;
 import com.csun.spotr.helper.ImageHelper;
 import com.csun.spotr.helper.JsonHelper;
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.OverlayItem;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -33,22 +30,20 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class ProfileActivity extends Activity {
-	private static final String TAG = "(ProfileActivity)";
-	private static final String GET_USER_DETAIL_URL = "http://107.22.209.62/android/get_user_detail.php";
-	private static final int CAMERA_PICTURE = 111;
-	private static final int GALLERY_PICTURE = 222;
+	private final String TAG = "(ProfileActivity)";
+	private final String GET_USER_DETAIL_URL = "http://107.22.209.62/android/get_user_detail.php";
+	private final int CAMERA_PICTURE = 111;
+	private final int GALLERY_PICTURE = 222;
 	private ListView listViewProfile = null;
 	private ProfileItemAdapter adapter = null;
 	private int currentUserId = 0;

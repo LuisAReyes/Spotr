@@ -15,13 +15,13 @@ import android.widget.TextView;
 
 import com.csun.spotr.R;
 import com.csun.spotr.core.Challenge;
-import com.csun.spotr.core.PlaceLog;
+import com.csun.spotr.core.adapter_item.PlaceFeedItem;
 
 public class PlaceActivityItemAdapter extends BaseAdapter {
-	private List<PlaceLog> items;
+	private List<PlaceFeedItem> items;
 	private Activity context;
 	
-	public PlaceActivityItemAdapter(Activity context, List<PlaceLog> items) {
+	public PlaceActivityItemAdapter(Activity context, List<PlaceFeedItem> items) {
 		this.context = context;
 		this.items = items;
 	}

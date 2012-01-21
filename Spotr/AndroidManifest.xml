@@ -256,6 +256,15 @@
             </intent-filter>
         </activity>
         
+         <!-- Friend Profile Activity -->
+        <activity android:name=".FriendProfileActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
+            <intent-filter >
+                <action android:name="com.csun.spotr.FriendProfileActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
         <!-- Profile Edit Activity -->
  		<activity android:name=".ProfileEditActivity" 
             	  android:configChanges="orientation|keyboardHidden">

@@ -10,7 +10,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class SettingsActivity extends Activity {
-	private static final String TAG = "[SettingActivity]";
+	private final String TAG = "[SettingActivity]";
 	private String[] defaultView;
 
 	@Override

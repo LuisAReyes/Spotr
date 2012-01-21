@@ -13,16 +13,12 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore.Images.Media;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -43,9 +39,9 @@ import com.csun.spotr.adapter.UserItemAdapter;
 import com.csun.spotr.helper.JsonHelper;
 
 public class FriendListActionActivity extends Activity {
-	private static final String TAG = "(FriendListActionActivity)";
-	private static final String SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
-	private static final String SEND_REQUEST_URL = "http://107.22.209.62/android/send_friend_request.php";
+	private final String TAG = "(FriendListActionActivity)";
+	private final String SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
+	private final String SEND_REQUEST_URL = "http://107.22.209.62/android/send_friend_request.php";
 	private ListView list = null;
 	private UserItemAdapter adapter = null;
 	private List<UserItem> userItemList = null;
@@ -65,8 +61,6 @@ public class FriendListActionActivity extends Activity {
 		buttonSearch = (Button) findViewById(R.id.friend_list_action_xml_button_search);
 		editTextSearch = (EditText) findViewById(R.id.friend_list_action_xml_edittext_search);
 
-		// TODO: should we allow user to search on an empty string? which
-		// returns the whole list of users in our database
 		buttonSearch.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// hide keyboard right away
@@ -138,7 +132,7 @@ public class FriendListActionActivity extends Activity {
 		protected void onPreExecute() {
 			// display waiting dialog
 			progressDialog = new ProgressDialog(FriendListActionActivity.this);
-			progressDialog.setMessage("Searching...please wait!");
+			progressDialog.setMessage("Searching...");
 			progressDialog.setIndeterminate(true);
 			progressDialog.setCancelable(false);
 			progressDialog.show();
@@ -186,16 +180,21 @@ public class FriendListActionActivity extends Activity {
 				});
 				dialogMessage.show();
 			}
+			
+			clientData = null;
+			progressDialog = null;
+			array = null;
+			
+			System.gc();
 		}
 	}
 
 	private void startDialog(final UserItem user) {
 		AlertDialog.Builder builder;
-		Context c = this;
 		final AlertDialog dialog;
-		LayoutInflater inflater = (LayoutInflater) c.getSystemService(LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
 		final View layout = inflater.inflate(R.layout.friend_request_dialog, null);
-		builder = new AlertDialog.Builder(c);
+		builder = new AlertDialog.Builder(this);
 		builder.setTitle("Send request");
 		builder.setView(layout);
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -219,7 +218,7 @@ public class FriendListActionActivity extends Activity {
 	}
 
 	private class SendFriendRequestTask extends AsyncTask<String, Integer, Boolean> {
-		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
+		private List<NameValuePair> friendData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
 		private JSONObject json = null;
 
@@ -235,10 +234,10 @@ public class FriendListActionActivity extends Activity {
 
 		@Override
 		protected Boolean doInBackground(String... datas) {
-			userData.add(new BasicNameValuePair("users_id", datas[0].toString()));
-			userData.add(new BasicNameValuePair("friend_id", datas[1].toString()));
-			userData.add(new BasicNameValuePair("friend_message", datas[2].toString()));
-			json = JsonHelper.getJsonObjectFromUrlWithData(SEND_REQUEST_URL, userData);
+			friendData.add(new BasicNameValuePair("users_id", datas[0].toString()));
+			friendData.add(new BasicNameValuePair("friend_id", datas[1].toString()));
+			friendData.add(new BasicNameValuePair("friend_message", datas[2].toString()));
+			json = JsonHelper.getJsonObjectFromUrlWithData(SEND_REQUEST_URL, friendData);
 			try {
 				if (json.getString("result").equals("success")) {
 					return true;
@@ -279,7 +278,7 @@ public class FriendListActionActivity extends Activity {
 
 			progressDialog = null;
 			dialogMessage = null;
-			userData = null;
+			friendData = null;
 			json = null;
 			System.gc();
 		}
@@ -320,7 +319,6 @@ public class FriendListActionActivity extends Activity {
 	@Override
 	public void onDestroy() {
 		Log.v(TAG, "I'm destroyed!");
-		adapter.imageLoader.clearCache();
 		super.onDestroy();
 	}
 }

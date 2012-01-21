@@ -68,7 +68,7 @@ public class FriendListActivity extends Activity {
 		});
 
 		// initially, we load 10 items and show user immediately
-		task = new GetFriendsTask();
+		task = new GetFriendsTask(true);
 		task.execute(counter);
 
 		// handle scrolling event
@@ -85,7 +85,7 @@ public class FriendListActivity extends Activity {
 				if (!loading && ((totalItemCount - visibleItemCount) <= (firstVisibleItem + threshHold))) {
 					counter += 10;
 					loading = true;
-					new GetFriendsTask().execute(counter);
+					new GetFriendsTask(false).execute(counter);
 				}
 			}
 
@@ -97,10 +97,24 @@ public class FriendListActivity extends Activity {
 
 	private class GetFriendsTask extends AsyncTask<Integer, UserItem, Boolean> {
 		private List<NameValuePair> clientData = new ArrayList<NameValuePair>();
-		private JSONArray array = null;
+		private ProgressDialog progressDialog = null;
+		private JSONArray userJsonArray = null;
+		private boolean displayDialogFlag;
 
+		public GetFriendsTask(boolean flag) {
+			this.displayDialogFlag = flag;
+		}
+		
 		@Override
 		protected void onPreExecute() {
+			if (displayDialogFlag == true) {
+				// display waiting dialog
+				progressDialog = new ProgressDialog(FriendListActivity.this);
+				progressDialog.setMessage("Loading friends...");
+				progressDialog.setIndeterminate(true);
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
 		}
 
 		@Override
@@ -116,11 +130,15 @@ public class FriendListActivity extends Activity {
 			// send offset
 			clientData.add(new BasicNameValuePair("offset", Integer.toString(offsets[0])));
 			// retrieve data from server
-			array = JsonHelper.getJsonArrayFromUrlWithData(GET_FRIENDS_URL, clientData);
-			if (array != null) {
+			userJsonArray = JsonHelper.getJsonArrayFromUrlWithData(GET_FRIENDS_URL, clientData);
+			if (userJsonArray != null) {
 				try {
-					for (int i = 0; i < array.length(); ++i) {
-						publishProgress(new UserItem(array.getJSONObject(i).getInt("users_tbl_id"), array.getJSONObject(i).getString("users_tbl_username"), array.getJSONObject(i).getString("users_tbl_user_image_url")));
+					for (int i = 0; i < userJsonArray.length(); ++i) {
+						publishProgress(
+							new UserItem(
+								userJsonArray.getJSONObject(i).getInt("users_tbl_id"), 
+								userJsonArray.getJSONObject(i).getString("users_tbl_username"), 
+								userJsonArray.getJSONObject(i).getString("users_tbl_user_image_url")));
 					}
 				}
 				catch (JSONException e) {
@@ -128,13 +146,29 @@ public class FriendListActivity extends Activity {
 				}
 				return true;
 			}
-			else {
-				return false;
-			}
+			return false;
 		}
 
 		@Override
 		protected void onPostExecute(Boolean result) {
+			if (displayDialogFlag)
+				progressDialog.dismiss();
+			if (result == false && displayDialogFlag == true) {
+				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActivity.this).create();
+				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
+				dialogMessage.setMessage("You current have no friends");
+				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				dialogMessage.show();
+			}
+			
+			clientData = null;
+			userJsonArray = null;
+			progressDialog = null;
+			System.gc();
 		}
 	}
 
@@ -150,7 +184,7 @@ public class FriendListActivity extends Activity {
 
 		myAlertDialog.setNegativeButton("View profile", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface arg0, int arg1) {
-				Intent intent = new Intent("com.csun.spotr.ProfileMainActivity");
+				Intent intent = new Intent("com.csun.spotr.FriendProfileActivity");
 				Bundle extras = new Bundle();
 				extras.putInt("user_id", user.getId());
 				intent.putExtras(extras);
@@ -172,7 +206,6 @@ public class FriendListActivity extends Activity {
 		Log.v(TAG, "I'm destroyed!");
 
 		list = null;
-		adapter.imageLoader.clearCache();
 		adapter = null;
 		userItemList = null;
 		task = null;

@@ -1,11 +1,8 @@
 package com.csun.spotr.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +16,7 @@ import com.csun.spotr.core.Challenge;
 public class PlaceActionItemAdapter extends BaseAdapter {
 	private List<Challenge> items;
 	private Activity context;
-	
+
 	public PlaceActionItemAdapter(Activity context, List<Challenge> items) {
 		this.context = context;
 		this.items = items;
@@ -28,22 +25,22 @@ public class PlaceActionItemAdapter extends BaseAdapter {
 	public int getCount() {
 		return items.size();
 	}
-	
+
 	public Object getItem(int position) {
 		return items.get(position);
 	}
-	
+
 	public long getItemId(int position) {
 		return position;
 	}
-	
+
 	public static class ItemViewHolder {
-		TextView   titleTextView;
-		TextView   descriptionTextView;
-		TextView   pointTextView;
-		ImageView  iconImageView;
+		TextView titleTextView;
+		TextView descriptionTextView;
+		TextView pointTextView;
+		ImageView iconImageView;
 	}
-	
+
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ItemViewHolder holder;
 		LayoutInflater inflater = context.getLayoutInflater();
@@ -64,18 +61,18 @@ public class PlaceActionItemAdapter extends BaseAdapter {
 		holder.titleTextView.setText(items.get(position).getName());
 		holder.descriptionTextView.setText(items.get(position).getDescription());
 		holder.pointTextView.setText(Integer.toString(items.get(position).getPoints()));
-		
+
 		if (items.get(position).getType() == Challenge.Type.CHECK_IN)
 			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
-		else if (items.get(position).getType() == Challenge.Type.SNAP_PICTURE) 
+		else if (items.get(position).getType() == Challenge.Type.SNAP_PICTURE)
 			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
 		else if (items.get(position).getType() == Challenge.Type.WRITE_ON_WALL)
 			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
 		else if (items.get(position).getType() == Challenge.Type.WRITE_ON_WALL)
 			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
-		else 
+		else
 			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
-		
+
 		return convertView;
 	}
 }

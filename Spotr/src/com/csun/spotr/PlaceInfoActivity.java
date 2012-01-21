@@ -43,13 +43,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
 public class PlaceInfoActivity extends MapActivity {
-	private static final String TAG = "[PlaceInfoActivity]";
-	private static final String GET_SPOT_DETAIL_URL = "http://107.22.209.62/android/get_spot_detail.php";
+	private final String TAG = "[PlaceInfoActivity]";
+	private final String GET_SPOT_DETAIL_URL = "http://107.22.209.62/android/get_spot_detail.php";
 	private int currentPlaceId = 0;
 	private MapView mapView = null;
 	private List<Overlay> mapOverlays = null;
 	private MapController mapController = null;
 	private MyItemizedOverlay itemizedOverlay = null;
+	private Drawable mapMarker;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,8 +64,8 @@ public class PlaceInfoActivity extends MapActivity {
 		mapView.invalidate();
 		
 		mapOverlays = mapView.getOverlays();
-		Drawable drawble = getResources().getDrawable(R.drawable.map_maker_red);
-		itemizedOverlay = new MyItemizedOverlay(drawble, mapView);
+		mapMarker = getResources().getDrawable(R.drawable.map_maker_red);
+		itemizedOverlay = new MyItemizedOverlay(mapMarker, mapView);
 		mapOverlays.add(itemizedOverlay);
 		
 		// get place id
@@ -77,11 +78,12 @@ public class PlaceInfoActivity extends MapActivity {
 	private class GetPlaceDetailTask extends AsyncTask<Void, Integer, Place> {
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
+		private JSONArray array;
 
 		@Override
 		protected Place doInBackground(Void...voids) {
 			placeData.add(new BasicNameValuePair("place_id", Integer.toString(currentPlaceId)));
-			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_SPOT_DETAIL_URL, placeData);
+			array = JsonHelper.getJsonArrayFromUrlWithData(GET_SPOT_DETAIL_URL, placeData);
 			Place place = null;
 			try {
 				// create a place
@@ -119,6 +121,11 @@ public class PlaceInfoActivity extends MapActivity {
 		@Override
 		protected void onPostExecute(final Place place) {
 			progressDialog.dismiss();
+			
+			placeData = null;
+			array = null;
+			progressDialog = null;
+			System.gc();
 			
 			TextView name = (TextView) findViewById(R.id.place_info_xml_textview_name);
 			name.setText(place.getName());
@@ -217,5 +224,23 @@ public class PlaceInfoActivity extends MapActivity {
 				break;
 		}
 		return true;
+	}
+    
+	@Override
+	public void onPause() {
+		Log.v(TAG, "I'm paused!");
+		super.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+		Log.v(TAG, "I'm destroyed!");
+		mapView = null;
+		mapOverlays = null;
+		mapController = null;
+		itemizedOverlay = null;
+		mapMarker = null;
+		System.gc();
+		super.onDestroy();
 	}
 }

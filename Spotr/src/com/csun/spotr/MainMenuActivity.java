@@ -12,8 +12,8 @@ import org.json.JSONObject;
 import com.csun.spotr.singleton.CurrentUriList;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.adapter.FriendRequestItemAdapter;
-import com.csun.spotr.core.FriendRequest;
 import com.csun.spotr.core.User;
+import com.csun.spotr.core.adapter_item.FriendRequestItem;
 import com.csun.spotr.helper.JsonHelper;
 
 import android.app.Activity;
@@ -47,7 +47,7 @@ public class MainMenuActivity extends Activity {
 	private static final String GET_REQUEST_URL = "http://107.22.209.62/android/get_friend_requests.php";
 	private static final String ADD_FRIEND_URL = "http://107.22.209.62/android/add_friend.php";
 	private static final String IGNORE_FRIEND_URL = "http://107.22.209.62/android/ignore_friend.php";
-	private List<FriendRequest> friendRequestList = null;
+	private List<FriendRequestItem> friendRequestList = null;
 	private int currentSelectedFriendId;
 	
 	@Override
@@ -146,13 +146,13 @@ public class MainMenuActivity extends Activity {
 		@Override
 		protected Boolean doInBackground(Void...voids) {
 			friendData.add(new BasicNameValuePair("users_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
-			friendRequestList = new ArrayList<FriendRequest>();
+			friendRequestList = new ArrayList<FriendRequestItem>();
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_REQUEST_URL, friendData);
 			if (array != null) { 
 				try {
 					for (int i = 0; i < array.length(); ++i) { 
 						friendRequestList.add(
-							new FriendRequest(
+							new FriendRequestItem(
 								array.getJSONObject(i).getInt("user_requests_tbl_friend_id"),
 								array.getJSONObject(i).getString("users_tbl_username"),
 								array.getJSONObject(i).getString("user_requests_tbl_friend_message"),
@@ -234,7 +234,7 @@ public class MainMenuActivity extends Activity {
 			
 			datas.add(new BasicNameValuePair("users_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
 			datas.add(new BasicNameValuePair("friend_id", Integer.toString(currentSelectedFriendId)));
-			friendRequestList = new ArrayList<FriendRequest>();
+			friendRequestList = new ArrayList<FriendRequestItem>();
 			JSONObject json = JsonHelper.getJsonObjectFromUrlWithData(urls[0], datas);
 			try {
 				if (json.getString("result").equals("success")) {

@@ -37,9 +37,6 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-/**
- * @author: Chan Nguyen
- */
 public class MapViewActivity extends MapActivity {
 	private static final String TAG = "[MapViewActivity]";
 	private static final String RADIUS = "50";

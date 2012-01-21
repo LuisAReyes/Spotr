@@ -7,19 +7,15 @@ import com.csun.spotr.core.User;
 import com.csun.spotr.singleton.CurrentUser;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class LeaderboardItemAdapter extends BaseAdapter {
 	private Activity context;
 	private List<User> items;
-	private static int count = 0;
 	
 	public LeaderboardItemAdapter(Activity context, List<User> items) {
 		super();

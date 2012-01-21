@@ -16,7 +16,6 @@ import com.csun.spotr.helper.JsonHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,7 +23,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,9 +32,9 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class PlaceActionActivity extends Activity {
-	private static final String TAG = "(PlaceActionActivity)";
-	private static final String GET_CHALLENGES_URL = "http://107.22.209.62/android/get_challenges_from_place.php";
-	private static final String DO_CHECK_IN_URL = "http://107.22.209.62/android/do_check_in.php";
+	private final String TAG = "(PlaceActionActivity)";
+	private final String GET_CHALLENGES_URL = "http://107.22.209.62/android/get_challenges_from_place.php";
+	private final String DO_CHECK_IN_URL = "http://107.22.209.62/android/do_check_in.php";
 	private int currentPlaceId;
 	private int currentChosenItem;
 	private ListView list = null;

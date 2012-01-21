@@ -35,10 +35,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class LoginActivity extends Activity {
-	private static final String TAG = "[LoginActivity]";
-	private static final String LOGIN_URL = "http://107.22.209.62/android/login.php";
-	private static final int LOGIN_ERROR = 0;
-	private static final int CONNECTION_ERROR = 1;
+	private final String TAG = "[LoginActivity]";
+	private final String LOGIN_URL = "http://107.22.209.62/android/login.php";
+	private final int LOGIN_ERROR = 0;
+	private final int CONNECTION_ERROR = 1;
 	
 	private EditText edittextUsername;
 	private EditText edittextPassword;

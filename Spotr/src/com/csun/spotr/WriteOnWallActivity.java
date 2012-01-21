@@ -29,8 +29,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class WriteOnWallActivity extends Activity {
-	private static final String TAG = "[WriteOnWallActivity]";
-	private static final String WRITE_ON_WALL_URL = "http://107.22.209.62/android/do_write_on_wall.php";
+	private final String TAG = "[WriteOnWallActivity]";
+	private final String WRITE_ON_WALL_URL = "http://107.22.209.62/android/do_write_on_wall.php";
 	private Button buttonPost;
 	private EditText editTextMessage;
 	private String usersId;

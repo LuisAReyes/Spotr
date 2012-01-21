@@ -3,8 +3,6 @@ package com.csun.spotr;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -12,11 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.csun.spotr.adapter.FriendListFeedItemAdapter;
-import com.csun.spotr.adapter.PlaceActivityItemAdapter;
-import com.csun.spotr.adapter.UserActivityItemAdapter;
 import com.csun.spotr.core.Challenge;
-import com.csun.spotr.core.FriendFeed;
-import com.csun.spotr.core.PlaceLog;
+import com.csun.spotr.core.adapter_item.FriendFeedItem;
 import com.csun.spotr.helper.ImageHelper;
 import com.csun.spotr.helper.JsonHelper;
 import com.csun.spotr.singleton.CurrentUser;
@@ -34,7 +29,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,9 +38,9 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class FriendListFeedActivity extends Activity {
-	private static final String TAG = "(FriendListFeedActivity)";
-	private static final String GET_FRIEND_FEED_URL = "http://107.22.209.62/android/get_friend_feeds.php";
-	private List<FriendFeed> friendFeedList = new ArrayList<FriendFeed>();
+	private final String TAG = "(FriendListFeedActivity)";
+	private final String GET_FRIEND_FEED_URL = "http://107.22.209.62/android/get_friend_feeds.php";
+	private List<FriendFeedItem> friendFeedList = new ArrayList<FriendFeedItem>();
 	private ListView list = null;
 	private FriendListFeedItemAdapter adapter = null;
 	private GetFriendFeedTask task = null;
@@ -67,7 +61,7 @@ public class FriendListFeedActivity extends Activity {
 		task.execute();
     }
     
-    private class GetFriendFeedTask extends AsyncTask<Void, FriendFeed, Boolean> {
+    private class GetFriendFeedTask extends AsyncTask<Void, FriendFeedItem, Boolean> {
 		private List<NameValuePair> datas = new ArrayList<NameValuePair>(); 
 		private ProgressDialog progressDialog = null;
 		private JSONArray array = null;
@@ -84,7 +78,7 @@ public class FriendListFeedActivity extends Activity {
 		}
 		
 		@Override
-		  protected void onProgressUpdate(FriendFeed... feeds) {
+		  protected void onProgressUpdate(FriendFeedItem... feeds) {
 			friendFeedList.add(feeds[0]);
 			adapter.notifyDataSetChanged();
 	    }
@@ -107,7 +101,7 @@ public class FriendListFeedActivity extends Activity {
 						}
 						
 						publishProgress(
-							new FriendFeed.Builder(
+							new FriendFeedItem.Builder(
 									// required parameters
 									array.getJSONObject(i).getInt("activity_tbl_id"),
 									array.getJSONObject(i).getInt("friends_tbl_friend_id"),
@@ -220,7 +214,7 @@ public class FriendListFeedActivity extends Activity {
     public void onDestroy() {
 		// clean up
     	Log.v(TAG, "I'm destroyed!");
-        for (FriendFeed feed: friendFeedList) {
+        for (FriendFeedItem feed: friendFeedList) {
         	if (feed.getChallengeType() == Challenge.Type.SNAP_PICTURE) {
         		getContentResolver().delete(feed.getActivitySnapPictureUri(), null, null);
         		feed.setActivitySnapPictureUri(null);
@@ -231,6 +225,7 @@ public class FriendListFeedActivity extends Activity {
         		feed.setFriendPictureUri(null);
         	}
         }
+        
         list = null;
         adapter = null;
         friendFeedList = null;

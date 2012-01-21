@@ -3,7 +3,7 @@ package com.csun.spotr.adapter;
 import java.util.List;
 
 import com.csun.spotr.R;
-import com.csun.spotr.core.FriendRequest;
+import com.csun.spotr.core.adapter_item.FriendRequestItem;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -15,9 +15,9 @@ import android.widget.TextView;
 
 public class FriendRequestItemAdapter extends BaseAdapter {
 	private Activity context;
-	private List<FriendRequest> items;
+	private List<FriendRequestItem> items;
 
-	public FriendRequestItemAdapter(Activity context, List<FriendRequest> items) {
+	public FriendRequestItemAdapter(Activity context, List<FriendRequestItem> items) {
 		this.context = context;
 		this.items = items;
 	}

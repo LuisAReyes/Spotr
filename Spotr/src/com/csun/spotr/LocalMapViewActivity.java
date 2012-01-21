@@ -48,9 +48,9 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 public class LocalMapViewActivity extends MapActivity {
-	private static final String TAG = "[LocalMapViewActivity]";
-	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
-	private static final String RADIUS = "100";
+	private final String TAG = "(LocalMapViewActivity)";
+	private final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
+	private final String RADIUS = "10";
 	private MapView mapView = null;
 	private List<Overlay> mapOverlays = null;
 	private MyItemizedOverlay itemizedOverlay = null;

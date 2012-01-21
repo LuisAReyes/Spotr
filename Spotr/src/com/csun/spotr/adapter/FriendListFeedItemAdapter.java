@@ -13,13 +13,13 @@ import android.widget.TextView;
 
 import com.csun.spotr.R;
 import com.csun.spotr.core.Challenge;
-import com.csun.spotr.core.FriendFeed;
+import com.csun.spotr.core.adapter_item.FriendFeedItem;
 
 public class FriendListFeedItemAdapter extends BaseAdapter {
-	private List<FriendFeed> items;
+	private List<FriendFeedItem> items;
 	private Activity context;
 	
-	public FriendListFeedItemAdapter(Activity context, List<FriendFeed> items) {
+	public FriendListFeedItemAdapter(Activity context, List<FriendFeedItem> items) {
 		this.context = context;
 		this.items = items;
 	}
