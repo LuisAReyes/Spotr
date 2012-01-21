@@ -57,7 +57,7 @@ public class PlaceActivity extends Activity {
 	private static final String TAG = "(PlaceActivity)";
 	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
 	private static final String UPDATE_GOOGLE_PLACES_URL = "http://107.22.209.62/android/update_google_places.php";
-	private static final String RADIUS = "100";
+	
 	private ListView list;
 	private PlaceItemAdapter adapter;
 	private List<PlaceItem> placeItemList = new ArrayList<PlaceItem>();
@@ -191,7 +191,7 @@ public class PlaceActivity extends Activity {
 			List<NameValuePair> sentData = new ArrayList<NameValuePair>();
 			// we reformat the original data to include only what we need
 			JSONArray reformattedData = new JSONArray();
-			JSONObject json = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlacesUrl(lastKnownLocation, RADIUS));
+			JSONObject json = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlacesUrl(lastKnownLocation, "10"));
 			JSONObject temp = null;
 			try {
 				JSONArray originalGoogleDataArray = json.getJSONArray("results");
@@ -242,7 +242,7 @@ public class PlaceActivity extends Activity {
 			// now sending latitude, longitude and radius to retrieve places
 			placeData.add(new BasicNameValuePair("latitude", Double.toString(lastKnownLocation.getLatitude())));
 			placeData.add(new BasicNameValuePair("longitude", Double.toString(lastKnownLocation.getLongitude())));
-			placeData.add(new BasicNameValuePair("radius", RADIUS));
+			placeData.add(new BasicNameValuePair("radius", "0.1"));
 			
 			// get places as JSON format from our database
 			JSONArray jsonPlaceArray = JsonHelper.getJsonArrayFromUrlWithData(GET_SPOTS_URL, placeData);
@@ -266,6 +266,7 @@ public class PlaceActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
+			progressDialog.dismiss();
 			if (result == false) {
 				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
