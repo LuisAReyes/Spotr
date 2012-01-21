@@ -76,14 +76,6 @@ public class PlaceActivity extends Activity {
 			CreateAlert("Unexpected Error!", "Service cannot be started.");
 		}
 
-		// register click event for refresh button
-		Button refreshButton = (Button) findViewById(R.id.place_xml_button_refresh);
-		refreshButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				startService();
-			}
-		});
-
 		list = (ListView) findViewById(R.id.place_xml_listview_places);
 		adapter = new PlaceItemAdapter(PlaceActivity.this, placeItemList);
 		list.setAdapter(adapter);
@@ -97,6 +89,16 @@ public class PlaceActivity extends Activity {
 				onPause();
 			}
 		});
+		
+		// register click event for refresh button
+		Button refreshButton = (Button) findViewById(R.id.place_xml_button_refresh);
+		refreshButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				placeItemList = new ArrayList<PlaceItem>();
+				adapter.notifyDataSetChanged();
+				new GetSpotsTask().execute();
+			}
+		});
 	}
 
 	public AlertDialog CreateAlert(String title, String message) {
@@ -104,7 +106,6 @@ public class PlaceActivity extends Activity {
 		alert.setTitle(title);
 		alert.setMessage(message);
 		return alert;
-
 	}
 
 	public boolean startService() {
