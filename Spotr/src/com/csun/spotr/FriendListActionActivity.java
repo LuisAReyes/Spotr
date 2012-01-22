@@ -39,9 +39,9 @@ import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.UserItemAdapter;
 
 public class FriendListActionActivity extends Activity {
-	private final String TAG = "(FriendListActionActivity)";
-	private final String SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
-	private final String SEND_REQUEST_URL = "http://107.22.209.62/android/send_friend_request.php";
+	private static final String TAG = "(FriendListActionActivity)";
+	private static final String SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
+	private static final String SEND_REQUEST_URL = "http://107.22.209.62/android/send_friend_request.php";
 	private ListView listview = null;
 	private UserItemAdapter adapter = null;
 	private List<UserItem> userItemList = null;

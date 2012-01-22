@@ -8,11 +8,11 @@ import com.csun.spotr.core.User;
 import android.text.format.DateFormat;
 
 public class CurrentUser {
-	private static final String	TAG = "[CurrentUser]";
+	private static final String	TAG = "(CurrentUser)";
 	private static User	user;
 	private static int selectedPostion = 0;
 	
-	public static void setCurrentUser(int id, String username, String password) {
+	public static synchronized void setCurrentUser(int id, String username, String password) {
 		user = new User.Builder(id, username, password).build();
 	}
 	
@@ -20,7 +20,7 @@ public class CurrentUser {
 		return user;
 	}
 	
-	public static void setSelectedPostion(int position) {
+	public static synchronized void setSelectedPostion(int position) {
 		selectedPostion = position;
 	}
 	

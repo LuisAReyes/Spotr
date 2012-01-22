@@ -1,6 +1,5 @@
 package com.csun.spotr;
 
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.csun.spotr.singleton.CurrentUser;
-import com.csun.spotr.util.ImageHelper;
 import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.PlaceFeedItemAdapter;
 import com.csun.spotr.core.Challenge;
@@ -19,31 +17,33 @@ import com.csun.spotr.core.adapter_item.PlaceFeedItem;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class PlaceActivityActivity extends Activity {
-	private final String TAG = "(PlaceActivityActivity)";
-	private final String GET_PLACELOG_URL = "http://107.22.209.62/android/get_activities.php";
+	private static final String TAG = "(PlaceActivityActivity)";
+	private static final String GET_PLACE_FEED_URL = "http://107.22.209.62/android/get_activities.php";
 	private int currentPlaceId = 0;
-	private ListView list = null;
+	private ListView listview = null;
 	private PlaceFeedItemAdapter adapter = null;
 	private List<PlaceFeedItem> placeFeedList = new ArrayList<PlaceFeedItem>();
+	private boolean loading = true;
+	private int prevTotal = 0;
+	private final int threshHold = 5;
+	private int counter = 0;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,23 +53,56 @@ public class PlaceActivityActivity extends Activity {
         Bundle extrasBundle = getIntent().getExtras();
 		currentPlaceId = extrasBundle.getInt("place_id");
 		
-		list = (ListView) findViewById(R.id.place_activity_xml_listview);
+		listview = (ListView) findViewById(R.id.place_activity_xml_listview);
 		adapter = new PlaceFeedItemAdapter(PlaceActivityActivity.this, placeFeedList);
-		list.setAdapter(adapter);
-		list.setOnItemClickListener(new OnItemClickListener() {
+		listview.setAdapter(adapter);
+		listview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			}
 		});
-		// run task
-		new GetPlaceLogTask().execute();
+		
+		
+		// initial task
+		new GetPlaceFeedTask(true).execute(counter);
+		
+		// as we scroll down the list, add more items
+		listview.setOnScrollListener(new OnScrollListener() {
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				if (loading) {
+					if (totalItemCount > prevTotal) {
+						loading = false;
+						prevTotal = totalItemCount;
+						Log.d(TAG, Integer.toString(totalItemCount));
+					}
+				}
+
+				if (!loading && ((totalItemCount - visibleItemCount) <= (firstVisibleItem + threshHold))) {
+					synchronized (this) {
+						counter += threshHold;
+						loading = true;
+					}
+					// run with another 5
+					new GetPlaceFeedTask(false).execute(counter);
+				}
+			}
+
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+			}
+		});
     }
     
-    private class GetPlaceLogTask extends AsyncTask<Void, PlaceFeedItem, Boolean> {
+    private class GetPlaceFeedTask extends AsyncTask<Integer, PlaceFeedItem, Boolean> {
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>(); 
 		private ProgressDialog progressDialog = null;
+		private boolean displayDialogFlag = false;
+		
+		public GetPlaceFeedTask(boolean flag) {
+			displayDialogFlag = flag;
+		}
+		
 		@Override
 		protected void onPreExecute() {
-			placeData.add(new BasicNameValuePair("spots_id", Integer.toString(currentPlaceId)));
 			// display waiting dialog
 			progressDialog = new ProgressDialog(PlaceActivityActivity.this);
 			progressDialog.setMessage("Loading place activities...please wait!");
@@ -79,14 +112,17 @@ public class PlaceActivityActivity extends Activity {
 		}
 		
 		@Override
-	    protected void onProgressUpdate(PlaceFeedItem... placeLogs) {
-			placeFeedList.add(placeLogs[0]);
+	    protected void onProgressUpdate(PlaceFeedItem... feeds) {
+			progressDialog.dismiss();
+			placeFeedList.add(feeds[0]);
 			adapter.notifyDataSetChanged();
 	    }
 		
 		@Override
-		protected Boolean doInBackground(Void...voids) {
-			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_PLACELOG_URL, placeData);
+		protected Boolean doInBackground(Integer... offsets) {
+			placeData.add(new BasicNameValuePair("spots_id", Integer.toString(currentPlaceId)));
+			placeData.add(new BasicNameValuePair("offset", Integer.toString(offsets[0])));
+			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_PLACE_FEED_URL, placeData);
 			if (array != null) { 
 				try {
 					for (int i = 0; i < array.length(); ++i) { 
@@ -116,7 +152,7 @@ public class PlaceActivityActivity extends Activity {
 					}
 				}
 				catch (JSONException e) {
-					Log.e(TAG + "GetPlaceLogTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+					Log.e(TAG + "GetPlaceFeedTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
 				}
 				return true;
 			}
@@ -128,7 +164,7 @@ public class PlaceActivityActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
-			if (result == false) {
+			if (result == false && displayDialogFlag == true) {
 				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActivityActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("There are no activities for this place!");

@@ -43,8 +43,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
 public class PlaceInfoActivity extends MapActivity {
-	private final String TAG = "[PlaceInfoActivity]";
-	private final String GET_SPOT_DETAIL_URL = "http://107.22.209.62/android/get_spot_detail.php";
+	private static final String TAG = "(PlaceInfoActivity)";
+	private static final String GET_SPOT_DETAIL_URL = "http://107.22.209.62/android/get_spot_detail.php";
 	private int currentPlaceId = 0;
 	private MapView mapView = null;
 	private List<Overlay> mapOverlays = null;

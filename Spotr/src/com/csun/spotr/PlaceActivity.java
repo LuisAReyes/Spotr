@@ -1,10 +1,7 @@
 package com.csun.spotr;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Vector;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,7 +9,6 @@ import android.app.ProgressDialog;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,21 +18,14 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -57,8 +46,8 @@ public class PlaceActivity extends Activity {
 	private static final String TAG = "(PlaceActivity)";
 	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
 	private static final String UPDATE_GOOGLE_PLACES_URL = "http://107.22.209.62/android/update_google_places.php";
-	private static final String GOOGLE_RADIUS_IN_METER = "1000";
-	private static final String RADIUS_IN_KM = "1";
+	private static final String GOOGLE_RADIUS_IN_METER = "100";
+	private static final String RADIUS_IN_KM = "0.1";
 	
 	private ListView list;
 	private PlaceItemAdapter adapter;
