@@ -2,13 +2,11 @@ package com.csun.spotr;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -16,7 +14,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -29,17 +26,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.csun.spotr.singleton.CurrentUser;
-import com.csun.spotr.adapter.BalloonItemizedOverlay;
+import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.core.Place;
-import com.csun.spotr.helper.ImageHelper;
-import com.csun.spotr.helper.GooglePlaceHelper;
-import com.csun.spotr.helper.JsonHelper;
+import com.csun.spotr.custom_gui.BalloonItemizedOverlay;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
@@ -48,12 +40,14 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 public class LocalMapViewActivity extends MapActivity {
-	private final String TAG = "(LocalMapViewActivity)";
-	private final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
-	private final String RADIUS = "10";
+	private static final String TAG = "(LocalMapViewActivity)";
+	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
+	private static final String GOOGLE_RADIUS_IN_METER = "100";
+	private static final String RADIUS_IN_KM = "0.1";
+	
 	private MapView mapView = null;
 	private List<Overlay> mapOverlays = null;
-	private MyItemizedOverlay itemizedOverlay = null;
+	private CustomItemizedOverlay itemizedOverlay = null;
 	private MapController mapController = null;
 	
 	@Override
@@ -71,7 +65,7 @@ public class LocalMapViewActivity extends MapActivity {
 		// get the display icon on map
 		Drawable drawable = getResources().getDrawable(R.drawable.map_maker_green);
 		// initialize overlay item
-		itemizedOverlay = new MyItemizedOverlay(drawable, mapView);
+		itemizedOverlay = new CustomItemizedOverlay(drawable, mapView);
 		// add them to the map
 		mapOverlays.add(itemizedOverlay);
 
@@ -165,11 +159,11 @@ public class LocalMapViewActivity extends MapActivity {
 		protected void onPreExecute() {
 			listener = new MyLocationListener();
 			manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-			// NETWORK is faster
-			if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+				manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
+
+			else if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
 				manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
-				// manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
-			}
 			
 			// display waiting dialog
 			progressDialog = new ProgressDialog(LocalMapViewActivity.this);
@@ -182,8 +176,16 @@ public class LocalMapViewActivity extends MapActivity {
 		@Override
 		protected void onPostExecute(Location location) {
 			progressDialog.dismiss();
+			OverlayItem ovl = new OverlayItem(
+					new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6)), "My location", "Hello");
+			Drawable icon = getResources().getDrawable(R.drawable.map_circle_marker_red);
+			icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+			ovl.setMarker(icon);
+			Place place = new Place.Builder(location.getLongitude(), location.getLatitude(), -1).build();
+			itemizedOverlay.addOverlay(ovl, place);
+			
 			mapController.animateTo(new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6)));
-			mapController.setZoom(16);
+			mapController.setZoom(18);
 			new GetSpotsTask().execute(location);
 		}
 		
@@ -217,7 +219,7 @@ public class LocalMapViewActivity extends MapActivity {
 			progressDialog = new ProgressDialog(LocalMapViewActivity.this);
 			progressDialog.setMessage("Loading...");
 			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 		}
 		
@@ -233,7 +235,7 @@ public class LocalMapViewActivity extends MapActivity {
 		protected Boolean doInBackground(Location...locations) {
 			placeData.add(new BasicNameValuePair("latitude", Double.toString(locations[0].getLatitude())));
 			placeData.add(new BasicNameValuePair("longitude", Double.toString(locations[0].getLongitude())));
-			placeData.add(new BasicNameValuePair("radius", RADIUS)); 
+			placeData.add(new BasicNameValuePair("radius", RADIUS_IN_KM)); 
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_SPOTS_URL, placeData);
 			if (array != null) { 
 				try {
@@ -277,12 +279,12 @@ public class LocalMapViewActivity extends MapActivity {
 		}
 	}
 	
-	private class MyItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
+	private class CustomItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 		private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
 		private List<Place> places = new ArrayList<Place>();
 		private Context context;
 
-		public MyItemizedOverlay(Drawable defaultMarker, MapView mapView) {
+		public CustomItemizedOverlay(Drawable defaultMarker, MapView mapView) {
 			super(boundCenter(defaultMarker), mapView);
 			context = mapView.getContext();
 		}
@@ -310,11 +312,13 @@ public class LocalMapViewActivity extends MapActivity {
 
 		@Override
 		protected boolean onBalloonTap(int index, OverlayItem item) {
-			Intent intent = new Intent("com.csun.spotr.PlaceMainActivity");
-			Bundle extras = new Bundle();
-			extras.putInt("place_id", places.get(index).getId());
-			intent.putExtras(extras);
-			startActivity(intent);
+			if (places.get(index).getId() != -1) {
+				Intent intent = new Intent("com.csun.spotr.PlaceMainActivity");
+				Bundle extras = new Bundle();
+				extras.putInt("place_id", places.get(index).getId());
+				intent.putExtras(extras);
+				startActivity(intent);
+			}
 			return true;
 		}
 	}

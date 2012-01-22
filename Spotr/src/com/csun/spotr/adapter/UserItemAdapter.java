@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.csun.spotr.core.adapter_item.UserItem;
 import com.csun.spotr.R;
-import com.csun.spotr.helper.ImageLoader;
+import com.csun.spotr.util.ImageLoader;
 
 import android.app.Activity;
 import android.content.Context;

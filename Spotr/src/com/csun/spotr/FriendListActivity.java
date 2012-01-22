@@ -33,13 +33,13 @@ import com.csun.spotr.adapter.UserItemAdapter;
 import com.csun.spotr.core.User;
 import com.csun.spotr.singleton.CurrentUriList;
 import com.csun.spotr.singleton.CurrentUser;
-import com.csun.spotr.helper.ImageHelper;
-import com.csun.spotr.helper.JsonHelper;
+import com.csun.spotr.util.ImageHelper;
+import com.csun.spotr.util.JsonHelper;
 
 public class FriendListActivity extends Activity {
 	private static final String TAG = "(FriendListActivity)";
 	private static final String GET_FRIENDS_URL = "http://107.22.209.62/android/get_friends.php";
-	private ListView list = null;
+	private ListView listview = null;
 	private UserItemAdapter adapter = null;
 	private List<UserItem> userItemList = new ArrayList<UserItem>();
 	private GetFriendsTask task = null;
@@ -53,15 +53,15 @@ public class FriendListActivity extends Activity {
 		setContentView(R.layout.friend_list_main);
 
 		// initialize list view
-		list = (ListView) findViewById(R.id.friend_list_main_xml_listview_friends);
+		listview = (ListView) findViewById(R.id.friend_list_main_xml_listview_friends);
 
 		// set up list view adapter
 		adapter = new UserItemAdapter(FriendListActivity.this, userItemList);
-		list.setAdapter(adapter);
-		list.setVisibility(View.VISIBLE);
+		listview.setAdapter(adapter);
+		listview.setVisibility(View.VISIBLE);
 
 		// handle item click event
-		list.setOnItemClickListener(new OnItemClickListener() {
+		listview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				startDialog(userItemList.get(position));
 			}
@@ -72,7 +72,7 @@ public class FriendListActivity extends Activity {
 		task.execute(counter);
 
 		// handle scrolling event
-		list.setOnScrollListener(new OnScrollListener() {
+		listview.setOnScrollListener(new OnScrollListener() {
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 				if (loading) {
 					if (totalItemCount > prevTotal) {
@@ -205,7 +205,7 @@ public class FriendListActivity extends Activity {
 	public void onDestroy() {
 		Log.v(TAG, "I'm destroyed!");
 
-		list = null;
+		listview = null;
 		adapter = null;
 		userItemList = null;
 		task = null;

@@ -11,10 +11,10 @@ import org.json.JSONObject;
 
 import com.csun.spotr.singleton.CurrentUriList;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.FriendRequestItemAdapter;
 import com.csun.spotr.core.User;
 import com.csun.spotr.core.adapter_item.FriendRequestItem;
-import com.csun.spotr.helper.JsonHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;

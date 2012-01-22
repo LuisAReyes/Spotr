@@ -45,14 +45,14 @@ import android.graphics.Color;
 import android.widget.Button;
 
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.LeaderboardItemAdapter;
 import com.csun.spotr.core.User;
-import com.csun.spotr.helper.JsonHelper;
 
 public class LeaderboardActivity extends Activity {
 	private final String TAG = "(LeaderboardActivity)";
 	private final String GET_USERS_URL = "http://107.22.209.62/android/get_users.php";
-	private ListView list = null;
+	private ListView listview = null;
 	private LeaderboardItemAdapter adapter = null;
 	private List<User> userList = new ArrayList<User>();
 	
@@ -61,10 +61,10 @@ public class LeaderboardActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.leaderboard);
 		// initialize list view
-		list = (ListView) findViewById(R.id.leaderboard_xml_listview_users);
+		listview = (ListView) findViewById(R.id.leaderboard_xml_listview_users);
 		adapter = new LeaderboardItemAdapter(LeaderboardActivity.this, userList);
-		list.setAdapter(adapter);
-		list.setOnItemClickListener(new OnItemClickListener() {
+		listview.setAdapter(adapter);
+		listview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// handle click 
 			}
@@ -75,10 +75,10 @@ public class LeaderboardActivity extends Activity {
 		buttonWhere.setOnClickListener(new OnClickListener() {
 			public void onClick(final View v) {
 				// run new task
-				list.post(new Runnable() {
+				listview.post(new Runnable() {
 					public void run() {
-						list.setSelection(CurrentUser.getSelectedPosition());
-						list.getChildAt(CurrentUser.getSelectedPosition()).setBackgroundColor(Color.RED);
+						listview.setSelection(CurrentUser.getSelectedPosition());
+						listview.getChildAt(CurrentUser.getSelectedPosition()).setBackgroundColor(Color.RED);
 						v.setEnabled(false);
 						v.setBackgroundColor(color.transparent);
 				}});

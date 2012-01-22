@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ChallengeInfoActivity extends Activity {
-	private static final String TAG = "[ChallengeInfoActivity]";
+	private final String TAG = "[ChallengeInfoActivity]";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

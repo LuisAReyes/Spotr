@@ -19,8 +19,8 @@ public class FriendFeedItem {
 	// optional parameter
 	private String challengeName;
 	private String challengeDescription;
-	private Uri activitySnapPictureUri = null;
-	private Uri friendPictureUri = null;
+	private String activitySnapPictureUrl = null;
+	private String friendPictureUrl = null;
 	private String activityComment;
 
 	public static class Builder {
@@ -35,8 +35,8 @@ public class FriendFeedItem {
 		// optional parameter
 		private String challengeName;
 		private String challengeDescription;
-		private Uri activitySnapPictureUri = null;
-		private Uri friendPictureUri = null;
+		private String activitySnapPictureUrl = null;
+		private String friendPictureUrl = null;
 		private String activityComment;
 
 		public Builder(int activityId, int friendId, String friendName, Challenge.Type challengeType, String activityTime, String placeName) {
@@ -58,13 +58,13 @@ public class FriendFeedItem {
 			return this;
 		}
 
-		public Builder activitySnapPictureUri(Uri uri) {
-			this.activitySnapPictureUri = uri;
+		public Builder activitySnapPictureUrl(String url) {
+			this.activitySnapPictureUrl = url;
 			return this;
 		}
 
-		public Builder friendPictureUri(Uri uri) {
-			this.friendPictureUri = uri;
+		public Builder friendPictureUrl(String url) {
+			this.friendPictureUrl = url;
 			return this;
 		}
 
@@ -88,8 +88,8 @@ public class FriendFeedItem {
 
 		this.challengeName = builder.challengeName;
 		this.challengeDescription = builder.challengeDescription;
-		this.activitySnapPictureUri = builder.activitySnapPictureUri;
-		this.friendPictureUri = builder.friendPictureUri;
+		this.activitySnapPictureUrl = builder.activitySnapPictureUrl;
+		this.friendPictureUrl = builder.friendPictureUrl;
 		this.activityComment = builder.activityComment;
 	}
 
@@ -109,20 +109,20 @@ public class FriendFeedItem {
 		this.challengeDescription = challengeDescription;
 	}
 
-	public Uri getActivitySnapPictureUri() {
-		return activitySnapPictureUri;
+	public String getActivitySnapPictureUrl() {
+		return activitySnapPictureUrl;
 	}
 
-	public void setActivitySnapPictureUri(Uri uri) {
-		this.activitySnapPictureUri = uri;
+	public void setActivitySnapPictureUri(String url) {
+		this.activitySnapPictureUrl = url;
 	}
 
-	public Uri getFriendPictureUri() {
-		return friendPictureUri;
+	public String getFriendPictureUrl() {
+		return friendPictureUrl;
 	}
 
-	public void setFriendPictureUri(Uri uri) {
-		this.friendPictureUri = uri;
+	public void setFriendPictureUrl(String url) {
+		this.friendPictureUrl = url;
 	}
 
 	public String getActivityComment() {

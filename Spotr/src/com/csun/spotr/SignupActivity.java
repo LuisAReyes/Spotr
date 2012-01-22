@@ -16,7 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import com.csun.spotr.helper.JsonHelper;
+import com.csun.spotr.util.JsonHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;

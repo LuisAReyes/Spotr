@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.csun.spotr.core.adapter_item.PlaceItem;
-import com.csun.spotr.helper.ImageHelper;
+import com.csun.spotr.util.ImageHelper;
 
 public class PlaceItemAdapter extends BaseAdapter {
 	private Activity context;

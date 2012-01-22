@@ -48,15 +48,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.csun.spotr.core.adapter_item.PlaceItem;
-import com.csun.spotr.helper.GooglePlaceHelper;
-import com.csun.spotr.helper.JsonHelper;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.util.GooglePlaceHelper;
+import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.PlaceItemAdapter;
 
 public class PlaceActivity extends Activity {
 	private static final String TAG = "(PlaceActivity)";
 	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
 	private static final String UPDATE_GOOGLE_PLACES_URL = "http://107.22.209.62/android/update_google_places.php";
+	private static final String GOOGLE_RADIUS_IN_METER = "1000";
+	private static final String RADIUS_IN_KM = "1";
 	
 	private ListView list;
 	private PlaceItemAdapter adapter;
@@ -135,6 +137,8 @@ public class PlaceActivity extends Activity {
 			while (currentLocation == null) {
 				; // do nothing
 			}
+			
+			manager.removeUpdates(listener);
 			// update the last known location
 			lastKnownLocation = currentLocation;
 			return currentLocation;
@@ -144,22 +148,25 @@ public class PlaceActivity extends Activity {
 		protected void onPreExecute() {
 			listener = new MyLocationListener();
 			manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-			// NETWORK is faster
-			if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+				manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
+
+			else if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
 				manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
 
 			// display waiting dialog
 			progressDialog = new ProgressDialog(PlaceActivity.this);
 			progressDialog.setMessage("Finding location...");
 			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
+			progressDialog.setCancelable(false);
 			progressDialog.show();
 		}
 
 		@Override
 		protected void onPostExecute(Location location) {
 			progressDialog.dismiss();
-			new GetSpotsTask().execute();
+			if (location != null)
+				new GetSpotsTask().execute();
 		}
 
 		public class MyLocationListener implements LocationListener {
@@ -192,7 +199,7 @@ public class PlaceActivity extends Activity {
 			List<NameValuePair> sentData = new ArrayList<NameValuePair>();
 			// we reformat the original data to include only what we need
 			JSONArray reformattedData = new JSONArray();
-			JSONObject json = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlacesUrl(lastKnownLocation, "10"));
+			JSONObject json = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlacesUrl(lastKnownLocation, GOOGLE_RADIUS_IN_METER));
 			JSONObject temp = null;
 			try {
 				JSONArray originalGoogleDataArray = json.getJSONArray("results");
@@ -243,7 +250,7 @@ public class PlaceActivity extends Activity {
 			// now sending latitude, longitude and radius to retrieve places
 			placeData.add(new BasicNameValuePair("latitude", Double.toString(lastKnownLocation.getLatitude())));
 			placeData.add(new BasicNameValuePair("longitude", Double.toString(lastKnownLocation.getLongitude())));
-			placeData.add(new BasicNameValuePair("radius", "0.1"));
+			placeData.add(new BasicNameValuePair("radius", RADIUS_IN_KM));
 			
 			// get places as JSON format from our database
 			JSONArray jsonPlaceArray = JsonHelper.getJsonArrayFromUrlWithData(GET_SPOTS_URL, placeData);

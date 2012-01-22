@@ -11,8 +11,8 @@ import org.json.JSONException;
 
 import com.csun.spotr.adapter.ProfileItemAdapter;
 import com.csun.spotr.core.User;
-import com.csun.spotr.helper.ImageHelper;
-import com.csun.spotr.helper.JsonHelper;
+import com.csun.spotr.util.ImageHelper;
+import com.csun.spotr.util.JsonHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;

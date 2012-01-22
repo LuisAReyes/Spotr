@@ -15,8 +15,8 @@ public class PlaceFeedItem {
 	// optional parameters
 	private String name;
 	private String description;
-	private Uri snapPictureUri = null;
-	private Uri userPictureUri = null;
+	private String snapPictureUrl = null;
+	private String userPictureUrl = null;
 	private String comment;
 
 	public static class Builder {
@@ -29,8 +29,8 @@ public class PlaceFeedItem {
 		// optional parameters
 		private String name = "";
 		private String description = "";
-		private Uri snapPictureUri = null;
-		private Uri userPictureUri = null;
+		private String snapPictureUrl = null;
+		private String userPictureUrl = null;
 		private String comment = "";
 
 		public Builder(int id, String username, Challenge.Type challengeType, String time) {
@@ -50,13 +50,13 @@ public class PlaceFeedItem {
 			return this;
 		}
 
-		public Builder userPictureUri(Uri uri) {
-			this.userPictureUri = uri;
+		public Builder userPictureUrl(String url) {
+			this.userPictureUrl = url;
 			return this;
 		}
 
-		public Builder snapPictureUri(Uri uri) {
-			this.snapPictureUri = uri;
+		public Builder snapPictureUrl(String url) {
+			this.snapPictureUrl = url;
 			return this;
 		}
 
@@ -77,8 +77,8 @@ public class PlaceFeedItem {
 		this.time = builder.time;
 		this.name = builder.name;
 		this.description = builder.description;
-		this.userPictureUri = builder.userPictureUri;
-		this.snapPictureUri = builder.snapPictureUri;
+		this.userPictureUrl = builder.userPictureUrl;
+		this.snapPictureUrl = builder.snapPictureUrl;
 		this.comment = builder.comment;
 	}
 
@@ -98,20 +98,20 @@ public class PlaceFeedItem {
 		this.description = description;
 	}
 
-	public Uri getSnapPictureUri() {
-		return snapPictureUri;
+	public String getSnapPictureUrl() {
+		return snapPictureUrl;
 	}
 
-	public void setSnapPictureUri(Uri uri) {
-		this.snapPictureUri = uri;
+	public void setSnapPictureUrl(String url) {
+		this.snapPictureUrl = url;
 	}
 
-	public Uri getUserPictureUri() {
-		return userPictureUri;
+	public String getUserPictureUrl() {
+		return userPictureUrl;
 	}
 
-	public void setUserPictureUri(Uri uri) {
-		this.userPictureUri = uri;
+	public void setUserPictureUrl(String url) {
+		this.userPictureUrl = url;
 	}
 
 	public String getComment() {

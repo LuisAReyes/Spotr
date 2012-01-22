@@ -35,14 +35,14 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.csun.spotr.core.adapter_item.UserItem;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.UserItemAdapter;
-import com.csun.spotr.helper.JsonHelper;
 
 public class FriendListActionActivity extends Activity {
 	private final String TAG = "(FriendListActionActivity)";
 	private final String SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
 	private final String SEND_REQUEST_URL = "http://107.22.209.62/android/send_friend_request.php";
-	private ListView list = null;
+	private ListView listview = null;
 	private UserItemAdapter adapter = null;
 	private List<UserItem> userItemList = null;
 	private Button buttonSearch = null;
@@ -68,7 +68,7 @@ public class FriendListActionActivity extends Activity {
 				imm.hideSoftInputFromWindow(editTextSearch.getWindowToken(), 0);
 
 				// create a new list of items
-				list = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
+				listview = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
 				/*
 				 * View footerView =
 				 * ((LayoutInflater)FriendListActionActivity.this
@@ -80,8 +80,8 @@ public class FriendListActionActivity extends Activity {
 				counter = 0;
 				userItemList = new ArrayList<UserItem>();
 				adapter = new UserItemAdapter(FriendListActionActivity.this, userItemList);
-				list.setAdapter(adapter);
-				list.setOnItemClickListener(new OnItemClickListener() {
+				listview.setAdapter(adapter);
+				listview.setOnItemClickListener(new OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 						startDialog(userItemList.get(position));
 					}
@@ -91,7 +91,7 @@ public class FriendListActionActivity extends Activity {
 				task = new SearchFriendsTask(editTextSearch.getText().toString(), true);
 				task.execute(counter);
 
-				list.setOnScrollListener(new OnScrollListener() {
+				listview.setOnScrollListener(new OnScrollListener() {
 					public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 						if (loading) {
 							if (totalItemCount > prevTotal) {

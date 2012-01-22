@@ -25,11 +25,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.csun.spotr.singleton.CurrentUser;
-import com.csun.spotr.adapter.BalloonItemizedOverlay;
+import com.csun.spotr.util.GooglePlaceHelper;
+import com.csun.spotr.util.ImageHelper;
+import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.core.Place;
-import com.csun.spotr.helper.ImageHelper;
-import com.csun.spotr.helper.GooglePlaceHelper;
-import com.csun.spotr.helper.JsonHelper;
+import com.csun.spotr.custom_gui.BalloonItemizedOverlay;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
@@ -186,15 +186,11 @@ public class MapViewActivity extends MapActivity {
 			// assume either GPS or Network is enabled
 			// TODO: add error handling
 			
-			// prefer GPS
-			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
 				manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
-			}
-			else {
-				if(manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-					manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
-				}
-			}
+
+			else if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+				manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
 			
 			progressDialog = new ProgressDialog(MapViewActivity.this);
 			progressDialog.setMessage("Loading...");

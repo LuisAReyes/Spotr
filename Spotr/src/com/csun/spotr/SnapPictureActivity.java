@@ -13,11 +13,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.csun.spotr.helper.Base64;
-import com.csun.spotr.helper.JsonHelper;
-import com.csun.spotr.helper.UploadFileHelper;
 import com.csun.spotr.singleton.CurrentDateTime;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.util.Base64;
+import com.csun.spotr.util.JsonHelper;
+import com.csun.spotr.util.UploadFileHelper;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

@@ -9,12 +9,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.csun.spotr.adapter.FriendListFeedItemAdapter;
+import com.csun.spotr.adapter.FriendFeedItemAdapter;
 import com.csun.spotr.core.Challenge;
 import com.csun.spotr.core.adapter_item.FriendFeedItem;
-import com.csun.spotr.helper.ImageHelper;
-import com.csun.spotr.helper.JsonHelper;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.util.ImageHelper;
+import com.csun.spotr.util.JsonHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -41,8 +41,8 @@ public class FriendListFeedActivity extends Activity {
 	private final String TAG = "(FriendListFeedActivity)";
 	private final String GET_FRIEND_FEED_URL = "http://107.22.209.62/android/get_friend_feeds.php";
 	private List<FriendFeedItem> friendFeedList = new ArrayList<FriendFeedItem>();
-	private ListView list = null;
-	private FriendListFeedItemAdapter adapter = null;
+	private ListView listview = null;
+	private FriendFeedItemAdapter adapter = null;
 	private GetFriendFeedTask task = null;
 	
     @Override
@@ -50,10 +50,10 @@ public class FriendListFeedActivity extends Activity {
     	super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list_feed);
 		
-		list = (ListView) findViewById(R.id.friend_list_feed_xml_listview);
-		adapter = new FriendListFeedItemAdapter(FriendListFeedActivity.this, friendFeedList);
-		list.setAdapter(adapter);
-		list.setOnItemClickListener(new OnItemClickListener() {
+		listview = (ListView) findViewById(R.id.friend_list_feed_xml_listview);
+		adapter = new FriendFeedItemAdapter(FriendListFeedActivity.this, friendFeedList);
+		listview.setAdapter(adapter);
+		listview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			}
 		});
@@ -79,6 +79,7 @@ public class FriendListFeedActivity extends Activity {
 		
 		@Override
 		  protected void onProgressUpdate(FriendFeedItem... feeds) {
+			progressDialog.dismiss();
 			friendFeedList.add(feeds[0]);
 			adapter.notifyDataSetChanged();
 	    }
@@ -89,15 +90,15 @@ public class FriendListFeedActivity extends Activity {
 			if (array != null) { 
 				try {
 					for (int i = 0; i < array.length(); ++i) { 
-						Uri snapPictureUri = null;
-						Uri userPictureUri = null;
+						String snapPictureUrl = null;
+						String userPictureUrl = null;
 						
 						if (Challenge.returnType(array.getJSONObject(i).getString("challenges_tbl_type")) == Challenge.Type.SNAP_PICTURE) {
-							snapPictureUri = constructUriFromBitmap(ImageHelper.downloadImage(array.getJSONObject(i).getString("activity_tbl_snap_picture_url")), 100);
+							snapPictureUrl = array.getJSONObject(i).getString("activity_tbl_snap_picture_url");
 						}
 						
 						if(ImageHelper.downloadImage(array.getJSONObject(i).getString("users_tbl_user_image_url")) != null) {
-							userPictureUri = constructUriFromBitmap(ImageHelper.downloadImage(array.getJSONObject(i).getString("users_tbl_user_image_url")), 1);
+							userPictureUrl = array.getJSONObject(i).getString("users_tbl_user_image_url");
 						}
 						
 						publishProgress(
@@ -112,8 +113,8 @@ public class FriendListFeedActivity extends Activity {
 										// optional parameters
 										.challengeName(array.getJSONObject(i).getString("challenges_tbl_name"))
 										.challengeDescription(array.getJSONObject(i).getString("challenges_tbl_description"))
-										.activitySnapPictureUri(snapPictureUri)
-										.friendPictureUri(userPictureUri)
+										.activitySnapPictureUrl(snapPictureUrl)
+										.friendPictureUrl(userPictureUrl)
 										.activityComment(array.getJSONObject(i).getString("activity_tbl_comment"))
 											.build());
 					}
@@ -142,32 +143,13 @@ public class FriendListFeedActivity extends Activity {
 				});
 				dialogMessage.show();
 			}
+			
 			progressDialog = null;
 			datas = null;
 			array = null;
 			System.gc();
 		}
 			
-	}
-    
-    private Uri constructUriFromBitmap(Bitmap bitmap, int quality) {
-		ContentValues values = new ContentValues(1);
-		values.put(Media.MIME_TYPE, "image/jpeg");
-		Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
-		OutputStream outStream;
-		try {
-		    outStream = getContentResolver().openOutputStream(uri);
-			bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outStream);
-		    outStream.close();
-		} 
-		catch (Exception e) {
-		    Log.e(TAG, "exception while writing image", e);
-		}
-		bitmap.recycle();
-		bitmap = null;
-		outStream = null;
-		System.gc();
-		return uri;
 	}
     
 	@Override
@@ -205,28 +187,14 @@ public class FriendListFeedActivity extends Activity {
     
     @Override
     public void onPause() {
-		// clean up
     	Log.v(TAG, "I'm paused!");
         super.onPause();
 	}
     
     @Override
     public void onDestroy() {
-		// clean up
     	Log.v(TAG, "I'm destroyed!");
-        for (FriendFeedItem feed: friendFeedList) {
-        	if (feed.getChallengeType() == Challenge.Type.SNAP_PICTURE) {
-        		getContentResolver().delete(feed.getActivitySnapPictureUri(), null, null);
-        		feed.setActivitySnapPictureUri(null);
-        	}	
-        	
-        	if (feed.getFriendPictureUri() != null) {
-        		getContentResolver().delete(feed.getFriendPictureUri(), null, null);
-        		feed.setFriendPictureUri(null);
-        	}
-        }
-        
-        list = null;
+        listview = null;
         adapter = null;
         friendFeedList = null;
         System.gc();

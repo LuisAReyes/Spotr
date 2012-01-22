@@ -10,11 +10,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.csun.spotr.singleton.CurrentUser;
-import com.csun.spotr.adapter.PlaceActivityItemAdapter;
+import com.csun.spotr.util.ImageHelper;
+import com.csun.spotr.util.JsonHelper;
+import com.csun.spotr.adapter.PlaceFeedItemAdapter;
 import com.csun.spotr.core.Challenge;
 import com.csun.spotr.core.adapter_item.PlaceFeedItem;
-import com.csun.spotr.helper.ImageHelper;
-import com.csun.spotr.helper.JsonHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -42,8 +42,8 @@ public class PlaceActivityActivity extends Activity {
 	private final String GET_PLACELOG_URL = "http://107.22.209.62/android/get_activities.php";
 	private int currentPlaceId = 0;
 	private ListView list = null;
-	private PlaceActivityItemAdapter adapter = null;
-	private List<PlaceFeedItem> placeLogList = new ArrayList<PlaceFeedItem>();
+	private PlaceFeedItemAdapter adapter = null;
+	private List<PlaceFeedItem> placeFeedList = new ArrayList<PlaceFeedItem>();
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class PlaceActivityActivity extends Activity {
 		currentPlaceId = extrasBundle.getInt("place_id");
 		
 		list = (ListView) findViewById(R.id.place_activity_xml_listview);
-		adapter = new PlaceActivityItemAdapter(PlaceActivityActivity.this, placeLogList);
+		adapter = new PlaceFeedItemAdapter(PlaceActivityActivity.this, placeFeedList);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -80,7 +80,7 @@ public class PlaceActivityActivity extends Activity {
 		
 		@Override
 	    protected void onProgressUpdate(PlaceFeedItem... placeLogs) {
-			placeLogList.add(placeLogs[0]);
+			placeFeedList.add(placeLogs[0]);
 			adapter.notifyDataSetChanged();
 	    }
 		
@@ -90,15 +90,15 @@ public class PlaceActivityActivity extends Activity {
 			if (array != null) { 
 				try {
 					for (int i = 0; i < array.length(); ++i) { 
-						Uri userPictureUri = null;
-						Uri snapPictureUri = null;
+						String userPictureUrl = null;
+						String snapPictureUrl = null;
 					
-						if(ImageHelper.downloadImage(array.getJSONObject(i).getString("users_tbl_user_image_url")) != null) {
-							userPictureUri = constructUriFromBitmap(ImageHelper.downloadImage(array.getJSONObject(i).getString("users_tbl_user_image_url")), 1);
+						if(array.getJSONObject(i).getString("users_tbl_user_image_url") != null) {
+							userPictureUrl = array.getJSONObject(i).getString("users_tbl_user_image_url");
 						}
 						
 						if (Challenge.returnType(array.getJSONObject(i).getString("challenges_tbl_type")) == Challenge.Type.SNAP_PICTURE) {
-							snapPictureUri = constructUriFromBitmap(ImageHelper.downloadImage(array.getJSONObject(i).getString("activity_tbl_snap_picture_url")), 100);
+							snapPictureUrl = array.getJSONObject(i).getString("activity_tbl_snap_picture_url");
 						}
 						
 						publishProgress(
@@ -109,8 +109,8 @@ public class PlaceActivityActivity extends Activity {
 									.name(array.getJSONObject(i).getString("challenges_tbl_name"))
 									.comment(array.getJSONObject(i).getString("activity_tbl_comment"))
 									.description(array.getJSONObject(i).getString("challenges_tbl_description"))
-									.userPictureUri(userPictureUri)
-									.snapPictureUri(snapPictureUri)
+									.userPictureUrl(userPictureUrl)
+									.snapPictureUrl(snapPictureUrl)
 										.build());
 						
 					}
@@ -140,22 +140,6 @@ public class PlaceActivityActivity extends Activity {
 				dialogMessage.show();
 			}
 		}
-	}
-    
-    private Uri constructUriFromBitmap(Bitmap bitmap, int quality) {
-		ContentValues values = new ContentValues(1);
-		values.put(Media.MIME_TYPE, "image/jpeg");
-		Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
-		try {
-		    OutputStream outStream = getContentResolver().openOutputStream(uri);
-			bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outStream);
-		    outStream.close();
-		} 
-		catch (Exception e) {
-		    Log.e(TAG, "exception while writing image", e);
-		}
-		bitmap.recycle();
-		return uri;
 	}
     
 	@Override
@@ -194,15 +178,6 @@ public class PlaceActivityActivity extends Activity {
     @Override
     public void onDestroy() {
     	Log.v(TAG, "I'm destroyed!");
-    	if (placeLogList != null) {
-	        for (PlaceFeedItem log: placeLogList) {
-	        	if (log.getChallengeType() == Challenge.Type.SNAP_PICTURE)
-	        		getContentResolver().delete(log.getSnapPictureUri(), null, null);
-	        	
-	        	if (log.getUserPictureUri() != null)
-	        		getContentResolver().delete(log.getUserPictureUri(), null, null);
-	        }
-    	}
         super.onDestroy();
 	}
     

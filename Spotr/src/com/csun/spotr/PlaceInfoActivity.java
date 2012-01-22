@@ -9,9 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.csun.spotr.adapter.BalloonItemizedOverlay;
 import com.csun.spotr.core.Place;
-import com.csun.spotr.helper.JsonHelper;
+import com.csun.spotr.custom_gui.BalloonItemizedOverlay;
+import com.csun.spotr.util.JsonHelper;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
