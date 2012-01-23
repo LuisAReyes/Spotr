@@ -12,7 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class RewardViewActivity extends Activity {
-	private final String TAG = "(RewardViewActivity)";
+	private static final String TAG = "(RewardViewActivity)";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

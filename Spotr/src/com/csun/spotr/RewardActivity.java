@@ -1,12 +1,14 @@
 package com.csun.spotr;
 
 import com.csun.spotr.adapter.RewardImageAdapter;
+import com.csun.spotr.custom_gui.DraggableGridView;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,27 +26,27 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class RewardActivity extends Activity {
-	private final String TAG = "(RewardActivity)";
+	private static final String TAG = "(RewardActivity)";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.reward);
 		
-		Button btnMainMenu;
-		
-		//Button for Main Menu
-		btnMainMenu = (Button) findViewById(R.id.reward_xml_button_mainmenu);
-		btnMainMenu.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent intent = new Intent("com.csun.spotr.MainMenuActivity");
-				startActivity(intent);
-			}
-		});
-		
+		 Integer[] thumbIds = {
+			R.drawable.newbie, R.drawable.adventurer,
+		    R.drawable.explorer, R.drawable.superstar,
+		    R.drawable.awards, R.drawable.awards,
+		};
 		//GridView
-	    GridView gridview = (GridView) findViewById(R.id.reward_xml_gridView1);
-	    gridview.setAdapter(new RewardImageAdapter(this));
-
+	    DraggableGridView gridview = (DraggableGridView) findViewById(R.id.reward_xml_gridview_rewards);
+	    
+	    for (int i = 0; i < thumbIds.length; ++i) {
+		    ImageView img = new ImageView(this);
+		    img.setImageDrawable(getResources().getDrawable(thumbIds[i]));
+		    img.setPadding(2, 2, 2, 2);
+		    gridview.addView(img);
+	    }
+	    
 	    gridview.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 	           Intent intent = new Intent(getApplicationContext(), RewardViewActivity.class);

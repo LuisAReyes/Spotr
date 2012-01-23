@@ -9,7 +9,7 @@ import android.view.MenuInflater;
 import android.widget.TabHost;
 
 public class FriendListMainActivity extends TabActivity {
-	private final String TAG = "(FriendListMainActivity)";
+	private static final String TAG = "(FriendListMainActivity)";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

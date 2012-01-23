@@ -24,8 +24,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class FriendProfileActivity extends Activity {
-	private final String TAG = "(FriendProfileActivity)";
-	private final String GET_USER_DETAIL_URL = "http://107.22.209.62/android/get_user_detail.php";
+	private static final String TAG = "(FriendProfileActivity)";
+	private static final String GET_USER_DETAIL_URL = "http://107.22.209.62/android/get_user_detail.php";
 	private ImageView imageViewFriendPicture;
 	private TextView textViewName;
 	private TextView textViewChallengesDone;

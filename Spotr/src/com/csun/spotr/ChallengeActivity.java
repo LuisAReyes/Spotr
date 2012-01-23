@@ -10,7 +10,7 @@ import android.widget.ListView;
 import com.csun.spotr.adapter.ChallengeItemAdapter;
 
 public class ChallengeActivity extends Activity {
-	private final String TAG = "[ChallengeActivity]";
+	private static final String TAG = "(ChallengeActivity)";
 	private ListView challengeListView;
 	private ChallengeItemAdapter challengeItems;
 

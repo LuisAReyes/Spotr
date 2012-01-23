@@ -50,8 +50,8 @@ import com.csun.spotr.adapter.LeaderboardItemAdapter;
 import com.csun.spotr.core.User;
 
 public class LeaderboardActivity extends Activity {
-	private final String TAG = "(LeaderboardActivity)";
-	private final String GET_USERS_URL = "http://107.22.209.62/android/get_users.php";
+	private static final String TAG = "(LeaderboardActivity)";
+	private static final String GET_USERS_URL = "http://107.22.209.62/android/get_users.php";
 	private ListView listview = null;
 	private LeaderboardItemAdapter adapter = null;
 	private List<User> userList = new ArrayList<User>();

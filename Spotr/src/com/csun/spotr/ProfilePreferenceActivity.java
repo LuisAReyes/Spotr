@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 public class ProfilePreferenceActivity extends Activity {
-	private final String TAG = "[ProfilePreferenceActivity]";
+	private static final String TAG = "(ProfilePreferenceActivity)";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

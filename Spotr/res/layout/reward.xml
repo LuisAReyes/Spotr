@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-	>
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/reward_xml_textview"
@@ -12,30 +11,12 @@
         android:layout_gravity="center_horizontal"
         android:text="Rewards"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-    
-    <TableRow
-        android:id="@+id/reward_xml_tableRowtop1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
 
-        <Button
-            android:id="@+id/reward_xml_button_mainmenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Main Menu" />
+   <com.csun.spotr.custom_gui.DraggableGridView
+        android:id="@+id/reward_xml_gridview_rewards"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+    </com.csun.spotr.custom_gui.DraggableGridView>
 
-    </TableRow>
-    
-        <GridView
-            android:id="@+id/reward_xml_gridView1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:columnWidth="90dp"
-            android:numColumns="3"
-            android:verticalSpacing="10dp"
-            android:horizontalSpacing="10dp"
-            android:stretchMode="columnWidth"
-            android:gravity="center">
-        </GridView>
-	
 </LinearLayout>

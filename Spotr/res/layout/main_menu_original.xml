@@ -2,104 +2,37 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
+    android:orientation="vertical"
     android:background="@drawable/background_selector" >
-
-    <ImageView
+    <ImageView
         android:id="@+id/main_menu_xml_imageview_logo"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_launcher" />
-
-    <Button
-        android:id="@+id/main_menu_xml_button_profile_icon"
+        android:layout_gravity="center"
+        android:src="@drawable/logo_0" />
+ 
+ 	<com.csun.spotr.custom_gui.DraggableGridView
+        android:id="@+id/main_menu_xml_gridview_maingrid"
+        android:layout_below="@id/main_menu_xml_imageview_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/main_menu_xml_imageview_logo"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
-        android:drawableTop="@drawable/profile"
-        android:text="@string/main_menu_xml_button_profile_str"
-        android:textColor="@color/main_menu_button_text" />
-
-    <Button
-        android:id="@+id/main_menu_xml_button_award_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/main_menu_xml_button_profile_icon"
-        android:layout_below="@+id/main_menu_xml_button_profile_icon"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/transparent"
-        android:drawableTop="@drawable/awards"
-        android:text="@string/main_menu_xml_button_rewards_str"
-        android:textColor="@color/main_menu_button_text" />
-
-    <Button
-        android:id="@+id/main_menu_xml_button_leader_board_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/main_menu_xml_button_award_icon"
-        android:layout_alignBottom="@+id/main_menu_xml_button_award_icon"
-        android:layout_marginRight="26dp"
-        android:layout_toLeftOf="@+id/main_menu_xml_button_profile_icon"
-        android:background="@android:color/transparent"
-        android:drawableTop="@drawable/leaderboards"
-        android:text="@string/main_menu_xml_button_leader_board_str"
-        android:textColor="@color/main_menu_button_text" />
-
-    <Button
-        android:id="@+id/main_menu_xml_button_friend_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/main_menu_xml_button_profile_icon"
-        android:layout_alignBottom="@+id/main_menu_xml_button_profile_icon"
-        android:layout_alignLeft="@+id/main_menu_xml_button_leader_board_icon"
-        android:layout_alignRight="@+id/main_menu_xml_button_leader_board_icon"
-        android:background="@android:color/transparent"
-        android:drawableTop="@drawable/friends"
-        android:text="@string/main_menu_xml_button_friend_str"
-        android:textColor="@color/main_menu_button_text" />
-
-    <Button
-        android:id="@+id/main_menu_xml_button_challenge_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/main_menu_xml_button_award_icon"
-        android:layout_alignBottom="@+id/main_menu_xml_button_award_icon"
-        android:layout_marginLeft="28dp"
-        android:layout_toRightOf="@+id/main_menu_xml_button_award_icon"
-        android:background="@android:color/transparent"
-        android:drawableTop="@drawable/challenges"
-        android:text="Map"
-        android:textColor="@color/main_menu_button_text" />
-
-    <Button
-        android:id="@+id/main_menu_xml_button_spot_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/main_menu_xml_button_profile_icon"
-        android:layout_alignBottom="@+id/main_menu_xml_button_profile_icon" 
-        android:layout_alignLeft="@+id/main_menu_xml_button_challenge_icon"
-        android:layout_alignRight="@+id/main_menu_button_challenge_icon"
-        android:background="@android:color/transparent"
-        android:drawableTop="@drawable/spots"
-        android:text="@string/main_menu_xml_button_spot_str"
-        android:textColor="@color/main_menu_button_text" />
+        >
+    </com.csun.spotr.custom_gui.DraggableGridView>
     
+   
     <SlidingDrawer 
         android:id="@+id/main_menu_xml_slider"
         android:gravity="bottom"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:topOffset="0dip"
         android:handle="@+id/main_menu_xml_slide_handle"
         android:content="@+id/main_menu_xml_slide_content" >
        
      <Button 
+         android:id="@+id/main_menu_xml_slide_handle"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:id="@+id/main_menu_xml_slide_handle"
          android:background="@drawable/sliderup_0"
          android:textColor="#2d2c2c"
          android:textStyle="bold"
@@ -111,7 +44,6 @@
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          />
-
      <ListView
          android:id="@+id/main_menu_xml_slide_content"
          android:layout_width="match_parent"

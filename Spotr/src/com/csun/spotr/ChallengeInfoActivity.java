@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ChallengeInfoActivity extends Activity {
-	private final String TAG = "[ChallengeInfoActivity]";
+	private static final String TAG = "(ChallengeInfoActivity)";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,14 +33,6 @@ public class ChallengeInfoActivity extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		/*challengeInfoListView = new ListView(this);
-		challengeInfo = new ChallengeInfoAdapter(this);
-		challengeInfoListView.setAdapter(challengeInfo);
-		challengeInfoListView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				
-			}
-		});*/
 		
 		TextView nameTextView = (TextView)findViewById(R.id.challenge_info_xml_textview_name);
 		CheckBox flagCheckBox = (CheckBox)findViewById(R.id.challenge_info_xml_checkbox_reviewflag);

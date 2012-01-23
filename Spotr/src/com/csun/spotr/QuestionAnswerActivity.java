@@ -45,7 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class QuestionAnswerActivity extends Activity {
-	private static final String TAG = "[SnapPictureActivity]";
+	private static final String TAG = "(SnapPictureActivity)";
 	private static final String QUESTION_ANSWER_URL = "http://107.22.209.62/android/do_question_answer.php";
 	private TextView textViewQuestion = null;
 	private EditText editTextAnswer = null; 

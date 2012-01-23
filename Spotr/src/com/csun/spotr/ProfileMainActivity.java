@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.widget.TabHost;
 
 public class ProfileMainActivity extends TabActivity {
-	private final String TAG = "[ProfileMainActivity]";
+	private final static String TAG = "(ProfileMainActivity)";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

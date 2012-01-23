@@ -40,10 +40,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ProfileActivity extends Activity {
-	private final String TAG = "(ProfileActivity)";
-	private final String GET_USER_DETAIL_URL = "http://107.22.209.62/android/get_user_detail.php";
-	private final int CAMERA_PICTURE = 111;
-	private final int GALLERY_PICTURE = 222;
+	private static final String TAG = "(ProfileActivity)";
+	private static final String GET_USER_DETAIL_URL = "http://107.22.209.62/android/get_user_detail.php";
+	private static final int CAMERA_PICTURE = 111;
+	private static final int GALLERY_PICTURE = 222;
 	private ListView listViewProfile = null;
 	private ProfileItemAdapter adapter = null;
 	private int currentUserId = 0;

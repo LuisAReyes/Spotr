@@ -38,8 +38,8 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class FriendListFeedActivity extends Activity {
-	private final String TAG = "(FriendListFeedActivity)";
-	private final String GET_FRIEND_FEED_URL = "http://107.22.209.62/android/get_friend_feeds.php";
+	private static final String TAG = "(FriendListFeedActivity)";
+	private static final String GET_FRIEND_FEED_URL = "http://107.22.209.62/android/get_friend_feeds.php";
 	private List<FriendFeedItem> friendFeedList = new ArrayList<FriendFeedItem>();
 	private ListView listview = null;
 	private FriendFeedItemAdapter adapter = null;

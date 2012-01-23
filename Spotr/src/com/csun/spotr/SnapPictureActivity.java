@@ -42,8 +42,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class SnapPictureActivity extends Activity {
-	private final String TAG = "[SnapPictureActivity]";
-	private final String SNAP_PICTURE_URL = "http://107.22.209.62/images/upload_picture.php";
+	private static final String TAG = "(SnapPictureActivity)";
+	private static final String SNAP_PICTURE_URL = "http://107.22.209.62/images/upload_picture.php";
 	private Button buttonGo = null;
 	private Button buttonNext = null;
 	private ImageView imageViewPreview = null;

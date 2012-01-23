@@ -15,6 +15,7 @@ import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.FriendRequestItemAdapter;
 import com.csun.spotr.core.User;
 import com.csun.spotr.core.adapter_item.FriendRequestItem;
+import com.csun.spotr.custom_gui.DraggableGridView;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,6 +32,7 @@ import android.preference.Preference;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -66,64 +68,71 @@ public class MainMenuActivity extends Activity {
 		Button btnSpots;
 		Button btnSettings;
 		Button btnLogoff;
+		
+		DraggableGridView mainGrid = (DraggableGridView) findViewById(R.id.main_menu_xml_gridview_maingrid);
+		
+		final ImageView imageViewProfile = new ImageView(this);
+		imageViewProfile.setImageDrawable(getResources().getDrawable(R.drawable.profile));
+		mainGrid.addView(imageViewProfile);
 
-		// button for the profile
-		btnProfile = (Button) findViewById(R.id.main_menu_xml_button_profile_icon);
-		btnProfile.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				User user = CurrentUser.getCurrentUser();
-				Bundle extras = new Bundle();
-				extras.putInt("user_id", user.getId());
-				Intent intent = new Intent("com.csun.spotr.ProfileMainActivity");
-				intent.putExtras(extras);
-				startActivity(intent);
-			}
-		});
 
-		// button for the challenge
-		btnChallenges = (Button) findViewById(R.id.main_menu_xml_button_challenge_icon);
-		btnChallenges.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.LocalMapViewActivity");
-				startActivity(i);
-			}
-		});
+		final ImageView imageViewLocalMap = new ImageView(this);
+		imageViewLocalMap.setImageDrawable(getResources().getDrawable(R.drawable.challenges));
+		mainGrid.addView(imageViewLocalMap);
+		
+		final ImageView imageViewFriend = new ImageView(this);
+		imageViewFriend.setImageDrawable(getResources().getDrawable(R.drawable.friends));
+		mainGrid.addView(imageViewFriend);
+		
 
-		// button for the friends list
-		btnFriends = (Button) findViewById(R.id.main_menu_xml_button_friend_icon);
-		btnFriends.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.FriendListMainActivity");
-				startActivity(i);
-			}
-		});
-
-		btnLeaderboards = (Button) findViewById(R.id.main_menu_xml_button_leader_board_icon);
-		btnLeaderboards.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.LeaderboardActivity");
-				startActivity(i);
-			}
-		});
-
-		// button for rewards
-		btnRewards = (Button) findViewById(R.id.main_menu_xml_button_award_icon);
-		btnRewards.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.RewardActivity");
-				startActivity(i);
-			}
-		});
-
-		// button for spots
-		btnSpots = (Button) findViewById(R.id.main_menu_xml_button_spot_icon);
-		btnSpots.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.PlaceActivity");
-				startActivity(i);
-			}
-		});
-
+		final ImageView imageViewLeaderboad = new ImageView(this);
+		imageViewLeaderboad.setImageDrawable(getResources().getDrawable(R.drawable.leaderboards));
+		mainGrid.addView(imageViewLeaderboad);
+	
+		final ImageView imageViewReward = new ImageView(this);
+		imageViewReward.setImageDrawable(getResources().getDrawable(R.drawable.awards));
+		mainGrid.addView(imageViewReward);
+		
+		final ImageView imageViewPlace = new ImageView(this);
+		imageViewPlace.setImageDrawable(getResources().getDrawable(R.drawable.spots));
+		mainGrid.addView(imageViewPlace);
+		
+		mainGrid.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+				Intent intent;
+				if (v.equals(imageViewProfile)) {
+					Bundle extras = new Bundle();
+					extras.putInt("user_id", CurrentUser.getCurrentUser().getId());
+					intent = new Intent(getApplicationContext(), ProfileMainActivity.class);
+					intent.putExtras(extras);
+					startActivity(intent);
+				}
+				else if (v.equals(imageViewLocalMap)) {
+					intent = new Intent(getApplicationContext(), LocalMapViewActivity.class);
+					startActivity(intent);
+				}
+				else if (v.equals(imageViewLeaderboad)) {
+					intent = new Intent(getApplicationContext(), LeaderboardActivity.class);
+					startActivity(intent);
+				}
+				else if (v.equals(imageViewPlace)) {
+					intent = new Intent(getApplicationContext(), PlaceActivity.class);
+					startActivity(intent);
+				}
+				else if (v.equals(imageViewFriend)) {
+					intent = new Intent(getApplicationContext(), FriendListMainActivity.class);
+					startActivity(intent);
+				}
+				else if (v.equals(imageViewReward)) {
+					intent = new Intent(getApplicationContext(), RewardActivity.class);
+					startActivity(intent);
+				}
+				else {
+					// should never go here
+				}
+		    }
+		});	
+	
 		// populating Notification with friend request 
 		GetFriendRequestTask task = new GetFriendRequestTask();
 		task.execute();
