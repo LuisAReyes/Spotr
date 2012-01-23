@@ -1,9 +1,3 @@
-/**
- * @author Aleksandr Rozenman
- * @author Adam Brakel
- * @author: Chan Nguyen
- */
-
 package com.csun.spotr.adapter;
 
 import android.app.Activity;

@@ -12,6 +12,7 @@ import org.json.JSONException;
 import com.csun.spotr.adapter.ProfileItemAdapter;
 import com.csun.spotr.core.User;
 import com.csun.spotr.util.ImageHelper;
+import com.csun.spotr.util.ImageLoader;
 import com.csun.spotr.util.JsonHelper;
 
 import android.app.Activity;
@@ -51,6 +52,7 @@ public class ProfileActivity extends Activity {
 	private GetUserDetailTask task = null;
 	private Bitmap bitmapUserPicture = null;
 	private ImageView imageViewUserPicture = null;
+	private ImageLoader imageLoader;
 	private TextView textViewChallengesDone = null;
 	private TextView textViewPlacesVisited = null;
 	private TextView textViewPoints = null;
@@ -65,6 +67,8 @@ public class ProfileActivity extends Activity {
 		// testing
 		Bundle extrasBundle = getIntent().getExtras();
 		currentUserId = extrasBundle.getInt("user_id");
+		
+		imageLoader = new ImageLoader(getApplicationContext());
 		
 		imageViewUserPicture = (ImageView) findViewById(R.id.profile_xml_imageview_user_picture);
 		imageViewUserPicture.setOnClickListener(new OnClickListener() {
@@ -154,7 +158,7 @@ public class ProfileActivity extends Activity {
 							.challengesDone(array.getJSONObject(0).getInt("users_tbl_challenges_done"))
 							.placesVisited(array.getJSONObject(0).getInt("users_tbl_places_visited"))
 							.points(array.getJSONObject(0).getInt("users_tbl_points"))
-							.imageUri(constructUriFromBitmap(ImageHelper.downloadImage(array.getJSONObject(0).getString("users_tbl_user_image_url"))))
+							.imageUrl(array.getJSONObject(0).getString("users_tbl_user_image_url"))
 								.build();
 			}
 			catch (JSONException e) {
@@ -167,7 +171,7 @@ public class ProfileActivity extends Activity {
 		protected void onPostExecute(final User user) {
 			progressDialog.dismiss();
 			if (user != null) {
-				imageViewUserPicture.setImageURI(user.getImageUri());
+				imageLoader.displayImage(user.getImageUrl(), imageViewUserPicture);
 				
 				textViewChallengesDone = (TextView) findViewById(R.id.profile_xml_textview_challenges_done);
 				textViewChallengesDone.setText(Integer.toString(user.getChallengesDone()));
@@ -269,11 +273,7 @@ public class ProfileActivity extends Activity {
 	@Override
     public void onDestroy() {
 		Log.v(TAG, "I'm destroyed!");
-		if (user != null) {
-			getContentResolver().delete(user.getImageUri(), null, null);
-			user.setImageUri(null);
-		}
-		
+	
 		if (bitmapUserPicture != null) {
 			bitmapUserPicture.recycle();
 			bitmapUserPicture = null;

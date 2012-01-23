@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.csun.spotr.singleton.CurrentUriList;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.FriendRequestItemAdapter;

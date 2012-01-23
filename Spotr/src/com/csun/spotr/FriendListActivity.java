@@ -31,7 +31,6 @@ import android.view.View;
 import com.csun.spotr.core.adapter_item.UserItem;
 import com.csun.spotr.adapter.UserItemAdapter;
 import com.csun.spotr.core.User;
-import com.csun.spotr.singleton.CurrentUriList;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.util.ImageHelper;
 import com.csun.spotr.util.JsonHelper;

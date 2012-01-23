@@ -22,8 +22,6 @@ public class User {
 	private int placesVisited;
 	private int rank;
 	private String imageUrl;
-	private Drawable imageDrawable;
-	private Uri imageUri;
 
 	public static class Builder {
 		// required parameters
@@ -38,8 +36,6 @@ public class User {
 		private int placesVisited;
 		private int rank;
 		private String imageUrl;
-		private Drawable imageDrawable;
-		private Uri imageUri;
 
 		public Builder(int id, String username, String password) {
 			// required parameters
@@ -53,8 +49,6 @@ public class User {
 			challengesDone = 0;
 			placesVisited = 0;
 			imageUrl = null;
-			imageDrawable = null;
-			imageUri = null;
 		}
 
 		public Builder realname(String realname) {
@@ -92,16 +86,6 @@ public class User {
 			return this;
 		}
 
-		public Builder imageDrawable(Drawable drawable) {
-			this.imageDrawable = drawable;
-			return this;
-		}
-		
-		public Builder imageUri(Uri uri) {
-			this.imageUri = uri;
-			return this;
-		}
-
 		public User build() {
 			return new User(this);
 		}
@@ -118,8 +102,6 @@ public class User {
 		this.placesVisited = builder.placesVisited;
 		this.rank = builder.rank;
 		this.imageUrl = builder.imageUrl;
-		this.imageDrawable = builder.imageDrawable;
-		this.imageUri = builder.imageUri;
 	}
 
 	public String getRealname() {
@@ -184,22 +166,6 @@ public class User {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
-	}
-
-	public Drawable getImageDrawable() {
-		return imageDrawable;
-	}
-
-	public void setImageDrawable(Drawable imageDrawable) {
-		this.imageDrawable = imageDrawable;
-	}
-
-	public Uri getImageUri() {
-		return imageUri;
-	}
-
-	public void setImageUri(Uri imageUri) {
-		this.imageUri = imageUri;
 	}
 
 	public int getId() {

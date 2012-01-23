@@ -1,11 +1,6 @@
 package com.csun.spotr.singleton;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import com.csun.spotr.core.User;
-
-import android.text.format.DateFormat;
 
 public class CurrentUser {
 	private static final String	TAG = "(CurrentUser)";

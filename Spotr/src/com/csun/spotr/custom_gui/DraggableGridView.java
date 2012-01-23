@@ -90,7 +90,6 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 		}
 	};
 
-	// OVERRIDES
 	@Override
 	public void addView(View child) {
 		super.addView(child);
@@ -103,7 +102,6 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 		newPositions.remove(index);
 	};
 
-	// LAYOUT
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		// compute width of view, in dp

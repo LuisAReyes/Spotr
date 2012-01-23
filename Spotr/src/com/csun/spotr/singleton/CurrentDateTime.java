@@ -7,7 +7,7 @@ import java.util.TimeZone;
 public class CurrentDateTime {
 	static final String DATEFORMAT = "yyyyMMddHHmmss";
 
-	public static String getUTCDateTime() {
+	public synchronized static String getUTCDateTime() {
 		final SimpleDateFormat sdf = new SimpleDateFormat(DATEFORMAT);
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		String utcTime = sdf.format(new Date());
