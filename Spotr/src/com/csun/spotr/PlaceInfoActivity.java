@@ -97,10 +97,6 @@ public class PlaceInfoActivity extends MapActivity {
 						.address(array.getJSONObject(0).getString("spots_tbl_description"))
 							.build();
 				
-				
-				// if (!array.getJSONObject(0).getString("spots_tbl_phone").equals("")) {
-					// place.setPhoneNumber(array.getJSONObject(0).getString("spots_tbl_phone"));
-				// }
 			}
 			catch (JSONException e) {
 				Log.e(TAG + ".filterPlaces() : ", "JSON error parsing data" + e.toString());

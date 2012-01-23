@@ -60,37 +60,38 @@ public class FriendListActionActivity extends Activity {
 		setContentView(R.layout.friend_list_action);
 		buttonSearch = (Button) findViewById(R.id.friend_list_action_xml_button_search);
 		editTextSearch = (EditText) findViewById(R.id.friend_list_action_xml_edittext_search);
+		listview = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
+		
+		userItemList = new ArrayList<UserItem>();
+		adapter = new UserItemAdapter(FriendListActionActivity.this, userItemList);
+		listview.setAdapter(adapter);
+		
+		listview.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				startDialog(userItemList.get(position));
+			}
+		});
+			
+		// hide keyboard right away
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(editTextSearch.getWindowToken(), 0);
 
 		buttonSearch.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				// hide keyboard right away
-				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(editTextSearch.getWindowToken(), 0);
-
-				// create a new list of items
-				listview = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
-				/*
-				 * View footerView =
-				 * ((LayoutInflater)FriendListActionActivity.this
-				 * .getSystemService
-				 * (Context.LAYOUT_INFLATER_SERVICE)).inflate(R.
-				 * layout.listview_footer, null, false);
-				 * list.addFooterView(footerView);
-				 */
-				counter = 0;
-				userItemList = new ArrayList<UserItem>();
-				adapter = new UserItemAdapter(FriendListActionActivity.this, userItemList);
-				listview.setAdapter(adapter);
-				listview.setOnItemClickListener(new OnItemClickListener() {
-					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-						startDialog(userItemList.get(position));
-					}
-				});
-
+				synchronized (this) {
+					loading = true;
+					counter = 0;
+				}
+				
+				userItemList.clear();
+				adapter.notifyDataSetChanged();
+			
+				Log.v(TAG, "search button was clicked.");
 				// start task
 				task = new SearchFriendsTask(editTextSearch.getText().toString(), true);
 				task.execute(counter);
-
+				
+				listview.clearChoices();
 				listview.setOnScrollListener(new OnScrollListener() {
 					public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 						if (loading) {
@@ -102,8 +103,10 @@ public class FriendListActionActivity extends Activity {
 						}
 
 						if (!loading && ((totalItemCount - visibleItemCount) <= (firstVisibleItem + threshHold))) {
-							counter += 10;
-							loading = true;
+							synchronized (this) {
+								counter += threshHold;
+								loading = true;
+							}
 							new SearchFriendsTask(editTextSearch.getText().toString(), false).execute(counter);
 						}
 					}
