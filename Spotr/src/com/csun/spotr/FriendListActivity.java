@@ -1,6 +1,5 @@
 package com.csun.spotr;
 
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +11,10 @@ import org.json.JSONException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore.Images.Media;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -30,9 +25,7 @@ import android.view.View;
 
 import com.csun.spotr.core.adapter_item.UserItem;
 import com.csun.spotr.adapter.UserItemAdapter;
-import com.csun.spotr.core.User;
 import com.csun.spotr.singleton.CurrentUser;
-import com.csun.spotr.util.ImageHelper;
 import com.csun.spotr.util.JsonHelper;
 
 public class FriendListActivity extends Activity {

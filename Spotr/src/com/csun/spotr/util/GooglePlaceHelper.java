@@ -1,11 +1,8 @@
 package com.csun.spotr.util;
 
 import android.location.Location;
-/**
- * @author Chan Nguyen
- */
+
 public class GooglePlaceHelper {
-	private static final String	TAG = "[GooglePlaceHelper]";
 	private static final String GOOGLE_PLACE_API_KEY = "AIzaSyB3LpeNgrKCPBbYovm9smzQ-7dfiIb8nnI";
 	
 	public static String buildGooglePlacesUrl(Location location, String radius) {

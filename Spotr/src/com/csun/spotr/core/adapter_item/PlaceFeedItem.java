@@ -1,9 +1,6 @@
 package com.csun.spotr.core.adapter_item;
 
 import com.csun.spotr.core.Challenge;
-import com.csun.spotr.core.Challenge.Type;
-
-import android.net.Uri;
 
 public class PlaceFeedItem {
 	// required parameters

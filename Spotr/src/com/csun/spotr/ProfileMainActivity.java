@@ -2,12 +2,10 @@ package com.csun.spotr;
 
 import android.app.TabActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.TabHost;
 
 public class ProfileMainActivity extends TabActivity {

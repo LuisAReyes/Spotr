@@ -20,10 +20,6 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-/*
- * (non-Javadoc)
- * Update view of PlaceActivity
- */
 public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 	private Context context;
 

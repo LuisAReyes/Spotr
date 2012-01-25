@@ -12,7 +12,6 @@ import org.json.JSONObject;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.FriendRequestItemAdapter;
-import com.csun.spotr.core.User;
 import com.csun.spotr.core.adapter_item.FriendRequestItem;
 import com.csun.spotr.custom_gui.DraggableGridView;
 
@@ -22,15 +21,11 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.Preference;
 
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.util.Log;
@@ -40,7 +35,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainMenuActivity extends Activity {

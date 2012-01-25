@@ -6,19 +6,12 @@ import com.csun.spotr.core.adapter_item.PlaceItem;
 import com.csun.spotr.R;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
-import android.view.LayoutInflater.Filter;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.csun.spotr.core.adapter_item.PlaceItem;
-import com.csun.spotr.util.ImageHelper;
 
 public class PlaceItemAdapter extends BaseAdapter {
 	private Activity context;

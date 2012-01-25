@@ -222,62 +222,68 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 
 	public boolean onTouch(View view, MotionEvent event) {
 		int action = event.getAction();
+		
 		switch (action & MotionEvent.ACTION_MASK) {
-		case MotionEvent.ACTION_DOWN :
-			enabled = true;
-			lastX = (int) event.getX();
-			lastY = (int) event.getY();
-			touching = true;
-			break;
-		case MotionEvent.ACTION_MOVE :
-			int delta = lastY - (int) event.getY();
-			if (dragged != -1) {
-				// change draw location of dragged visual
-				int x = (int) event.getX(), y = (int) event.getY();
-				int l = x - (3 * childSize / 4), t = y - (3 * childSize / 4);
-				getChildAt(dragged).layout(l, t, l + (childSize * 3 / 2), t + (childSize * 3 / 2));
-
-				// check for new target hover
-				int target = getTargetFromCoor(x, y);
-				if (lastTarget != target) {
-					if (target != -1) {
-						animateGap(target);
-						lastTarget = target;
+		
+			case MotionEvent.ACTION_DOWN :
+				enabled = true;
+				lastX = (int) event.getX();
+				lastY = (int) event.getY();
+				touching = true;
+				break;
+				
+			case MotionEvent.ACTION_MOVE :
+				int delta = lastY - (int) event.getY();
+				if (dragged != -1) {
+					// change draw location of dragged visual
+					int x = (int) event.getX(), y = (int) event.getY();
+					int l = x - (3 * childSize / 4), t = y - (3 * childSize / 4);
+					getChildAt(dragged).layout(l, t, l + (childSize * 3 / 2), t + (childSize * 3 / 2));
+	
+					// check for new target hover
+					int target = getTargetFromCoor(x, y);
+					if (lastTarget != target) {
+						if (target != -1) {
+							animateGap(target);
+							lastTarget = target;
+						}
 					}
 				}
-			}
-			else {
-				scroll += delta;
-				clampScroll();
-				if (Math.abs(delta) > 2)
-					enabled = false;
-				onLayout(true, getLeft(), getTop(), getRight(), getBottom());
-			}
-			lastX = (int) event.getX();
-			lastY = (int) event.getY();
-			lastDelta = delta;
-			break;
-		case MotionEvent.ACTION_UP :
-			if (dragged != -1) {
-				View v = getChildAt(dragged);
-				if (lastTarget != -1)
-					reorderChildren();
 				else {
-					Point xy = getCoorFromIndex(dragged);
-					v.layout(xy.x, xy.y, xy.x + childSize, xy.y + childSize);
+					scroll += delta;
+					clampScroll();
+					if (Math.abs(delta) > 2)
+						enabled = false;
+					onLayout(true, getLeft(), getTop(), getRight(), getBottom());
 				}
-				v.clearAnimation();
-				if (v instanceof ImageView)
-					((ImageView) v).setAlpha(255);
-				lastTarget = -1;
-				dragged = -1;
+				lastX = (int) event.getX();
+				lastY = (int) event.getY();
+				lastDelta = delta;
+				break;
+				
+			case MotionEvent.ACTION_UP :
+				if (dragged != -1) {
+					View v = getChildAt(dragged);
+					if (lastTarget != -1)
+						reorderChildren();
+					else {
+						Point xy = getCoorFromIndex(dragged);
+						v.layout(xy.x, xy.y, xy.x + childSize, xy.y + childSize);
+					}
+					v.clearAnimation();
+					if (v instanceof ImageView)
+						((ImageView) v).setAlpha(255);
+					lastTarget = -1;
+					dragged = -1;
+				}
+				touching = false;
+				break;
 			}
-			touching = false;
-			break;
-		}
-		if (dragged != -1)
-			return true;
-		return false;
+		
+			if (dragged != -1)
+				return true;
+			
+			return false;
 	}
 
 	protected void animateDragged() {

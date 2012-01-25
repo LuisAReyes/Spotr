@@ -1,6 +1,5 @@
 package com.csun.spotr;
 
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,21 +12,16 @@ import com.csun.spotr.adapter.FriendFeedItemAdapter;
 import com.csun.spotr.core.Challenge;
 import com.csun.spotr.core.adapter_item.FriendFeedItem;
 import com.csun.spotr.singleton.CurrentUser;
-import com.csun.spotr.util.ImageHelper;
 import com.csun.spotr.util.JsonHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -97,7 +91,7 @@ public class FriendListFeedActivity extends Activity {
 							snapPictureUrl = array.getJSONObject(i).getString("activity_tbl_snap_picture_url");
 						}
 						
-						if(ImageHelper.downloadImage(array.getJSONObject(i).getString("users_tbl_user_image_url")) != null) {
+						if(array.getJSONObject(i).getString("users_tbl_user_image_url").equals("") == false) {
 							userPictureUrl = array.getJSONObject(i).getString("users_tbl_user_image_url");
 						}
 						

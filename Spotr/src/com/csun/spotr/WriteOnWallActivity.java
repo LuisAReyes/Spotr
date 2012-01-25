@@ -114,10 +114,34 @@ public class WriteOnWallActivity extends Activity {
 				Intent intent = new Intent("com.csun.spotr.PlaceMainActivity");
 				intent.putExtra("place_id", Integer.parseInt(spotsId));
 				startActivity(intent);
+				finish();
 			}
 		}
 	}
-	
+	@Override
+	public void onDestroy() {
+		Log.v(TAG, "I'm destroyed!");
+		super.onDestroy();
+	}
+
+	@Override
+	public void onRestart() {
+		Log.v(TAG, "I'm restarted!");
+		super.onRestart();
+	}
+
+	@Override
+	public void onStop() {
+		Log.v(TAG, "I'm stopped!");
+		super.onStop();
+	}
+
+	@Override
+	public void onPause() {
+		Log.v(TAG, "I'm paused!");
+		super.onPause();
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();

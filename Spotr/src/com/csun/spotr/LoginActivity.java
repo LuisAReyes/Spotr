@@ -5,12 +5,10 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.util.JsonHelper;
-import com.csun.spotr.core.User;
 
 import android.app.Activity;
 import android.app.AlertDialog;

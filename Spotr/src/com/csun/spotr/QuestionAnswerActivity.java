@@ -1,11 +1,6 @@
 package com.csun.spotr;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -13,11 +8,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.csun.spotr.singleton.CurrentDateTime;
 import com.csun.spotr.singleton.CurrentUser;
-import com.csun.spotr.util.Base64;
 import com.csun.spotr.util.JsonHelper;
-import com.csun.spotr.util.UploadFileHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,14 +17,9 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,9 +27,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class QuestionAnswerActivity extends Activity {
 	private static final String TAG = "(SnapPictureActivity)";
@@ -126,6 +111,7 @@ public class QuestionAnswerActivity extends Activity {
 				Intent intent = new Intent("com.csun.spotr.PlaceMainActivity");
 				intent.putExtra("place_id", Integer.parseInt(spotsId));
 				startActivity(intent);
+				finish();
 			}
 		}
 	}
@@ -156,6 +142,24 @@ public class QuestionAnswerActivity extends Activity {
 	}
 
 	@Override
+	public void onRestart() {
+		Log.v(TAG, "I'm restarted!");
+		super.onRestart();
+	}
+
+	@Override
+	public void onStop() {
+		Log.v(TAG, "I'm stopped!");
+		super.onStop();
+	}
+
+	@Override
+	public void onPause() {
+		Log.v(TAG, "I'm paused!");
+		super.onPause();
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
 		switch (item.getItemId()) {
@@ -174,6 +178,7 @@ public class QuestionAnswerActivity extends Activity {
 			case R.id.options_menu_xml_item_mainmenu_icon:
 				intent = new Intent("com.csun.spotr.MainMenuActivity");
 				startActivity(intent);
+				finish();
 				break;
 		}
 		return true;

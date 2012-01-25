@@ -1,25 +1,13 @@
-/**
- * @author Aleksandr Rozenman
- * @author Adam Brakel
- */
-
 package com.csun.spotr;
 
 import com.csun.spotr.core.CurrentChallenge;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class ChallengeInfoActivity extends Activity {
 	private static final String TAG = "(ChallengeInfoActivity)";

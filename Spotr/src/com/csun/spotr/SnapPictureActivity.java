@@ -1,11 +1,7 @@
 package com.csun.spotr;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -16,7 +12,6 @@ import org.json.JSONObject;
 import com.csun.spotr.singleton.CurrentDateTime;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.util.Base64;
-import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.util.UploadFileHelper;
 
 import android.app.Activity;
@@ -24,13 +19,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,8 +29,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class SnapPictureActivity extends Activity {
 	private static final String TAG = "(SnapPictureActivity)";
@@ -113,7 +102,7 @@ public class SnapPictureActivity extends Activity {
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
+		protected String doInBackground(Void... voids) {
 			// create a stream
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			// compress picture and add to stream (PNG)
@@ -153,6 +142,7 @@ public class SnapPictureActivity extends Activity {
 				Intent intent = new Intent("com.csun.spotr.PlaceMainActivity");
 				intent.putExtra("place_id", Integer.parseInt(spotsId));
 				startActivity(intent);
+				finish();
 			}
 		}
 	}
@@ -166,12 +156,30 @@ public class SnapPictureActivity extends Activity {
 	
 	@Override
 	public void onDestroy() {
+		Log.v(TAG, "I'm destroyed!");
 		if (takenPictureBitmap != null) {
 			takenPictureBitmap.recycle(); 
 			takenPictureBitmap = null;
 		}
-		
 		super.onDestroy();
+	}
+
+	@Override
+	public void onRestart() {
+		Log.v(TAG, "I'm restarted!");
+		super.onRestart();
+	}
+
+	@Override
+	public void onStop() {
+		Log.v(TAG, "I'm stopped!");
+		super.onStop();
+	}
+
+	@Override
+	public void onPause() {
+		Log.v(TAG, "I'm paused!");
+		super.onPause();
 	}
 
 	@Override
@@ -181,6 +189,7 @@ public class SnapPictureActivity extends Activity {
 			case R.id.options_menu_xml_item_setting_icon:
 				intent = new Intent("com.csun.spotr.SettingsActivity");
 				startActivity(intent);
+				finish();
 				break;
 			case R.id.options_menu_xml_item_logout_icon:
 				SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
@@ -193,6 +202,7 @@ public class SnapPictureActivity extends Activity {
 			case R.id.options_menu_xml_item_mainmenu_icon:
 				intent = new Intent("com.csun.spotr.MainMenuActivity");
 				startActivity(intent);
+				finish();
 				break;
 		}
 		return true;

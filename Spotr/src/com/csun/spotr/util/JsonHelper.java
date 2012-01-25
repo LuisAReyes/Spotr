@@ -12,7 +12,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +19,7 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class JsonHelper {
-	private static final String TAG = "[JsonHelper]";
+	private static final String TAG = "(JsonHelper)";
 	
 	public static JSONObject getJsonFromUrl(String url) {
 		InputStream input = null;

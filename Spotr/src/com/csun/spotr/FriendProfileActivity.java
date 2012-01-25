@@ -8,9 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.csun.spotr.adapter.ProfileItemAdapter;
 import com.csun.spotr.core.User;
-import com.csun.spotr.util.ImageHelper;
 import com.csun.spotr.util.ImageLoader;
 import com.csun.spotr.util.JsonHelper;
 
@@ -20,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class FriendProfileActivity extends Activity {

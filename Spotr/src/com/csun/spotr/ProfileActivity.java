@@ -11,7 +11,6 @@ import org.json.JSONException;
 
 import com.csun.spotr.adapter.ProfileItemAdapter;
 import com.csun.spotr.core.User;
-import com.csun.spotr.util.ImageHelper;
 import com.csun.spotr.util.ImageLoader;
 import com.csun.spotr.util.JsonHelper;
 

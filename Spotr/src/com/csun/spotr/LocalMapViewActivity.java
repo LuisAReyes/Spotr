@@ -273,6 +273,30 @@ public class LocalMapViewActivity extends MapActivity {
 	}
 	
 	@Override
+	public void onRestart() {
+		Log.v(TAG, "I'm restarted!");
+		super.onRestart();
+	}
+
+	@Override
+	public void onStop() {
+		Log.v(TAG, "I'm stopped!");
+		super.onStop();
+	}
+
+	@Override
+	public void onPause() {
+		Log.v(TAG, "I'm paused!");
+		super.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+		Log.v(TAG, "I'm destroyed!");
+		super.onDestroy();
+	}
+	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.all_menu, menu);
