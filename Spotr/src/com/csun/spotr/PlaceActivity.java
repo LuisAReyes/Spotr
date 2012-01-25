@@ -21,14 +21,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.util.Log;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -38,6 +35,8 @@ import org.json.JSONObject;
 
 import com.csun.spotr.core.adapter_item.PlaceItem;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.util.FineLocation;
+import com.csun.spotr.util.FineLocation.LocationResult;
 import com.csun.spotr.util.GooglePlaceHelper;
 import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.PlaceItemAdapter;
@@ -53,6 +52,7 @@ public class PlaceActivity extends Activity {
 	private PlaceItemAdapter adapter;
 	private List<PlaceItem> placeItemList = new ArrayList<PlaceItem>();
 	private Location lastKnownLocation = null;
+	private FineLocation fineLocation = new FineLocation();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,11 +62,7 @@ public class PlaceActivity extends Activity {
 		// make sure keyboard of edit text do not populate
 		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-		// initially, load all locations
-		if (!startService()) {
-			CreateAlert("Unexpected Error!", "Service cannot be started.");
-		}
-
+	
 		list = (ListView) findViewById(R.id.place_xml_listview_places);
 		adapter = new PlaceItemAdapter(PlaceActivity.this, placeItemList);
 		list.setAdapter(adapter);
@@ -90,6 +86,16 @@ public class PlaceActivity extends Activity {
 				new GetSpotsTask().execute();
 			}
 		});
+		
+		LocationResult locationResult = (new LocationResult() {
+			@Override
+			public void gotLocation(final Location location) {
+				lastKnownLocation = location;
+				new GetSpotsTask().execute();
+			}
+		});
+		
+		fineLocation.getLocation(this, locationResult);
 	}
 
 	public AlertDialog CreateAlert(String title, String message) {
@@ -97,85 +103,6 @@ public class PlaceActivity extends Activity {
 		alert.setTitle(title);
 		alert.setMessage(message);
 		return alert;
-	}
-
-	public boolean startService() {
-		try {
-			UpdateLocationTask task = new UpdateLocationTask();
-			task.execute();
-			return true;
-		}
-		catch (Exception error) {
-			return false;
-		}
-	}
-
-	/*
-	 * This task is used to listen to either Network Provider or GPS Provider to
-	 * retrieve our Phone's location.
-	 */
-	private class UpdateLocationTask extends AsyncTask<Void, Integer, Location> {
-		public Location currentLocation = null;
-		private ProgressDialog progressDialog = null;
-		private MyLocationListener listener;
-		private LocationManager manager;
-
-		@Override
-		protected Location doInBackground(Void... voids) {
-			// wait for a new location
-			while (currentLocation == null) {
-				; // do nothing
-			}
-			
-			manager.removeUpdates(listener);
-			// update the last known location
-			lastKnownLocation = currentLocation;
-			return currentLocation;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			listener = new MyLocationListener();
-			manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-				manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
-
-			else if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-				manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
-
-			// display waiting dialog
-			progressDialog = new ProgressDialog(PlaceActivity.this);
-			progressDialog.setMessage("Finding location...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
-		}
-
-		@Override
-		protected void onPostExecute(Location location) {
-			progressDialog.dismiss();
-			if (location != null)
-				new GetSpotsTask().execute();
-		}
-
-		public class MyLocationListener implements LocationListener {
-			public void onLocationChanged(Location location) {
-				// update new location
-				currentLocation = location;
-			}
-
-			public void onProviderDisabled(String provider) {
-				Log.i("OnProviderDisabled", "OnProviderDisabled");
-			}
-
-			public void onProviderEnabled(String provider) {
-				Log.i("onProviderEnabled", "onProviderEnabled");
-			}
-
-			public void onStatusChanged(String provider, int status, Bundle extras) {
-				Log.i("onStatusChanged", "onStatusChanged");
-			}
-		}
 	}
 
 	private class GetSpotsTask extends AsyncTask<Void, PlaceItem, Boolean> {

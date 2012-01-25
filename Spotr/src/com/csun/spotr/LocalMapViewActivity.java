@@ -29,7 +29,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.util.FineLocation;
 import com.csun.spotr.util.JsonHelper;
+import com.csun.spotr.util.FineLocation.LocationResult;
 import com.csun.spotr.core.Place;
 import com.csun.spotr.custom_gui.BalloonItemizedOverlay;
 import com.google.android.maps.GeoPoint;
@@ -49,6 +51,8 @@ public class LocalMapViewActivity extends MapActivity {
 	private List<Overlay> mapOverlays = null;
 	private CustomItemizedOverlay itemizedOverlay = null;
 	private MapController mapController = null;
+	private FineLocation fineLocation = new FineLocation();
+	private Location lastKnownLocation = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,8 +78,27 @@ public class LocalMapViewActivity extends MapActivity {
 		Button listPlaceButton = (Button) findViewById(R.id.mapview_xml_button_places);
 		Button locateButton = (Button) findViewById(R.id.mapview_xml_button_locate);
 		
-		UpdateLocationTask task = new UpdateLocationTask();
-		task.execute();
+		
+		LocationResult locationResult = (new LocationResult() {
+			@Override
+			public void gotLocation(final Location location) {
+				lastKnownLocation = location;
+				OverlayItem ovl = new OverlayItem(
+						new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6)), "My location", "Hello");
+				Drawable icon = getResources().getDrawable(R.drawable.map_circle_marker_red);
+				icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+				ovl.setMarker(icon);
+				Place place = new Place.Builder(location.getLongitude(), location.getLatitude(), -1).build();
+				itemizedOverlay.addOverlay(ovl, place);
+				
+				mapController.animateTo(new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6)));
+				mapController.setZoom(18);
+				
+				// process to update map
+				new GetSpotsTask().execute(lastKnownLocation);
+			}
+		});
+		fineLocation.getLocation(this, locationResult);
 
 		// handle change view event
 		changeViewButton.setOnClickListener(new OnClickListener() {
@@ -87,18 +110,14 @@ public class LocalMapViewActivity extends MapActivity {
 		// handle locate event
 		locateButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				itemizedOverlay.clear();
-				UpdateLocationTask task = new UpdateLocationTask();
-				task.execute();
+				// do nothing
 			}
 		});
 
 		// handle show display list event
 		listPlaceButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				itemizedOverlay.clear();
-				UpdateLocationTask task = new UpdateLocationTask();
-				task.execute();
+				// do nothing
 			}
 		});
 	}
@@ -139,76 +158,6 @@ public class LocalMapViewActivity extends MapActivity {
 		return false;
 	}
 
-	private class UpdateLocationTask extends AsyncTask<Void, Integer, Location> {
-		public Location currentLocation = null;
-		private ProgressDialog progressDialog = null;
-		private MyLocationListener listener;
-		private LocationManager manager;
-		
-		@Override
-		protected Location doInBackground(Void...voids) {
-			// wait for a new location
-			while(currentLocation == null) {
-				
-			}
-			manager.removeUpdates(listener);
-			return currentLocation;
-		}
-		
-		@Override
-		protected void onPreExecute() {
-			listener = new MyLocationListener();
-			manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-			if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-				manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
-
-			else if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-				manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
-			
-			// display waiting dialog
-			progressDialog = new ProgressDialog(LocalMapViewActivity.this);
-			progressDialog.setMessage("Loading Google signal...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
-		}
-	
-		@Override
-		protected void onPostExecute(Location location) {
-			progressDialog.dismiss();
-			OverlayItem ovl = new OverlayItem(
-					new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6)), "My location", "Hello");
-			Drawable icon = getResources().getDrawable(R.drawable.map_circle_marker_red);
-			icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
-			ovl.setMarker(icon);
-			Place place = new Place.Builder(location.getLongitude(), location.getLatitude(), -1).build();
-			itemizedOverlay.addOverlay(ovl, place);
-			
-			mapController.animateTo(new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6)));
-			mapController.setZoom(18);
-			new GetSpotsTask().execute(location);
-		}
-		
-		public class MyLocationListener implements LocationListener {
-			public void onLocationChanged(Location location) {
-				// update new location
-				currentLocation = location;
-			}
-
-			public void onProviderDisabled(String provider) {
-				Log.i("OnProviderDisabled", "OnProviderDisabled");
-			}
-
-			public void onProviderEnabled(String provider) {
-				Log.i("onProviderEnabled", "onProviderEnabled");
-			}
-
-			public void onStatusChanged(String provider, int status, Bundle extras) {
-				Log.i("onStatusChanged", "onStatusChanged");
-			}
-		}
-	}
-	
 	private class GetSpotsTask extends AsyncTask<Location, Place, Boolean> {
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>(); 
 		private ProgressDialog progressDialog = null;
