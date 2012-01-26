@@ -52,16 +52,7 @@ public class MainMenuActivity extends Activity {
 		setContentView(R.layout.main_menu_original);
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_bar);
 
-		// activities to begin
-		Button btnProfile;
-		Button btnChallenges;
-		Button btnFriends;
-		Button btnLeaderboards;
-		Button btnRewards;
-		Button btnSpots;
-		Button btnSettings;
-		Button btnLogoff;
-		
+	
 		DraggableGridView mainGrid = (DraggableGridView) findViewById(R.id.main_menu_xml_gridview_maingrid);
 		
 		final ImageView imageViewProfile = new ImageView(this);
@@ -89,6 +80,11 @@ public class MainMenuActivity extends Activity {
 		final ImageView imageViewPlace = new ImageView(this);
 		imageViewPlace.setImageDrawable(getResources().getDrawable(R.drawable.spots));
 		mainGrid.addView(imageViewPlace);
+		
+		final ImageView imageViewPingMap = new ImageView(this);
+		imageViewPingMap.setImageDrawable(getResources().getDrawable(R.drawable.spots));
+		mainGrid.addView(imageViewPingMap);
+	
 		
 		mainGrid.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -119,6 +115,10 @@ public class MainMenuActivity extends Activity {
 				else if (v.equals(imageViewReward)) {
 					intent = new Intent(getApplicationContext(), RewardActivity.class);
 					startActivity(intent);
+				}
+				else if (v.equals(imageViewPingMap)) {
+				 	intent = new Intent(getApplicationContext(), PingMapActivity.class);
+					startActivity(intent);   
 				}
 				else {
 					// should never go here

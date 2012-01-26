@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+	>
+
+    <TableLayout
+        android:layout_width="400dp"
+        android:layout_height="40dp" >
+
+        <TableRow >
+            <Button
+                android:id="@+id/ping_map_xml_button_change_view"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="View"
+                />
+
+            <Button
+                android:id="@+id/ping_map_xml_button_ping_me"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Ping"
+                />
+
+            <Button
+                android:id="@+id/ping_map_xml_button_show_friends"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Friends"
+                />
+        </TableRow>
+        
+    </TableLayout>
+
+    <com.google.android.maps.MapView
+        android:id="@+id/ping_map_xml_map"
+        android:layout_width="fill_parent"
+        android:layout_height="420dp"
+        android:apiKey="0kqsfxjLdh6hBSw6P1O21ednBAHof_q1GuRuffg"
+        android:clickable="true" />
+
+</LinearLayout>

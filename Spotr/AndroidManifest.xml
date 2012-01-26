@@ -310,11 +310,20 @@
             </intent-filter>
         </activity>
         
-          <!-- Webview Activity -->
+         <!-- Webview Activity -->
         <activity android:name=".WebviewActivity" 
         		  android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <action android:name="com.csun.spotr.WebviewActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+         <!-- Ping Map Activity -->
+        <activity android:name=".PingMapActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
+            <intent-filter >
+                <action android:name="com.csun.spotr.PingMapActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
