@@ -310,6 +310,14 @@
             </intent-filter>
         </activity>
         
+          <!-- Webview Activity -->
+        <activity android:name=".WebviewActivity" 
+        		  android:configChanges="orientation|keyboardHidden">
+            <intent-filter >
+                <action android:name="com.csun.spotr.WebviewActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         
         <!-- Google Map API -->
         <uses-library android:name="com.google.android.maps" />
@@ -319,6 +327,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
  	<uses-permission android:name="android.permission.CAMERA" />
  	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" 
-	>
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="400dp"
@@ -14,6 +13,7 @@
             android:id="@+id/place_info_xml_imageview_picture"
             android:layout_width="120dp"
             android:layout_height="120dp" />
+
         <TableLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
@@ -45,31 +45,41 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/place_info_xml_textview_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#124CFC"
+                    android:textStyle="italic" />
+            </TableRow>
         </TableLayout>
     </LinearLayout>
+
     <Button
         android:id="@+id/place_info_xml_button_phone_number"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="818-626-4197" />
-    
+        android:layout_height="wrap_content" />
+
     <View
         android:layout_width="fill_parent"
-        android:layout_marginTop="4dp"
         android:layout_height="4dp"
+        android:layout_marginTop="4dp"
         android:background="#FAB002" />
 
-    
-     <com.google.android.maps.MapView
+    <com.google.android.maps.MapView
         android:id="@+id/place_info_xml_mapview"
         android:layout_width="400dp"
         android:layout_height="200dp"
         android:apiKey="0kqsfxjLdh6hBSw6P1O21ednBAHof_q1GuRuffg"
         android:clickable="true" />
-     
-      <View
+
+    <View
         android:layout_width="fill_parent"
-        android:layout_marginTop="4dp"
         android:layout_height="4dp"
+        android:layout_marginTop="4dp"
         android:background="#FC1900" />
+
 </LinearLayout>
