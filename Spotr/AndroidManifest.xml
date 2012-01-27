@@ -413,7 +413,17 @@
             </intent-filter>
         </activity>
 
+ <!-- QuestActivity -->
+        <activity
+            android:name=".QuestActivity"
+            android:configChanges="orientation|keyboardHidden" >
+            <intent-filter>
+                <action android:name="com.csun.spotr.QuestActivity" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
         <!-- Google Map API -->
         <uses-library android:name="com.google.android.maps" />
     </application>

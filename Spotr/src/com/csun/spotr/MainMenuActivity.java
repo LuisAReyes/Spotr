@@ -71,9 +71,9 @@ public class MainMenuActivity extends Activity {
 		imageViewFinder.setImageDrawable(getResources().getDrawable(R.drawable.leaderboards));
 		mainGrid.addView(imageViewFinder);
 	
-		final ImageView imageViewReward = new ImageView(this);
-		imageViewReward.setImageDrawable(getResources().getDrawable(R.drawable.awards));
-		mainGrid.addView(imageViewReward);
+		final ImageView imageViewQuest = new ImageView(this);
+		imageViewQuest.setImageDrawable(getResources().getDrawable(R.drawable.awards));
+		mainGrid.addView(imageViewQuest);
 		
 		final ImageView imageViewPlace = new ImageView(this);
 		imageViewPlace.setImageDrawable(getResources().getDrawable(R.drawable.spots));
@@ -109,8 +109,8 @@ public class MainMenuActivity extends Activity {
 					intent = new Intent(getApplicationContext(), FriendListMainActivity.class);
 					startActivity(intent);
 				}
-				else if (v.equals(imageViewReward)) {
-					intent = new Intent(getApplicationContext(), RewardActivity.class);
+				else if (v.equals(imageViewQuest)) {
+					intent = new Intent(getApplicationContext(), QuestActivity.class);
 					startActivity(intent);
 				}
 				else if (v.equals(imageViewPingMap)) {
