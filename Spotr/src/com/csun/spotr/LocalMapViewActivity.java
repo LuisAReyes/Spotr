@@ -46,14 +46,14 @@ public class LocalMapViewActivity extends MapActivity {
 	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
 	private static final String GOOGLE_RADIUS_IN_METER = "100";
 	private static final String RADIUS_IN_KM = "0.1";
-	
+
 	private MapView mapView = null;
 	private List<Overlay> mapOverlays = null;
 	private CustomItemizedOverlay itemizedOverlay = null;
 	private MapController mapController = null;
 	private FineLocation fineLocation = new FineLocation();
 	private Location lastKnownLocation = null;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,23 +77,21 @@ public class LocalMapViewActivity extends MapActivity {
 		Button changeViewButton = (Button) findViewById(R.id.mapview_xml_button_change_view);
 		Button listPlaceButton = (Button) findViewById(R.id.mapview_xml_button_places);
 		Button locateButton = (Button) findViewById(R.id.mapview_xml_button_locate);
-		
-		
+
 		LocationResult locationResult = (new LocationResult() {
 			@Override
 			public void gotLocation(final Location location) {
 				lastKnownLocation = location;
-				OverlayItem ovl = new OverlayItem(
-						new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6)), "My location", "Hello");
+				OverlayItem ovl = new OverlayItem(new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6)), "My location", "Hello");
 				Drawable icon = getResources().getDrawable(R.drawable.map_circle_marker_red);
 				icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
 				ovl.setMarker(icon);
 				Place place = new Place.Builder(location.getLongitude(), location.getLatitude(), -1).build();
 				itemizedOverlay.addOverlay(ovl, place);
-				
+
 				mapController.animateTo(new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6)));
 				mapController.setZoom(18);
-				
+
 				// process to update map
 				new GetSpotsTask().execute(lastKnownLocation);
 			}
@@ -159,9 +157,9 @@ public class LocalMapViewActivity extends MapActivity {
 	}
 
 	private class GetSpotsTask extends AsyncTask<Location, Place, Boolean> {
-		private List<NameValuePair> placeData = new ArrayList<NameValuePair>(); 
+		private List<NameValuePair> placeData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
-		
+
 		@Override
 		protected void onPreExecute() {
 			// display waiting dialog
@@ -171,34 +169,28 @@ public class LocalMapViewActivity extends MapActivity {
 			progressDialog.setCancelable(false);
 			progressDialog.show();
 		}
-		
+
 		@Override
-	    protected void onProgressUpdate(Place... places) {
-			OverlayItem overlay = new OverlayItem(
-				new GeoPoint((int) (places[0].getLatitude() * 1E6), (int) (places[0].getLongitude() * 1E6)), places[0].getName(), places[0].getAddress());
-			// add to item to map 
+		protected void onProgressUpdate(Place... places) {
+			OverlayItem overlay = new OverlayItem(new GeoPoint((int) (places[0].getLatitude() * 1E6), (int) (places[0].getLongitude() * 1E6)), places[0].getName(), places[0].getAddress());
+			// add to item to map
 			itemizedOverlay.addOverlay(overlay, places[0]);
-	    }
-		
+		}
+
 		@Override
-		protected Boolean doInBackground(Location...locations) {
+		protected Boolean doInBackground(Location... locations) {
 			placeData.add(new BasicNameValuePair("latitude", Double.toString(locations[0].getLatitude())));
 			placeData.add(new BasicNameValuePair("longitude", Double.toString(locations[0].getLongitude())));
-			placeData.add(new BasicNameValuePair("radius", RADIUS_IN_KM)); 
+			placeData.add(new BasicNameValuePair("radius", RADIUS_IN_KM));
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_SPOTS_URL, placeData);
-			if (array != null) { 
+			if (array != null) {
 				try {
-					for (int i = 0; i < array.length(); ++i) { 
-						publishProgress(
-							new Place.Builder(
-								// require parameters
-								array.getJSONObject(i).getDouble("spots_tbl_longitude"), 
-								array.getJSONObject(i).getDouble("spots_tbl_latitude"), 
-								array.getJSONObject(i).getInt("spots_tbl_id"))
-									// optional parameters
-									.name(array.getJSONObject(i).getString("spots_tbl_name"))
-									.address(array.getJSONObject(i).getString("spots_tbl_description"))
-										.build());
+					for (int i = 0; i < array.length(); ++i) {
+						publishProgress(new Place.Builder(
+						// require parameters
+						array.getJSONObject(i).getDouble("spots_tbl_longitude"), array.getJSONObject(i).getDouble("spots_tbl_latitude"), array.getJSONObject(i).getInt("spots_tbl_id"))
+						// optional parameters
+						.name(array.getJSONObject(i).getString("spots_tbl_name")).address(array.getJSONObject(i).getString("spots_tbl_description")).build());
 					}
 				}
 				catch (JSONException e) {
@@ -210,7 +202,7 @@ public class LocalMapViewActivity extends MapActivity {
 				return false;
 			}
 		}
-		
+
 		@Override
 		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
@@ -227,7 +219,7 @@ public class LocalMapViewActivity extends MapActivity {
 			}
 		}
 	}
-	
+
 	private class CustomItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 		private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
 		private List<Place> places = new ArrayList<Place>();
@@ -271,7 +263,7 @@ public class LocalMapViewActivity extends MapActivity {
 			return true;
 		}
 	}
-	
+
 	@Override
 	public void onRestart() {
 		Log.v(TAG, "I'm restarted!");
@@ -295,7 +287,7 @@ public class LocalMapViewActivity extends MapActivity {
 		Log.v(TAG, "I'm destroyed!");
 		super.onDestroy();
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -307,21 +299,21 @@ public class LocalMapViewActivity extends MapActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
 		switch (item.getItemId()) {
-			case R.id.options_menu_xml_item_setting_icon:
-				intent = new Intent("com.csun.spotr.SettingsActivity");
-				startActivity(intent);
-				break;
-			case R.id.options_menu_xml_item_logout_icon:
-				SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
-				editor.clear();
-				editor.commit();
-				intent = new Intent("com.csun.spotr.LoginActivity");
-				startActivity(intent);
-				break;
-			case R.id.options_menu_xml_item_mainmenu_icon:
-				intent = new Intent("com.csun.spotr.MainMenuActivity");
-				startActivity(intent);
-				break;
+		case R.id.options_menu_xml_item_setting_icon:
+			intent = new Intent("com.csun.spotr.SettingsActivity");
+			startActivity(intent);
+			break;
+		case R.id.options_menu_xml_item_logout_icon:
+			SharedPreferences.Editor editor = getSharedPreferences("Spotr", MODE_PRIVATE).edit();
+			editor.clear();
+			editor.commit();
+			intent = new Intent("com.csun.spotr.LoginActivity");
+			startActivity(intent);
+			break;
+		case R.id.options_menu_xml_item_mainmenu_icon:
+			intent = new Intent("com.csun.spotr.MainMenuActivity");
+			startActivity(intent);
+			break;
 		}
 		return true;
 	}

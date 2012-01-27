@@ -52,7 +52,6 @@ public class MainMenuActivity extends Activity {
 		setContentView(R.layout.main_menu_original);
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_bar);
 
-	
 		DraggableGridView mainGrid = (DraggableGridView) findViewById(R.id.main_menu_xml_gridview_maingrid);
 		
 		final ImageView imageViewProfile = new ImageView(this);
@@ -68,10 +67,9 @@ public class MainMenuActivity extends Activity {
 		imageViewFriend.setImageDrawable(getResources().getDrawable(R.drawable.friends));
 		mainGrid.addView(imageViewFriend);
 		
-
-		final ImageView imageViewLeaderboad = new ImageView(this);
-		imageViewLeaderboad.setImageDrawable(getResources().getDrawable(R.drawable.leaderboards));
-		mainGrid.addView(imageViewLeaderboad);
+		final ImageView imageViewFinder = new ImageView(this);
+		imageViewFinder.setImageDrawable(getResources().getDrawable(R.drawable.leaderboards));
+		mainGrid.addView(imageViewFinder);
 	
 		final ImageView imageViewReward = new ImageView(this);
 		imageViewReward.setImageDrawable(getResources().getDrawable(R.drawable.awards));
@@ -85,7 +83,6 @@ public class MainMenuActivity extends Activity {
 		imageViewPingMap.setImageDrawable(getResources().getDrawable(R.drawable.spots));
 		mainGrid.addView(imageViewPingMap);
 	
-		
 		mainGrid.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				Intent intent;
@@ -100,8 +97,8 @@ public class MainMenuActivity extends Activity {
 					intent = new Intent(getApplicationContext(), LocalMapViewActivity.class);
 					startActivity(intent);
 				}
-				else if (v.equals(imageViewLeaderboad)) {
-					intent = new Intent(getApplicationContext(), LeaderboardActivity.class);
+				else if (v.equals(imageViewFinder)) {
+					intent = new Intent(getApplicationContext(), FinderActivity.class);
 					startActivity(intent);
 				}
 				else if (v.equals(imageViewPlace)) {

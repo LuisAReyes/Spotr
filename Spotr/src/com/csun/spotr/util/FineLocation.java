@@ -7,8 +7,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 public class FineLocation {
+	private static final String TAG = "(FineLocation)";
 	Timer clock;
 	LocationManager lm;
 	LocationResult locationResult;
@@ -25,11 +27,14 @@ public class FineLocation {
 			gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		}
 		catch (Exception ex) {
+			Log.e(TAG, ex.getMessage());
 		}
+		
 		try {
 			networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 		}
 		catch (Exception ex) {
+			Log.e(TAG, ex.getMessage());
 		}
 
 		// don't start listeners if no provider is enabled
@@ -87,11 +92,12 @@ public class FineLocation {
 		public void run() {
 			lm.removeUpdates(gpsListener);
 			lm.removeUpdates(networkListener);
-
 			Location netLoc = null;
 			Location gpsLoc = null;
+			
 			if (gpsEnabled)
 				gpsLoc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			
 			if (networkEnabled)
 				netLoc = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
