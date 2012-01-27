@@ -46,7 +46,7 @@ import com.google.android.maps.OverlayItem;
 public class PingMapActivity extends MapActivity {
 	private static final String TAG = "(PingMapActivity)";
 	private static final String GET_FRIEND_LOCATION_URL = "http://107.22.209.62/android/get_friend_locations.php";
-	private static final String PING_ME_URL = "http://107.22.209.62/android/ping_current_location.php";
+	private static final String PING_ME_URL = "http://107.22.209.62/android/ping_me.php";
 
 	private MapView mapView = null;
 	private List<Overlay> mapOverlays = null;
@@ -177,14 +177,14 @@ public class PingMapActivity extends MapActivity {
 			if (array != null) {
 				try {
 					for (int i = 0; i < array.length(); ++i) {
-						if (array.getJSONObject(i).has("users_tbl_latitude") && array.getJSONObject(i).has("users_tbl_longitude")) {
+						if (array.getJSONObject(i).has("users_locations_tbl_latitude") && array.getJSONObject(i).has("users_locations_tbl_longitude")) {
 							publishProgress(
 									new FriendAndLocation(
 										array.getJSONObject(i).getInt("users_tbl_id"), 
 										array.getJSONObject(i).getString("users_tbl_username"), 
-										array.getJSONObject(i).getDouble("users_tbl_latitude"), 
-										array.getJSONObject(i).getDouble("users_tbl_longitude"), 
-										array.getJSONObject(i).getString("users_tbl_location_time")));
+										array.getJSONObject(i).getDouble("users_locations_tbl_latitude"), 
+										array.getJSONObject(i).getDouble("users_locations_tbl_longitude"), 
+										array.getJSONObject(i).getString("users_locations_tbl_created")));
 						}
 					}
 				}
@@ -257,7 +257,7 @@ public class PingMapActivity extends MapActivity {
 							(int) (lastKnownLocation.getLongitude() * 1E6)), 
 							CurrentUser.getCurrentUser().getUsername(), "Just Now");
 			
-			Drawable icon = getResources().getDrawable(R.drawable.bug);
+			Drawable icon = getResources().getDrawable(R.drawable.map_circle_marker_red);
 			icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
 			ovl.setMarker(icon);
 			
