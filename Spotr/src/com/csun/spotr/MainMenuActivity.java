@@ -38,7 +38,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainMenuActivity extends Activity {
-	private static final String TAG = "[MainMenuActivity]";
+	private static final String TAG = "(MainMenuActivity)";
 	private static final String GET_REQUEST_URL = "http://107.22.209.62/android/get_friend_requests.php";
 	private static final String ADD_FRIEND_URL = "http://107.22.209.62/android/add_friend.php";
 	private static final String IGNORE_FRIEND_URL = "http://107.22.209.62/android/ignore_friend.php";

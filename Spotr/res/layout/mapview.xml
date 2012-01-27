@@ -37,7 +37,7 @@
         android:id="@+id/mapview_xml_map"
         android:layout_width="fill_parent"
         android:layout_height="420dp"
-        android:apiKey="0kqsfxjLdh6hBSw6P1O21ednBAHof_q1GuRuffg"
+        android:apiKey="0kqsfxjLdh6ggN9sWrcd75tQQA_2JugZxhGcElQ"
         android:clickable="true" />
 
 </LinearLayout>

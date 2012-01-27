@@ -1,63 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/android:list"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/create_lost_item_xml_textview_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#00AAED"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/create_lost_item_xml_edittext_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/create_lost_item_xml_textview_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Description"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#00AAED"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/create_lost_item_xml_edittext_description"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:inputType="textMultiLine" 
-        />
-
-    <Button
-        android:id="@+id/create_lost_item_xml_button_choose_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Choose images" />
-    <ImageView
-        android:id="@+id/create_lost_item_xml_imageview_item_images"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/hottub" />
-
-
-    <TextView
-        android:id="@+id/create_lost_item_xml_textview_points"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <Button
-        android:id="@+id/create_lost_item_xml_button_upload"
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Upload this item now?" />
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/create_lost_item_xml_textview_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#00AAED"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/create_lost_item_xml_edittext_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/create_lost_item_xml_textview_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#00AAED"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/create_lost_item_xml_edittext_description"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/create_lost_item_xml_button_choose_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose images" />
+
+        <ImageView
+            android:id="@+id/create_lost_item_xml_imageview_item_images"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/hottub" />
+
+        <TextView
+            android:id="@+id/create_lost_item_xml_textview_points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose reward points"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/create_lost_item_xml_button_plus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+" />
+
+            <EditText
+                android:id="@+id/create_lost_item_xml_edittext_points"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" >
+            </EditText>
+
+            <Button
+                android:id="@+id/create_lost_item_xml_button_minus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/create_lost_item_xml_button_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Upload this item now?" />
+    </LinearLayout>
+
+</ScrollView>

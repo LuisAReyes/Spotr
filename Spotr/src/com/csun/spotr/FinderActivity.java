@@ -17,8 +17,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -38,15 +40,24 @@ public class FinderActivity extends Activity {
 	private List<SeekingItem> items;
 	private GridView gridview;
 	private SeekingItemAdapter adapter;
+	private Button buttonCreateItem;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.finder);
 
+		buttonCreateItem = (Button) findViewById(R.id.finder_xml_button);
 		items = new ArrayList<SeekingItem>();
 		gridview = (GridView) findViewById(R.id.finder_xml_gridview);
 		adapter = new SeekingItemAdapter(this, items);
 		gridview.setAdapter(adapter);
+		
+		buttonCreateItem.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), CreateLostItemActivity.class);
+				startActivity(intent);
+			}
+		});
 		
 		new GetFindersTask().execute();
 	}

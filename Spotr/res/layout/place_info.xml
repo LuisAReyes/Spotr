@@ -73,7 +73,7 @@
         android:id="@+id/place_info_xml_mapview"
         android:layout_width="400dp"
         android:layout_height="200dp"
-        android:apiKey="0kqsfxjLdh6hBSw6P1O21ednBAHof_q1GuRuffg"
+        android:apiKey="0kqsfxjLdh6ggN9sWrcd75tQQA_2JugZxhGcElQ"
         android:clickable="true" />
 
     <View

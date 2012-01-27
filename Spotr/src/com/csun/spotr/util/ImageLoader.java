@@ -34,7 +34,6 @@ public class ImageLoader {
 		executorService = Executors.newFixedThreadPool(5);
 	}
 
-
 	public void displayImage(String url, ImageView imageView) {
 		imageViews.put(imageView, url);
 		Bitmap bitmap = memoryCache.get(url);

@@ -46,7 +46,7 @@ import com.google.android.maps.OverlayItem;
 public class PingMapActivity extends MapActivity {
 	private static final String TAG = "(PingMapActivity)";
 	private static final String GET_FRIEND_LOCATION_URL = "http://107.22.209.62/android/get_friend_locations.php";
-	private static final String PING_ME_URL = "http://107.22.209.62/android/ping_me.php";
+	private static final String PING_ME_URL = "http://107.22.209.62/android/ping_current_location.php";
 
 	private MapView mapView = null;
 	private List<Overlay> mapOverlays = null;
@@ -257,7 +257,7 @@ public class PingMapActivity extends MapActivity {
 							(int) (lastKnownLocation.getLongitude() * 1E6)), 
 							CurrentUser.getCurrentUser().getUsername(), "Just Now");
 			
-			Drawable icon = getResources().getDrawable(R.drawable.map_circle_marker_red);
+			Drawable icon = getResources().getDrawable(R.drawable.bug);
 			icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
 			ovl.setMarker(icon);
 			
