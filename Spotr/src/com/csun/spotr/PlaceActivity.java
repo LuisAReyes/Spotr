@@ -45,8 +45,6 @@ public class PlaceActivity extends Activity {
 	private static final String TAG = "(PlaceActivity)";
 	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
 	private static final String UPDATE_GOOGLE_PLACES_URL = "http://107.22.209.62/android/update_google_places.php";
-	private static final String GOOGLE_RADIUS_IN_METER = "100";
-	private static final String RADIUS_IN_KM = "0.1";
 	
 	private ListView list;
 	private PlaceItemAdapter adapter;
@@ -115,7 +113,7 @@ public class PlaceActivity extends Activity {
 			List<NameValuePair> sentData = new ArrayList<NameValuePair>();
 			// we reformat the original data to include only what we need
 			JSONArray reformattedData = new JSONArray();
-			JSONObject json = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlacesUrl(lastKnownLocation, GOOGLE_RADIUS_IN_METER));
+			JSONObject json = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlacesUrl(lastKnownLocation, GooglePlaceHelper.GOOGLE_RADIUS_IN_METER));
 			JSONObject temp = null;
 			try {
 				JSONArray originalGoogleDataArray = json.getJSONArray("results");
@@ -187,7 +185,7 @@ public class PlaceActivity extends Activity {
 			// now sending latitude, longitude and radius to retrieve places
 			placeData.add(new BasicNameValuePair("latitude", Double.toString(lastKnownLocation.getLatitude())));
 			placeData.add(new BasicNameValuePair("longitude", Double.toString(lastKnownLocation.getLongitude())));
-			placeData.add(new BasicNameValuePair("radius", RADIUS_IN_KM));
+			placeData.add(new BasicNameValuePair("radius", GooglePlaceHelper.RADIUS_IN_KM));
 			
 			// get places as JSON format from our database
 			JSONArray jsonPlaceArray = JsonHelper.getJsonArrayFromUrlWithData(GET_SPOTS_URL, placeData);

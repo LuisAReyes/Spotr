@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -30,10 +31,12 @@ import android.widget.Button;
 
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.util.FineLocation;
+import com.csun.spotr.util.GooglePlaceHelper;
 import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.util.FineLocation.LocationResult;
 import com.csun.spotr.core.Place;
 import com.csun.spotr.custom_gui.BalloonItemizedOverlay;
+import com.csun.spotr.custom_gui.CustomItemizedOverlay;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
@@ -44,8 +47,7 @@ import com.google.android.maps.OverlayItem;
 public class LocalMapViewActivity extends MapActivity {
 	private static final String TAG = "(LocalMapViewActivity)";
 	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
-	private static final String GOOGLE_RADIUS_IN_METER = "100";
-	private static final String RADIUS_IN_KM = "0.1";
+	private static final String UPDATE_GOOGLE_PLACES_URL = "http://107.22.209.62/android/update_google_places.php";
 
 	private MapView mapView = null;
 	private List<Overlay> mapOverlays = null;
@@ -160,6 +162,57 @@ public class LocalMapViewActivity extends MapActivity {
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
 
+		private List<NameValuePair> constructGooglePlace() {
+			// this is data we will send to our server
+			List<NameValuePair> sentData = new ArrayList<NameValuePair>();
+			// we reformat the original data to include only what we need
+			JSONArray reformattedData = new JSONArray();
+			JSONObject json = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlacesUrl(lastKnownLocation, GooglePlaceHelper.GOOGLE_RADIUS_IN_METER));
+			JSONObject temp = null;
+			try {
+				JSONArray originalGoogleDataArray = json.getJSONArray("results");
+				for (int i = 0; i < originalGoogleDataArray.length(); i++) {
+					// id: is used to verify place existence 
+					JSONObject e = new JSONObject();
+					e.put("id", originalGoogleDataArray.getJSONObject(i).getString("id"));
+					e.put("name", originalGoogleDataArray.getJSONObject(i).getString("name"));
+					e.put("lat", originalGoogleDataArray.getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lat"));
+					e.put("lon", originalGoogleDataArray.getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lng"));
+					temp = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlaceDetailsUrl(originalGoogleDataArray.getJSONObject(i).getString("reference")));
+					
+					if (temp.getJSONObject("result").has("formatted_address")) {
+						e.put("addr", temp.getJSONObject("result").getString("formatted_address"));
+					}
+					else {
+						e.put("addr", "default address");
+					}
+					
+					if (temp.getJSONObject("result").has("formatted_phone_number")) {
+						e.put("phone", temp.getJSONObject("result").getString("formatted_phone_number"));
+					}
+					else {
+						e.put("phone", "(888) 888-8888");
+					}
+					
+					if (temp.getJSONObject("result").has("url")) {
+						e.put("url", temp.getJSONObject("result").getString("url"));
+					}
+					else {
+						e.put("url", "https://www.google.com/");
+					}
+					
+					// put e
+					reformattedData.put(e);
+				}
+			}
+			catch (JSONException e) {
+				Log.e(TAG + "GetSpotsTask.constructGooglePlace() : ", "JSON error parsing data" + e.toString());
+			}
+			// send data to our server
+			sentData.add(new BasicNameValuePair("google_array", reformattedData.toString()));
+			return sentData;
+		}
+		
 		@Override
 		protected void onPreExecute() {
 			// display waiting dialog
@@ -179,22 +232,32 @@ public class LocalMapViewActivity extends MapActivity {
 
 		@Override
 		protected Boolean doInBackground(Location... locations) {
+			// send Google data to our server to update 'spots' table
+			JsonHelper.getJsonObjectFromUrlWithData(UPDATE_GOOGLE_PLACES_URL, constructGooglePlace());
+			
+			// now sending latitude, longitude and radius to retrieve places
 			placeData.add(new BasicNameValuePair("latitude", Double.toString(locations[0].getLatitude())));
 			placeData.add(new BasicNameValuePair("longitude", Double.toString(locations[0].getLongitude())));
-			placeData.add(new BasicNameValuePair("radius", RADIUS_IN_KM));
+			placeData.add(new BasicNameValuePair("radius", GooglePlaceHelper.RADIUS_IN_KM));
+			
+			// get places as JSON format from our database
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_SPOTS_URL, placeData);
 			if (array != null) {
 				try {
 					for (int i = 0; i < array.length(); ++i) {
-						publishProgress(new Place.Builder(
-						// require parameters
-						array.getJSONObject(i).getDouble("spots_tbl_longitude"), array.getJSONObject(i).getDouble("spots_tbl_latitude"), array.getJSONObject(i).getInt("spots_tbl_id"))
-						// optional parameters
-						.name(array.getJSONObject(i).getString("spots_tbl_name")).address(array.getJSONObject(i).getString("spots_tbl_description")).build());
+						publishProgress(
+								new Place.Builder(
+									// require parameters
+									array.getJSONObject(i).getDouble("spots_tbl_longitude"), 
+									array.getJSONObject(i).getDouble("spots_tbl_latitude"), 
+									array.getJSONObject(i).getInt("spots_tbl_id"))
+										// optional parameters
+										.name(array.getJSONObject(i).getString("spots_tbl_name"))
+										.address(array.getJSONObject(i).getString("spots_tbl_description")).build());
 					}
 				}
 				catch (JSONException e) {
-					Log.e(TAG + "GetFriendTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
+					Log.e(TAG + "GetSpotsTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
 				}
 				return true;
 			}
@@ -217,50 +280,6 @@ public class LocalMapViewActivity extends MapActivity {
 				});
 				dialogMessage.show();
 			}
-		}
-	}
-
-	private class CustomItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
-		private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
-		private List<Place> places = new ArrayList<Place>();
-		private Context context;
-
-		public CustomItemizedOverlay(Drawable defaultMarker, MapView mapView) {
-			super(boundCenter(defaultMarker), mapView);
-			context = mapView.getContext();
-		}
-
-		public void addOverlay(OverlayItem overlay, Place place) {
-			overlays.add(overlay);
-			places.add(place);
-			populate();
-		}
-
-		public void clear() {
-			overlays.clear();
-			places.clear();
-		}
-
-		@Override
-		protected OverlayItem createItem(int i) {
-			return overlays.get(i);
-		}
-
-		@Override
-		public int size() {
-			return overlays.size();
-		}
-
-		@Override
-		protected boolean onBalloonTap(int index, OverlayItem item) {
-			if (places.get(index).getId() != -1) {
-				Intent intent = new Intent("com.csun.spotr.PlaceMainActivity");
-				Bundle extras = new Bundle();
-				extras.putInt("place_id", places.get(index).getId());
-				intent.putExtras(extras);
-				startActivity(intent);
-			}
-			return true;
 		}
 	}
 

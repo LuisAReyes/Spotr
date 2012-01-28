@@ -3,7 +3,9 @@ package com.csun.spotr.util;
 import android.location.Location;
 
 public class GooglePlaceHelper {
-	private static final String GOOGLE_PLACE_API_KEY = "AIzaSyB3LpeNgrKCPBbYovm9smzQ-7dfiIb8nnI";
+	public static final String GOOGLE_PLACE_API_KEY = "AIzaSyB3LpeNgrKCPBbYovm9smzQ-7dfiIb8nnI";
+	public static final String GOOGLE_RADIUS_IN_METER = "100";
+	public static final String RADIUS_IN_KM = "0.1";
 	
 	public static String buildGooglePlacesUrl(Location location, String radius) {
 		StringBuilder url = new StringBuilder();
