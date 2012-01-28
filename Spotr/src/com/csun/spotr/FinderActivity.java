@@ -26,7 +26,7 @@ import android.widget.ListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.csun.spotr.adapter.SeekingItemAdapter;
+import com.csun.spotr.adapter.FinderItemAdapter;
 import com.csun.spotr.adapter.UserItemAdapter;
 import com.csun.spotr.core.adapter_item.SeekingItem;
 import com.csun.spotr.core.adapter_item.UserItem;
@@ -39,7 +39,7 @@ public class FinderActivity extends Activity {
 	private static final String GET_FINDERS_URL = "http://107.22.209.62/android/get_finders.php";
 	private List<SeekingItem> items;
 	private GridView gridview;
-	private SeekingItemAdapter adapter;
+	private FinderItemAdapter adapter;
 	private Button buttonCreateItem;
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,8 +49,17 @@ public class FinderActivity extends Activity {
 		buttonCreateItem = (Button) findViewById(R.id.finder_xml_button);
 		items = new ArrayList<SeekingItem>();
 		gridview = (GridView) findViewById(R.id.finder_xml_gridview);
-		adapter = new SeekingItemAdapter(this, items);
+		adapter = new FinderItemAdapter(this, items);
 		gridview.setAdapter(adapter);
+		gridview.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Bundle extras = new Bundle();
+				extras.putInt("finder_id", items.get(position).getId());
+				Intent intent = new Intent(getApplicationContext(), FinderItemDetailActivity.class);
+				intent.putExtras(extras);
+				startActivity(intent);
+			}
+		});
 		
 		buttonCreateItem.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {

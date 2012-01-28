@@ -389,8 +389,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
-        
+
         <!-- FinderActivity Activity -->
         <activity
             android:name=".FinderActivity"
@@ -401,8 +400,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
-       <!-- CreateLostItemActivity -->
+
+        <!-- CreateLostItemActivity -->
         <activity
             android:name=".CreateLostItemActivity"
             android:configChanges="orientation|keyboardHidden" >
@@ -413,7 +412,7 @@
             </intent-filter>
         </activity>
 
- <!-- QuestActivity -->
+        <!-- QuestActivity -->
         <activity
             android:name=".QuestActivity"
             android:configChanges="orientation|keyboardHidden" >
@@ -423,7 +422,18 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
+
+        <!-- Seeking Item Detail Activity -->
+        <activity
+            android:name=".FinderItemDetailActivity"
+            android:configChanges="orientation|keyboardHidden" >
+            <intent-filter>
+                <action android:name="com.csun.spotr.FinderItemDetailActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <!-- Google Map API -->
         <uses-library android:name="com.google.android.maps" />
     </application>
