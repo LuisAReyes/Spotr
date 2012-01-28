@@ -127,7 +127,28 @@ public class PlaceActivity extends Activity {
 					e.put("lat", originalGoogleDataArray.getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lat"));
 					e.put("lon", originalGoogleDataArray.getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lng"));
 					temp = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlaceDetailsUrl(originalGoogleDataArray.getJSONObject(i).getString("reference")));
-					e.put("addr", temp.getJSONObject("result").getString("formatted_address"));
+					
+					if (temp.getJSONObject("result").has("formatted_address")) {
+						e.put("addr", temp.getJSONObject("result").getString("formatted_address"));
+					}
+					else {
+						e.put("addr", "default address");
+					}
+					
+					if (temp.getJSONObject("result").has("formatted_phone_number")) {
+						e.put("phone", temp.getJSONObject("result").getString("formatted_phone_number"));
+					}
+					else {
+						e.put("phone", "(888) 888-8888");
+					}
+					
+					if (temp.getJSONObject("result").has("url")) {
+						e.put("url", temp.getJSONObject("result").getString("url"));
+					}
+					else {
+						e.put("url", "https://www.google.com/");
+					}
+					
 					// put e
 					reformattedData.put(e);
 				}

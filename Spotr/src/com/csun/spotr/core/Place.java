@@ -29,8 +29,8 @@ public class Place {
 		private String address = "n/a";
 		private String name = "n/a";
 		private String iconUrl = "n/a";
-		private String phoneNumber = "n/a";
-		private String websiteUrl = "n/a";
+		private String phoneNumber = "(888) 888-8888";
+		private String websiteUrl = "http://www.google.com/";
 		private String types = "n/a";
 		private Set<Integer> challenges = new HashSet<Integer>();
 		private int rating = 0;
