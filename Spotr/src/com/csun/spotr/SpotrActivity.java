@@ -32,14 +32,6 @@ public class SpotrActivity extends Activity {
 				startActivity(i);
 			}
 		});
-
-		Button b3 = (Button) findViewById(R.id.test_mapview);
-		b3.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				Intent i = new Intent("com.csun.spotr.MapViewActivity");
-				startActivity(i);
-			}
-		});
 	}
 	
 	@Override

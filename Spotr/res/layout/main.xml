@@ -24,14 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Challenge Activity" />
-
-        <Button
-            android:id="@+id/test_mapview"
-            style="@style/my_button_2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Google Map View Activity" />
     </LinearLayout>
 
 </ScrollView>
