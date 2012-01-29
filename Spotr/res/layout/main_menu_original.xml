@@ -3,21 +3,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
     android:orientation="vertical"
-    android:background="@drawable/background_selector" >
-    <ImageView
-        android:id="@+id/main_menu_xml_imageview_logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:src="@drawable/logo_0" />
+    android:background="@drawable/background_striped" >
  
  	<com.csun.spotr.custom_gui.DraggableGridView
         android:id="@+id/main_menu_xml_gridview_maingrid"
-        android:layout_below="@id/main_menu_xml_imageview_logo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content" >
+        
     </com.csun.spotr.custom_gui.DraggableGridView>
     
    
@@ -27,7 +19,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:handle="@+id/main_menu_xml_slide_handle"
-        android:content="@+id/main_menu_xml_slide_content" >
+        android:content="@+id/main_menu_xml_slide_content"
+        android:visibility="invisible" >
        
      <Button 
          android:id="@+id/main_menu_xml_slide_handle"

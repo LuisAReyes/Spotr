@@ -5,12 +5,13 @@
     android:layout_width="fill_parent"
     android:layout_height="50dip"
     android:gravity="center_vertical"
-    android:background="@drawable/header_bg_selector" >
+    android:background="#2e3436" >
  
     <ImageView
         android:id="@+id/header"
-        android:src="@drawable/header_logo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:src="@drawable/title_bar_logo"
+        android:paddingLeft="5dip" />
  
 </LinearLayout>
