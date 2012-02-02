@@ -14,7 +14,7 @@
 	<ListView
         android:id="@+id/quest_action_xml_listview_quest_actions"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="100dp"
         android:background="@android:color/white" >
    	</ListView>
    	

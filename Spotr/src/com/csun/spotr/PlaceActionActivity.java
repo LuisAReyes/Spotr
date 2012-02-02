@@ -127,16 +127,19 @@ public class PlaceActionActivity extends Activity {
 			if (array != null) { 
 				try {
 					for (int i = 0; i < array.length(); ++i) {
-						publishProgress(
+						if (!array.getJSONObject(i).getString("challenges_tbl_type").equals("OTHER"))
+						{
+						publishProgress(								
 							new Challenge.Builder(
 									// required parameters
-									array.getJSONObject(i).getInt("challenges_tbl_id"), 
+									array.getJSONObject(i).getInt("challenges_tbl_id"),
 									Challenge.returnType(array.getJSONObject(i).getString("challenges_tbl_type")),
 									array.getJSONObject(i).getInt("challenges_tbl_points")) 
 										// optional parameters
 										.name(array.getJSONObject(i).getString("challenges_tbl_name"))
 										.description(array.getJSONObject(i).getString("challenges_tbl_description"))
 											.build());
+						}
 					}
 				}
 				catch (JSONException e) {

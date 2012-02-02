@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.csun.spotr.adapter.PlaceActionItemAdapter;
+import com.csun.spotr.adapter.QuestActionItemAdapter;
 import com.csun.spotr.core.Challenge;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.util.JsonHelper;
@@ -37,9 +38,16 @@ public class QuestActionActivity extends Activity {
 	private static final String DO_CHECK_IN_URL = "http://107.22.209.62/android/do_check_in.php";
 	private int currentPlaceId;
 	private int currentChosenItem;
-	private ListView list = null;
-	private	PlaceActionItemAdapter adapter = null;
+	
+	//for default challenge : check in, snap picture, write on wall...
+	private ListView list = null;	
+	private	PlaceActionItemAdapter adapter = null;	
 	private List<Challenge> challengeList = new ArrayList<Challenge>();
+	
+	//for custom challenge.
+	private ListView questlist =null;
+	private PlaceActionItemAdapter questadapter = null;
+	private List<Challenge> customChallengeList = new ArrayList<Challenge>();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +59,21 @@ public class QuestActionActivity extends Activity {
 		
 		currentPlaceId = this.getIntent().getExtras().getInt("place_id");
 		
-		// initialize list view of challenges
+		//initialize list view of custom challenges
+		questlist = (ListView) findViewById(R.id.quest_action_xml_listview_quest_actions);
+		questadapter = new PlaceActionItemAdapter(QuestActionActivity.this, customChallengeList);
+		questlist.setAdapter(questadapter);
+		questlist.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		// initialize list view of default challenges
 		list = (ListView) findViewById(R.id.quest_action_xml_listview_actions);
 		adapter = new PlaceActionItemAdapter(QuestActionActivity.this, challengeList);
 		list.setAdapter(adapter);
@@ -115,8 +137,16 @@ public class QuestActionActivity extends Activity {
 		
 		@Override
 	    protected void onProgressUpdate(Challenge... challenges) {
-			challengeList.add(challenges[0]);
-			adapter.notifyDataSetChanged();
+			if(challenges[0].getType().toString().equals("OTHER"))
+			{
+				customChallengeList.add(challenges[0]);
+				questadapter.notifyDataSetChanged();
+			}
+			else
+			{
+				challengeList.add(challenges[0]);
+				adapter.notifyDataSetChanged();
+			}
 			// adapter.notifyDataSetInvalidated();
 	    }
 
@@ -126,19 +156,19 @@ public class QuestActionActivity extends Activity {
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_QUEST_DETAIL_URL, challengeData);
 			if (array != null) { 
 				try {
-					for (int i = 0; i < array.length(); ++i) {
-						publishProgress(
+					for (int i = 0; i < array.length(); ++i) {						
+						publishProgress(								
 							new Challenge.Builder(
 									// required parameters
-									array.getJSONObject(i).getInt("challenges_tbl_id"), 
+									array.getJSONObject(i).getInt("challenges_tbl_id"),
 									Challenge.returnType(array.getJSONObject(i).getString("challenges_tbl_type")),
 									array.getJSONObject(i).getInt("challenges_tbl_points")) 
 										// optional parameters
 										.name(array.getJSONObject(i).getString("challenges_tbl_name"))
 										.description(array.getJSONObject(i).getString("challenges_tbl_description"))
 											.build());
-					}
-				}
+						}						
+					}				
 				catch (JSONException e) {
 					Log.e(TAG + "GetChallengesTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
 				}
