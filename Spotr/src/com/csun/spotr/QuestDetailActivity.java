@@ -64,7 +64,11 @@ public class QuestDetailActivity extends Activity {
 		//handle event when click on specific quest
 		questDetailListView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				
+				Intent intent = new Intent("com.csun.spotr.QuestActionActivity");
+				Bundle extras = new Bundle();
+				extras.putInt("place_id",questDetailList.get(position).getId() );
+				intent.putExtras(extras);
+				startActivity(intent);
 				
 			}
 		});
