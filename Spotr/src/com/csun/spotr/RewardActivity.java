@@ -27,13 +27,14 @@ public class RewardActivity extends Activity {
 		    R.drawable.explorer, R.drawable.superstar,
 		    R.drawable.awards, R.drawable.awards,
 		};
-		//GridView
+		 
+		// GridView
 	    DraggableGridView gridview = (DraggableGridView) findViewById(R.id.reward_xml_gridview_rewards);
 	    
 	    for (int i = 0; i < thumbIds.length; ++i) {
 		    ImageView img = new ImageView(this);
 		    img.setImageDrawable(getResources().getDrawable(thumbIds[i]));
-		    img.setPadding(2, 2, 2, 2);
+		    img.setPadding(8, 8, 8, 8);
 		    gridview.addView(img);
 	    }
 	    
