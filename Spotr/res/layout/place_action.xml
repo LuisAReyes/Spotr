@@ -2,9 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" 
-    >
+    android:orientation="vertical" >
 
+     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Want to fight with another player now?"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+    
+    <Button
+        android:id="@+id/place_action_xml_button_find_players"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fight ?" />
+   	 
     <TextView
         android:id="@+id/place_action_xml_textview_challenge_title"
         android:layout_width="wrap_content"
@@ -17,18 +29,17 @@
         android:layout_width="fill_parent"
         android:layout_height="4dp"
         android:background="#FAB002" />
- 
- 	<View
+
+    <View
         android:layout_width="fill_parent"
         android:layout_height="4dp"
         android:background="#F5114A" />
- 	
-	<View
+
+    <View
         android:layout_width="fill_parent"
         android:layout_height="4dp"
         android:background="#1124F5" />
 
-    
     <ListView
         android:id="@+id/place_action_xml_listview_actions"
         android:layout_width="fill_parent"

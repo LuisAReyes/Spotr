@@ -16,6 +16,7 @@
         android:id="@+id/reward_xml_gridview_rewards"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:padding="10dp"
         >
     </com.csun.spotr.custom_gui.DraggableGridView>
 
