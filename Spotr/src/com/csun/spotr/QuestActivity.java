@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,6 +58,11 @@ public class QuestActivity extends Activity {
 				nameTextView.setText(questList.get(position).getName());
 				placeTextView.setText(Integer.toString(questList.get(position).getSpotnum()));
 				pointTextView.setText(Integer.toString(questList.get(position).getPoints()));
+				Intent intent = new Intent("com.csun.spotr.QuestDetailActivity");
+				Bundle extras = new Bundle();
+				extras.putInt("quest_id",questList.get(position).getId() );
+				intent.putExtras(extras);
+				startActivity(intent);
 			}
 		});
 		

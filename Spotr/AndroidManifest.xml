@@ -422,6 +422,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        
+         <!-- QuestDetailActivity -->
+        <activity
+            android:name=".QuestDetailActivity"
+            android:configChanges="orientation|keyboardHidden" >
+            <intent-filter>
+                <action android:name="com.csun.spotr.QuestDetailActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <!-- Seeking Item Detail Activity -->
         <activity
