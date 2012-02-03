@@ -8,7 +8,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.util.JsonHelper;
@@ -27,9 +26,7 @@ import android.widget.EditText;
 public class CreateLostItemActivity extends Activity {
 	private static final String TAG = "(CreateLostItemActivity)";
 	private static final String GET_USER_POINTS_URL = "http://107.22.209.62/android/get_user_points.php";
-	private Integer userPoints = 0;
-	private int currentUserId = 0;
-	private int currentUserPoints = 0;
+	private static Integer userPoints = 0;
 	private EditText editTextName;
 	private EditText editTextDescription;
 	private EditText editTextPoints;
@@ -41,8 +38,6 @@ public class CreateLostItemActivity extends Activity {
 		
 		// hide keyboard right away
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		
-		Bundle extrasBundle = getIntent().getExtras();
 		
 		editTextName = (EditText) findViewById(R.id.create_lost_item_xml_edittext_name);
 		editTextDescription = (EditText) findViewById(R.id.create_lost_item_xml_edittext_description);
@@ -59,7 +54,7 @@ public class CreateLostItemActivity extends Activity {
 	}
 	
 	// We need the user's points to determine how many he/she can distribute
-	private class GetUserPoints extends AsyncTask<Void, Integer, Boolean> {
+	private static class GetUserPoints extends AsyncTask<Void, Integer, Boolean> {
 		private WeakReference<CreateLostItemActivity> refActivity;
 		private List<NameValuePair> jsonList = new ArrayList<NameValuePair>();
 		private ProgressDialog progressDialog = null;
@@ -72,7 +67,7 @@ public class CreateLostItemActivity extends Activity {
 		
 		@Override
 		protected void onPreExecute() {
-			progressDialog = new ProgressDialog(CreateLostItemActivity.this);
+			progressDialog = new ProgressDialog(refActivity.get());
 			progressDialog.setMessage("Loading...");
 			progressDialog.setIndeterminate(true);
 			progressDialog.setCancelable(false);
@@ -96,14 +91,13 @@ public class CreateLostItemActivity extends Activity {
 				return true;
 			}
 			
-			Log.d(TAG, "User's points: " + currentUserPoints);
 			return false;
 		}
 		
 		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
 			if (result == false) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(CreateLostItemActivity.this).create();
+				AlertDialog dialogMessage = new AlertDialog.Builder(refActivity.get()).create();
 				dialogMessage.setTitle("Oops!");
 				dialogMessage.setMessage("Sorry " + CurrentUser.getCurrentUser().toString() + ", it seems there was an error.");
 				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
