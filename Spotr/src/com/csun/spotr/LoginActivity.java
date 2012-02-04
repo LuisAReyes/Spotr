@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View.OnKeyListener;
 import android.view.Window;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -93,8 +94,7 @@ public class LoginActivity extends Activity {
 
 		buttonLogin.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				task = new LoginTask();
-				task.execute();
+				performLogin();
 			}
 		});
 		
@@ -113,7 +113,23 @@ public class LoginActivity extends Activity {
 					savePassword = false;
 			}
 		});
+		
+		edittextPassword.setOnKeyListener(new OnKeyListener() {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN &&
+						keyCode == KeyEvent.KEYCODE_ENTER) {
+					performLogin();
+					return true;
+				}
+				return false;
+			}
+		});
 
+	}
+	
+	protected void performLogin() {
+		task = new LoginTask();
+		task.execute();
 	}
 
 	@Override
