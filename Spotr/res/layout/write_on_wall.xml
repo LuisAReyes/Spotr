@@ -21,30 +21,31 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
     
 	<ScrollView 
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:orientation="vertical" >
+    		android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+    		<LinearLayout
+        		android:layout_width="fill_parent"
+        		android:layout_height="fill_parent"
+        		android:orientation="vertical" >
 
-        <EditText
-            android:id="@+id/write_on_wall_xml_edittext_message_box"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:maxLength="400" />
+        		<EditText
+        		    android:id="@+id/write_on_wall_xml_edittext_message_box"
+            		    android:layout_width="match_parent"
+            		    android:layout_height="wrap_content"
+            		    android:inputType="textMultiLine"
+            		    android:maxLength="400" />
 
-        <Button
-            android:id="@+id/write_on_wall_xml_button_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Post your message?" />
+        		<Button
+            			android:id="@+id/write_on_wall_xml_button_submit"
+            			android:layout_width="wrap_content"
+            			android:layout_height="wrap_content"
+            			android:layout_gravity="center"
+            			android:text="Post your message?" />
 
-    </LinearLayout>
+    		</LinearLayout>
 
 	</ScrollView>
+	
 </LinearLayout>
