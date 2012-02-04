@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.csun.spotr.adapter.PlaceActionItemAdapter;
+import com.csun.spotr.adapter.QuestActionItemAdapter;
 import com.csun.spotr.core.Challenge;
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.util.JsonHelper;
@@ -31,29 +32,50 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class PlaceActionActivity extends Activity {
-	private static final String TAG = "(PlaceActionActivity)";
-	private static final String GET_CHALLENGES_URL = "http://107.22.209.62/android/get_challenges_from_place.php";
+public class QuestActionActivity extends Activity {
+	private static final String TAG = "(QuestActionActivity)";
+	private static final String GET_QUEST_DETAIL_URL = "http://107.22.209.62/android/get_challenges_from_place.php";
 	private static final String DO_CHECK_IN_URL = "http://107.22.209.62/android/do_check_in.php";
 	private int currentPlaceId;
 	private int currentChosenItem;
-	private ListView list = null;
-	private	PlaceActionItemAdapter adapter = null;
+	
+	//for default challenge : check in, snap picture, write on wall...
+	private ListView list = null;	
+	private	PlaceActionItemAdapter adapter = null;	
 	private List<Challenge> challengeList = new ArrayList<Challenge>();
+	
+	//for custom challenge.
+	private ListView questlist =null;
+	private PlaceActionItemAdapter questadapter = null;
+	private List<Challenge> customChallengeList = new ArrayList<Challenge>();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// set layout
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.place_action);
+		setContentView(R.layout.quest_action);
 	
 		// get place id
-		Bundle extrasBundle = getIntent().getExtras();
-		currentPlaceId = extrasBundle.getInt("place_id");
 		
-		// initialize list view of challenges
-		list = (ListView) findViewById(R.id.place_action_xml_listview_actions);
-		adapter = new PlaceActionItemAdapter(PlaceActionActivity.this, challengeList);
+		currentPlaceId = this.getIntent().getExtras().getInt("place_id");
+		
+		//initialize list view of custom challenges
+		questlist = (ListView) findViewById(R.id.quest_action_xml_listview_quest_actions);
+		questadapter = new PlaceActionItemAdapter(QuestActionActivity.this, customChallengeList);
+		questlist.setAdapter(questadapter);
+		questlist.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		// initialize list view of default challenges
+		list = (ListView) findViewById(R.id.quest_action_xml_listview_actions);
+		adapter = new PlaceActionItemAdapter(QuestActionActivity.this, challengeList);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -115,20 +137,26 @@ public class PlaceActionActivity extends Activity {
 		
 		@Override
 	    protected void onProgressUpdate(Challenge... challenges) {
-			challengeList.add(challenges[0]);
-			adapter.notifyDataSetChanged();
+			if(challenges[0].getType().toString().equals("OTHER"))
+			{
+				customChallengeList.add(challenges[0]);
+				questadapter.notifyDataSetChanged();
+			}
+			else
+			{
+				challengeList.add(challenges[0]);
+				adapter.notifyDataSetChanged();
+			}
 			// adapter.notifyDataSetInvalidated();
 	    }
 
 		@Override
 		protected Boolean doInBackground(String... text) {
 			challengeData.add(new BasicNameValuePair("place_id", Integer.toString(currentPlaceId)));
-			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_CHALLENGES_URL, challengeData);
+			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_QUEST_DETAIL_URL, challengeData);
 			if (array != null) { 
 				try {
-					for (int i = 0; i < array.length(); ++i) {
-						if (!array.getJSONObject(i).getString("challenges_tbl_type").equals("OTHER"))
-						{
+					for (int i = 0; i < array.length(); ++i) {						
 						publishProgress(								
 							new Challenge.Builder(
 									// required parameters
@@ -139,9 +167,8 @@ public class PlaceActionActivity extends Activity {
 										.name(array.getJSONObject(i).getString("challenges_tbl_name"))
 										.description(array.getJSONObject(i).getString("challenges_tbl_description"))
 											.build());
-						}
-					}
-				}
+						}						
+					}				
 				catch (JSONException e) {
 					Log.e(TAG + "GetChallengesTask.doInBackGround(Void ...voids) : ", "JSON error parsing data" + e.toString());
 				}
@@ -151,11 +178,10 @@ public class PlaceActionActivity extends Activity {
 				return false;
 			}
 		}
-
 		@Override
 		protected void onPostExecute(Boolean result) {
 			if (result == false) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActionActivity.this).create();
+				AlertDialog dialogMessage = new AlertDialog.Builder(QuestActionActivity.this).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("There are no challenges at this place!");
 				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {

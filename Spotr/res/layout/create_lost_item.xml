@@ -48,7 +48,7 @@
             android:id="@+id/create_lost_item_xml_imageview_item_images"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/hottub" />
+            android:src="@drawable/challenges" />
 
         <TextView
             android:id="@+id/create_lost_item_xml_textview_points"
@@ -61,25 +61,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
+            
+            <Button
+                android:id="@+id/create_lost_item_xml_button_minus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-" />
 
+            <EditText
+                android:id="@+id/create_lost_item_xml_edittext_points"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:inputType="number" >
+            </EditText>
+            
             <Button
                 android:id="@+id/create_lost_item_xml_button_plus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+" />
 
-            <EditText
-                android:id="@+id/create_lost_item_xml_edittext_points"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" >
-            </EditText>
-
-            <Button
-                android:id="@+id/create_lost_item_xml_button_minus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="-" />
         </LinearLayout>
 
         <Button

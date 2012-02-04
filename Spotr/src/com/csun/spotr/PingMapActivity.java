@@ -298,6 +298,7 @@ public class PingMapActivity extends MapActivity {
 		public CustomItemizedOverlay(Drawable defaultMarker, MapView mapView) {
 			super(boundCenter(defaultMarker), mapView);
 			context = mapView.getContext();
+			populate();
 		}
 
 		public void addOverlay(OverlayItem overlay, FriendAndLocation fal) {

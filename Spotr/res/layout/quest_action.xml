@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    >
+	<TextView
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quest challenges"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+	    
+	<ListView
+        android:id="@+id/quest_action_xml_listview_quest_actions"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:background="@android:color/white" >
+   	</ListView>
+   	
+	<View
+        android:layout_width="fill_parent"
+        android:layout_height="4dp"
+        android:background="#FAB002" />
+	
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share that you are here"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="4dp"
+        android:background="#FAB002" />
+     
+    <ListView
+        android:id="@+id/quest_action_xml_listview_actions"
+        android:layout_width="fill_parent"
+        android:layout_height="325dp"
+        android:background="@android:color/white" >
+    </ListView>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#FAB002" />
+
+</LinearLayout>
