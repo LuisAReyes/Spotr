@@ -27,7 +27,7 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
 	private int colCount;
 	private int childSize;
 	private int padding;
-	private int dpi;
+	private int dpi; 
 	private int scroll = 0;
 	private float lastDelta = 0;
 	private Handler handler = new Handler();

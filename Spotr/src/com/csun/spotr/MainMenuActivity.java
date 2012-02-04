@@ -13,6 +13,7 @@ import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.FriendRequestItemAdapter;
 import com.csun.spotr.core.adapter_item.FriendRequestItem;
+import com.csun.spotr.custom_gui.DashboardLayout;
 import com.csun.spotr.custom_gui.DraggableGridView;
 
 import android.app.Activity;
@@ -26,6 +27,7 @@ import android.os.Bundle;
 
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.util.Log;
@@ -44,6 +46,7 @@ public class MainMenuActivity extends Activity {
 	private static final String IGNORE_FRIEND_URL = "http://107.22.209.62/android/ignore_friend.php";
 	private List<FriendRequestItem> friendRequestList = null;
 	private int currentSelectedFriendId;
+	private DashboardLayout dashboard = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,81 +54,50 @@ public class MainMenuActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.main_menu_original);
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_bar);
-
-		DraggableGridView mainGrid = (DraggableGridView) findViewById(R.id.main_menu_xml_gridview_maingrid);
-		
-		final ImageView imageViewProfile = new ImageView(this);
-		imageViewProfile.setImageDrawable(getResources().getDrawable(R.drawable.profile));
-		mainGrid.addView(imageViewProfile);
-
-
-		final ImageView imageViewLocalMap = new ImageView(this);
-		imageViewLocalMap.setImageDrawable(getResources().getDrawable(R.drawable.challenges));
-		mainGrid.addView(imageViewLocalMap);
-		
-		final ImageView imageViewFriend = new ImageView(this);
-		imageViewFriend.setImageDrawable(getResources().getDrawable(R.drawable.friends));
-		mainGrid.addView(imageViewFriend);
-		
-		final ImageView imageViewFinder = new ImageView(this);
-		imageViewFinder.setImageDrawable(getResources().getDrawable(R.drawable.leaderboards));
-		mainGrid.addView(imageViewFinder);
-	
-		final ImageView imageViewQuest = new ImageView(this);
-		imageViewQuest.setImageDrawable(getResources().getDrawable(R.drawable.awards));
-		mainGrid.addView(imageViewQuest);
-		
-		final ImageView imageViewPlace = new ImageView(this);
-		imageViewPlace.setImageDrawable(getResources().getDrawable(R.drawable.spots));
-		mainGrid.addView(imageViewPlace);
-		
-		final ImageView imageViewPingMap = new ImageView(this);
-		imageViewPingMap.setImageDrawable(getResources().getDrawable(R.drawable.spots));
-		mainGrid.addView(imageViewPingMap);
-	
-		mainGrid.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				Intent intent;
-				if (v.equals(imageViewProfile)) {
-					Bundle extras = new Bundle();
-					extras.putInt("user_id", CurrentUser.getCurrentUser().getId());
-					intent = new Intent(getApplicationContext(), ProfileMainActivity.class);
-					intent.putExtras(extras);
-					startActivity(intent);
-				}
-				else if (v.equals(imageViewLocalMap)) {
-					intent = new Intent(getApplicationContext(), LocalMapViewActivity.class);
-					startActivity(intent);
-				}
-				else if (v.equals(imageViewFinder)) {
-					intent = new Intent(getApplicationContext(), FinderActivity.class);
-					startActivity(intent);
-				}
-				else if (v.equals(imageViewPlace)) {
-					intent = new Intent(getApplicationContext(), PlaceActivity.class);
-					startActivity(intent);
-				}
-				else if (v.equals(imageViewFriend)) {
-					intent = new Intent(getApplicationContext(), FriendListMainActivity.class);
-					startActivity(intent);
-				}
-				else if (v.equals(imageViewQuest)) {
-					intent = new Intent(getApplicationContext(), QuestActivity.class);
-					startActivity(intent);
-				}
-				else if (v.equals(imageViewPingMap)) {
-				 	intent = new Intent(getApplicationContext(), PingMapActivity.class);
-					startActivity(intent);   
-				}
-				else {
-					// should never go here
-				}
-		    }
-		});	
 	
 		// populating Notification with friend request 
 		GetFriendRequestTask task = new GetFriendRequestTask();
 		task.execute();
+	}
+	
+	public void getActivity(View mainMenuButton) {
+		int id =  ((Button) mainMenuButton).getId();
+		Intent intent;
+		if (id == R.id.main_menu_btn_me) {
+			Bundle extras = new Bundle();
+			extras.putInt("user_id", CurrentUser.getCurrentUser().getId());
+			intent = new Intent(getApplicationContext(), ProfileMainActivity.class);
+			intent.putExtras(extras);
+			startActivity(intent);
+		}
+		else if (id == R.id.main_menu_btn_map) {
+			intent = new Intent(getApplicationContext(), LocalMapViewActivity.class);
+			startActivity(intent);
+		}
+		else if (id == R.id.main_menu_btn_spot_it) {
+			intent = new Intent(getApplicationContext(), FinderActivity.class);
+			startActivity(intent);
+		}
+		else if (id == R.id.main_menu_btn_spots) {
+			intent = new Intent(getApplicationContext(), PlaceActivity.class);
+			startActivity(intent);
+		}
+		else if (id == R.id.main_menu_btn_friends) {
+			intent = new Intent(getApplicationContext(), FriendListMainActivity.class);
+			startActivity(intent);
+		}
+		else if (id == R.id.main_menu_btn_quests) {
+			intent = new Intent(getApplicationContext(), QuestActivity.class);
+			startActivity(intent);
+		}
+		else if (id == R.id.main_menu_btn_ping) {
+		 	intent = new Intent(getApplicationContext(), PingMapActivity.class);
+			startActivity(intent);   
+		}
+		else {
+			// should never go here
+		}
+
 	}
 
 	private class GetFriendRequestTask extends AsyncTask<Void, Integer, Boolean> {

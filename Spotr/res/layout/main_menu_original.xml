@@ -1,18 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
-    android:orientation="vertical"
-    android:background="@drawable/background_striped" >
- 
- 	<com.csun.spotr.custom_gui.DraggableGridView
-        android:id="@+id/main_menu_xml_gridview_maingrid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-        
-    </com.csun.spotr.custom_gui.DraggableGridView>
+    android:orientation="vertical" >
     
-   
+    <com.csun.spotr.custom_gui.DashboardLayout
+        android:id="@+id/main_menu_xml_dashboard"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/dashboard_bg" >
+        
+	    <!--  Me Button -->
+	    <Button
+	        android:id="@+id/main_menu_btn_me"
+	        style="@style/MainMenuButton"
+	        android:drawableTop="@drawable/ic_main_menu_me"
+	        android:text="Me"
+	        android:onClick="getActivity" />
+	    
+	    <!--  Map Button -->
+	    <Button
+	        android:id="@+id/main_menu_btn_map"
+	        style="@style/MainMenuButton"
+	        android:drawableTop="@drawable/ic_main_menu_map"
+	        android:text="Map"
+	        android:onClick="getActivity" />
+	    
+	    <!--  Friends Button -->
+	    <Button
+	        android:id="@+id/main_menu_btn_friends"
+	        style="@style/MainMenuButton"
+	        android:drawableTop="@drawable/ic_main_menu_friends"
+	        android:text="Friends"
+	        android:onClick="getActivity" />
+	    
+	    <!--  Quests Button -->
+	    <Button
+	        android:id="@+id/main_menu_btn_quests"
+	        style="@style/MainMenuButton"
+	        android:drawableTop="@drawable/ic_main_menu_quests"
+	        android:text="Quests"
+	        android:onClick="getActivity" />
+	    
+	    <!--  Spots Button -->
+	    <Button
+	        android:id="@+id/main_menu_btn_spots"
+	        style="@style/MainMenuButton"
+	        android:drawableTop="@drawable/ic_main_menu_spots"
+	        android:text="Spots"
+	        android:onClick="getActivity" />
+	    
+	    <!--  Ping Button -->
+	    <Button
+	        android:id="@+id/main_menu_btn_ping"
+	        style="@style/MainMenuButton"
+	        android:drawableTop="@drawable/ic_main_menu_ping"
+	        android:text="Ping"
+	        android:onClick="getActivity" />
+	    
+	    <!-- Spot_It Button -->
+	    <Button
+	        android:id="@+id/main_menu_btn_spot_it"
+	        style="@style/MainMenuButton"
+	        android:drawableTop="@drawable/ic_main_menu_spot_it"
+	        android:text="Spot It"
+	        android:onClick="getActivity" />
+        
+    </com.csun.spotr.custom_gui.DashboardLayout>
+        
+        
+<!--  	<com.csun.spotr.custom_gui.DraggableGridView -->
+<!--         android:id="@+id/main_menu_xml_gridview_maingrid" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" > -->
+        
+<!--     </com.csun.spotr.custom_gui.DraggableGridView> -->
+    
     <SlidingDrawer 
         android:id="@+id/main_menu_xml_slider"
         android:gravity="bottom"
@@ -22,28 +85,28 @@
         android:content="@+id/main_menu_xml_slide_content"
         android:visibility="invisible" >
        
-     <Button 
-         android:id="@+id/main_menu_xml_slide_handle"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:background="@drawable/sliderup_0"
-         android:textColor="#2d2c2c"
-         android:textStyle="bold"
-         android:text="@string/main_menu_xml_slider_notification_str">
-     </Button>
-       
-    <ImageView
-         android:id="@+id/main_menu_xml_slide_handle"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         />
-     <ListView
-         android:id="@+id/main_menu_xml_slide_content"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:background="#D5484646" >
-    </ListView>
+	     <Button 
+	         android:id="@+id/main_menu_xml_slide_handle"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:background="@drawable/sliderup_0"
+	         android:textColor="#2d2c2c"
+	         android:textStyle="bold"
+	         android:text="@string/main_menu_xml_slider_notification_str">
+	     </Button>
+	       
+	    <ImageView
+	         android:id="@+id/main_menu_xml_slide_handle"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         />
+	     <ListView
+	         android:id="@+id/main_menu_xml_slide_content"
+	         android:layout_width="match_parent"
+	         android:layout_height="match_parent"
+	         android:background="#D5484646" >
+	    </ListView>
     
     </SlidingDrawer>
     
-</RelativeLayout>
+</LinearLayout>
