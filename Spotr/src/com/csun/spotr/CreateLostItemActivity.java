@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -10,9 +11,13 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import com.csun.spotr.singleton.CurrentDateTime;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.util.Base64;
 import com.csun.spotr.util.JsonHelper;
+import com.csun.spotr.util.UploadFileHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -39,9 +44,13 @@ import android.widget.ImageView;
 public class CreateLostItemActivity extends Activity {
 	private static final String TAG = "(CreateLostItemActivity)";
 	private static final String GET_USER_POINTS_URL = "http://107.22.209.62/android/get_user_points.php";
-	private static final String UPLOAD_SUBMIT_ITEM_URL = "http://107.22.209.62/android/submit_lost_item.php";
+	private static final String UPLOAD_PHOTO_URL = "http://107.22.209.62/images/upload_photo.php";
+	private static final String SUBMIT_ITEM_URL = "http://107.22.209.62/android/submit_lost_item.php";
 	
 	private static Integer userPoints = 0;
+	private static String itemName = null;
+	private static String itemDesc = null;
+	private static String itemFile = null;
 	private int itemPoints = 0;
 	
 	private EditText editTextName;
@@ -51,7 +60,8 @@ public class CreateLostItemActivity extends Activity {
 	private Button buttonPointsMinus;
 	private Button buttonSelectImage;
 	private Button buttonSubmit;
-	private ImageView imageViewSelected;
+	private Bitmap bitmapPicture = null;
+	private ImageView imageViewPicture;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +78,7 @@ public class CreateLostItemActivity extends Activity {
 		buttonPointsPlus = (Button) findViewById(R.id.create_lost_item_xml_button_plus);
 		buttonPointsMinus = (Button) findViewById(R.id.create_lost_item_xml_button_minus);
 		buttonSubmit = (Button) findViewById(R.id.create_lost_item_xml_button_upload);
-		imageViewSelected = (ImageView) findViewById(R.id.create_lost_item_xml_imageview_item_images);
+		imageViewPicture = (ImageView) findViewById(R.id.create_lost_item_xml_imageview_item_images);
 		
 		editTextName.setHint("Enter lost item's name here.");
 		editTextDescription.setHint("Describe the item in as much detail as you can here.");
@@ -98,7 +108,7 @@ public class CreateLostItemActivity extends Activity {
 		
 		buttonSubmit.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				// TODO Submit lost item
+				new SubmitLostItem(CreateLostItemActivity.this).execute();
 			}
 		});
 		
@@ -127,8 +137,8 @@ public class CreateLostItemActivity extends Activity {
 			}
 			Options options = new Options();
 			options.inSampleSize = 8;
-			Bitmap preview = BitmapFactory.decodeStream(in, null, options);
-			imageViewSelected.setImageBitmap(preview);
+			bitmapPicture = BitmapFactory.decodeStream(in, null, options);
+			imageViewPicture.setImageBitmap(bitmapPicture);
 		}
 	}
 	
@@ -189,6 +199,72 @@ public class CreateLostItemActivity extends Activity {
 		}
 	
 
+	}
+	
+	private class SubmitLostItem extends AsyncTask<String, Integer, String> {
+		private List<NameValuePair> lostItemData = new ArrayList<NameValuePair>();
+		private List<NameValuePair> photoData = new ArrayList<NameValuePair>();
+		private WeakReference<CreateLostItemActivity> refActivity;
+		private ProgressDialog progressDialog = null;
+		
+		public SubmitLostItem(Activity c) {
+			refActivity = new WeakReference<CreateLostItemActivity>((CreateLostItemActivity)c);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			progressDialog = new ProgressDialog(refActivity.get());
+			progressDialog.setMessage("Loading...");
+			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(false);
+			progressDialog.show();
+		}
+		
+		protected String doInBackground(String... params) {		
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			bitmapPicture.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+			byte[] src = stream.toByteArray();
+			String byteCode = Base64.encodeBytes(src);
+			
+			lostItemData.add(new BasicNameValuePair("name", itemName));
+			lostItemData.add(new BasicNameValuePair("desc", itemDesc));
+//			lostItemData.add(new BasicNameValuePair("points", Integer.toString(itemPoints)));
+			lostItemData.add(new BasicNameValuePair("image", byteCode));
+			lostItemData.add(new BasicNameValuePair("file_name",  CurrentUser.getCurrentUser().getUsername() 
+					+ "_" + itemName + "_"+ CurrentDateTime.getUTCDateTime().trim() + ".png"));
+			lostItemData.add(new BasicNameValuePair("user_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
+			
+			JSONObject jsonPicture = UploadFileHelper.uploadFileToServer(UPLOAD_PHOTO_URL, photoData);
+			JSONObject json = JsonHelper.getJsonObjectFromUrlWithData(SUBMIT_ITEM_URL, lostItemData);
+			String result = "success";
+			try {
+				result = json.getString("result");
+			} catch(JSONException e) {
+				Log.e(TAG + ".submitLostItem", e.toString());
+			}
+			
+			return result;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			progressDialog.dismiss();
+			if (result.equals("success")) {
+				AlertDialog dialogMessage = new AlertDialog.Builder(refActivity.get()).create();
+				dialogMessage.setTitle("Submission uploaded!");
+				dialogMessage.setMessage("Hey " + CurrentUser.getCurrentUser().getRealname() + ", submission successful!");
+				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						Intent intent = new Intent("com.csun.spotr.FinderActivity");
+						startActivity(intent);
+						finish();
+					}
+				});
+				dialogMessage.show();
+			}
+		}
+		
 	}
 	
 	@Override
