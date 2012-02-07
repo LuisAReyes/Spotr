@@ -24,7 +24,7 @@
     <!-- Custom Theme /w For Titlebar -->
 
     <style name="CustomWindowTitleBackground">
-        <item name="android:background">#832121</item>
+        <item name="android:background">#33b5e5</item>
     </style>
  
     <style name="CustomTheme" parent="android:Theme">
@@ -40,8 +40,14 @@
         <item name="android:drawablePadding">6dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#eeeeecff</item>
+        <item name="android:textColor">#eeeeec</item>
         <item name="android:background">@null</item>
-    </style>    
+    </style>
+    
+    <style name="NotificationHandle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">15dp</item>
+        <item name="android:background">#33b5e5</item>
+    </style>
     
 </resources>

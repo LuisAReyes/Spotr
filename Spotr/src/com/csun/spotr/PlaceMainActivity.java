@@ -29,8 +29,8 @@ public class PlaceMainActivity extends TabActivity {
 
 		// initialize a TabSpec for each tab and add it to the TabHost
 		spec = tabHost
-				.newTabSpec("action")
-				.setIndicator("Action", res.getDrawable(R.drawable.place_activity_tab))
+				.newTabSpec("missions")
+				.setIndicator("Missions")//, res.getDrawable(R.drawable.place_activity_tab))
 				.setContent(intent);
 		tabHost.addTab(spec);
 
@@ -40,8 +40,8 @@ public class PlaceMainActivity extends TabActivity {
 		intent.putExtras(extras);
 		
 		spec = tabHost
-				.newTabSpec("activity")
-				.setIndicator("Activity", res.getDrawable(R.drawable.place_activity_tab))
+				.newTabSpec("news")
+				.setIndicator("News")//, res.getDrawable(R.drawable.place_activity_tab))
 				.setContent(intent);
 		tabHost.addTab(spec);
 
@@ -50,8 +50,8 @@ public class PlaceMainActivity extends TabActivity {
 		intent.putExtras(extras);
 		
 		spec = tabHost
-				.newTabSpec("information")
-				.setIndicator("Information", res.getDrawable(R.drawable.place_activity_tab))
+				.newTabSpec("about")
+				.setIndicator("About")//, res.getDrawable(R.drawable.place_activity_tab))
 				.setContent(intent);
 		tabHost.addTab(spec);
 		// set current tab to action

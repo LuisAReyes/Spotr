@@ -5,40 +5,42 @@
     android:orientation="vertical" 
     >
 
-    <TextView
-        android:id="@+id/place_action_xml_textview_challenge_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Available challenges"
-        android:textColor="@android:color/white"
-        android:textStyle="bold" />
+<!--     <TextView -->
+<!--         android:id="@+id/place_action_xml_textview_challenge_title" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:text="Available challenges" -->
+<!--         android:textColor="@android:color/white" -->
+<!--         android:textStyle="bold" /> -->
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="4dp"
-        android:background="#FAB002" />
+<!-- Tri-colored upper border -->
+<!--     <View -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="4dp" -->
+<!--         android:background="#FAB002" /> -->
  
- 	<View
-        android:layout_width="fill_parent"
-        android:layout_height="4dp"
-        android:background="#F5114A" />
+<!--  	<View -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="4dp" -->
+<!--         android:background="#F5114A" /> -->
  	
-	<View
-        android:layout_width="fill_parent"
-        android:layout_height="4dp"
-        android:background="#1124F5" />
+<!-- 	<View -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="4dp" -->
+<!--         android:background="#1124F5" /> -->
 
     
     <ListView
         android:id="@+id/place_action_xml_listview_actions"
         android:layout_width="fill_parent"
-        android:layout_height="325dp"
-        android:background="@android:color/white" >
+        android:layout_height="match_parent"
+        android:background="#eeeeec" >
     </ListView>
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:background="#FAB002" />
+<!-- bottom border -->
+<!--     <View -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="2dp" -->
+<!--         android:background="#FAB002" /> -->
 
 </LinearLayout>
