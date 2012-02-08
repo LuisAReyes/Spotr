@@ -215,6 +215,17 @@ public class PlaceActionActivity extends Activity {
 			if (result.equals("success")) {
 				list.getChildAt(currentChosenItem).setBackgroundColor(Color.GRAY);
 			}
+			else {
+				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActionActivity.this).create();
+				dialogMessage.setTitle("Recent check in");
+				dialogMessage.setMessage("You checked in recently. You can only check in once every 24 hours. :(");
+				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				dialogMessage.show();
+			}	
 		}
 	}
 	
