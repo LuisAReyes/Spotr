@@ -2,52 +2,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    
+    android:background="#C0C0C0" >
 
     <LinearLayout
         android:layout_width="400dp"
         android:layout_height="130dp"
         android:orientation="horizontal" >
-
+    	<!-- Image of the location -->
         <ImageView
             android:id="@+id/place_info_xml_imageview_picture"
             android:layout_width="120dp"
             android:layout_height="120dp" />
-
+		
         <TableLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
 
             <TableRow>
-
+				<!-- Title of the Location -->
                 <TextView
                     android:id="@+id/place_info_xml_textview_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#F05411"
+                    android:textColor="#2e3436"
                     android:textSize="15sp"
                     android:textStyle="bold" />
             </TableRow>
 
             <TableRow>
-
+				<!-- Text for the description of the Location -->
                 <TextView
                     android:id="@+id/place_info_xml_textview_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="#2e3436"
                     android:maxLines="2" />
             </TableRow>
 
             <TableRow>
-
+				<!-- Text for the coordinates of the Location -->
                 <TextView
                     android:id="@+id/place_info_xml_textview_location"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textColor="#2e3436"
+                     />
             </TableRow>
 
             <TableRow>
-
+				<!-- Link for Google Map View -->
                 <TextView
                     android:id="@+id/place_info_xml_textview_url"
                     android:layout_width="match_parent"
@@ -57,29 +62,29 @@
             </TableRow>
         </TableLayout>
     </LinearLayout>
-
+	<!-- Phone number button -->
     <Button
         android:id="@+id/place_info_xml_button_phone_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
+	<!-- Border  -->
     <View
         android:layout_width="fill_parent"
         android:layout_height="4dp"
         android:layout_marginTop="4dp"
-        android:background="#FAB002" />
-
+        android:background="#eeeeec" />
+	<!-- Map View  -->
     <com.google.android.maps.MapView
         android:id="@+id/place_info_xml_mapview"
         android:layout_width="400dp"
         android:layout_height="200dp"
         android:apiKey="0kqsfxjLdh6ggN9sWrcd75tQQA_2JugZxhGcElQ"
         android:clickable="true" />
-
+	<!-- Border  -->
     <View
         android:layout_width="fill_parent"
         android:layout_height="4dp"
         android:layout_marginTop="4dp"
-        android:background="#FC1900" />
+        android:background="#eeeeec" />
 
 </LinearLayout>
