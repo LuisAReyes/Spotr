@@ -4,11 +4,17 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TabHost;
+import android.widget.TextView;
 
+/**
+ * Framework for Spots.
+ */
 public class PlaceMainActivity extends TabActivity {
 	private static final String TAG = "(PlaceMainActivity)";
 	
@@ -28,9 +34,12 @@ public class PlaceMainActivity extends TabActivity {
 		intent.putExtras(extras);
 
 		// initialize a TabSpec for each tab and add it to the TabHost
+	    View view = LayoutInflater.from(tabHost.getContext()).inflate(R.layout.tabs_bg, null);
+	    TextView tv = (TextView) view.findViewById(R.id.tabsText);
+	    tv.setText("Missions");
 		spec = tabHost
 				.newTabSpec("missions")
-				.setIndicator("Missions")//, res.getDrawable(R.drawable.place_activity_tab))
+				.setIndicator(view)//, res.getDrawable(R.drawable.place_activity_tab))
 				.setContent(intent);
 		tabHost.addTab(spec);
 
@@ -39,9 +48,12 @@ public class PlaceMainActivity extends TabActivity {
 		// pass this Extra to PlaceActivityActivity
 		intent.putExtras(extras);
 		
+		view = LayoutInflater.from(tabHost.getContext()).inflate(R.layout.tabs_bg, null);
+	    tv = (TextView) view.findViewById(R.id.tabsText);
+	    tv.setText("News");
 		spec = tabHost
 				.newTabSpec("news")
-				.setIndicator("News")//, res.getDrawable(R.drawable.place_activity_tab))
+				.setIndicator(view)//, res.getDrawable(R.drawable.place_activity_tab))
 				.setContent(intent);
 		tabHost.addTab(spec);
 
@@ -49,9 +61,12 @@ public class PlaceMainActivity extends TabActivity {
 		// pass this extra to PlaceInfoActivity
 		intent.putExtras(extras);
 		
+		view = LayoutInflater.from(tabHost.getContext()).inflate(R.layout.tabs_bg, null);
+	    tv = (TextView) view.findViewById(R.id.tabsText);
+	    tv.setText("About");
 		spec = tabHost
 				.newTabSpec("about")
-				.setIndicator("About")//, res.getDrawable(R.drawable.place_activity_tab))
+				.setIndicator(view)//, res.getDrawable(R.drawable.place_activity_tab))
 				.setContent(intent);
 		tabHost.addTab(spec);
 		// set current tab to action

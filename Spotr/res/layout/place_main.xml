@@ -13,8 +13,7 @@
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="#2e3436"
-            android:tabStripEnabled="true" />
+            android:background="#2e3436" />
 
         <FrameLayout
             android:id="@android:id/tabcontent"

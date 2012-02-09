@@ -3,16 +3,23 @@ package com.csun.spotr.adapter;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.csun.spotr.R;
 import com.csun.spotr.core.Challenge;
 
+/**
+ * Adapter for each challenge item in the Missions tab of Spots. 
+ */
 public class PlaceActionItemAdapter extends BaseAdapter {
 	private List<Challenge> items;
 	private Activity context;
@@ -38,6 +45,7 @@ public class PlaceActionItemAdapter extends BaseAdapter {
 		TextView titleTextView;
 		TextView descriptionTextView;
 		TextView pointTextView;
+		TextView pointAbbrevTextView;
 		ImageView iconImageView;
 	}
 
@@ -48,8 +56,9 @@ public class PlaceActionItemAdapter extends BaseAdapter {
 			convertView = inflater.inflate(R.layout.place_action_item, null);
 			holder = new ItemViewHolder();
 			holder.titleTextView = (TextView) convertView.findViewById(R.id.place_action_item_xml_textview_title);
-			holder.descriptionTextView = (TextView) convertView.findViewById(R.id.place_action_item_xml_textview_subtitle);
+//			holder.descriptionTextView = (TextView) convertView.findViewById(R.id.place_action_item_xml_textview_subtitle);
 			holder.pointTextView = (TextView) convertView.findViewById(R.id.place_action_item_xml_textview_point);
+			holder.pointAbbrevTextView = (TextView) convertView.findViewById(R.id.place_action_item_xml_textview_point_abbrev);
 			holder.iconImageView = (ImageView) convertView.findViewById(R.id.place_action_item_xml_imageview_action_icon);
 
 			convertView.setTag(holder);
@@ -59,8 +68,9 @@ public class PlaceActionItemAdapter extends BaseAdapter {
 		}
 
 		holder.titleTextView.setText(items.get(position).getName());
-		holder.descriptionTextView.setText(items.get(position).getDescription());
-		holder.pointTextView.setText(Integer.toString(items.get(position).getPoints()));
+//		holder.descriptionTextView.setText(items.get(position).getDescription());
+		holder.pointTextView.setText(Integer.toString(items.get(position).getPoints()) + " "); // extra space at end to avoid clipping off italic text
+		holder.pointAbbrevTextView.setText(R.string.place_action_item_xml_string_pts);
 
 		if (items.get(position).getType() == Challenge.Type.CHECK_IN)
 			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
@@ -72,7 +82,13 @@ public class PlaceActionItemAdapter extends BaseAdapter {
 			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
 		else
 			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
-
+		
+		// alternate row color
+//		if (position % 2 != 0)
+//			convertView.setBackgroundColor(R.color.aluminum5);
+//		else
+//			convertView.setBackgroundColor(R.color.aluminum6);
+				
 		return convertView;
 	}
 }

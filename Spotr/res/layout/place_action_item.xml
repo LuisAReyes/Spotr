@@ -1,55 +1,26 @@
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/place_action_item_xml_tablelayout_table"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#eeeeec" >
+    style="@style/MissionRow" >
 
-    <TableRow>
+    <!-- mission icon -->
+    <ImageView
+        android:id="@+id/place_action_item_xml_imageview_action_icon"
+        style="@style/MissionIcon"
+        android:src="@drawable/ic_launcher" />
 
-        <ImageView
-            android:id="@+id/place_action_item_xml_imageview_action_icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginRight="6dp"
-            android:src="@drawable/ic_launcher" />
+    <!-- mission name -->
+    <TextView
+        android:id="@+id/place_action_item_xml_textview_title"
+        style="@style/MissionName" />
 
-        <TextView
-            android:id="@+id/place_action_item_xml_textview_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#2e3436"
-            android:textSize="20sp" />
-    </TableRow>
+    <!-- mission point value -->
+    <TextView
+        android:id="@+id/place_action_item_xml_textview_point"
+        style="@style/MissionPointValue" />
 
-    <TableRow>
+    <!-- mission "points" abbreviation ("pts) -->
+    <TextView
+        android:id="@+id/place_action_item_xml_textview_point_abbrev"
+        style="@style/MissionPointValueAbbrev" />
 
-        <ImageView android:layout_marginRight="6dp" />
-
-        <TextView
-            android:id="@+id/place_action_item_xml_textview_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#2e3436"
-            android:textSize="15sp" />
-    </TableRow>
-
-    <TableRow>
-
-        <ImageView android:layout_marginRight="6dp" />
-
-        <TextView
-            android:id="@+id/place_action_item_xml_textview_point"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#2e3436"
-            android:textSize="15sp" />
-    </TableRow>
-
-    <TableRow>
-    </TableRow>
-
-</TableLayout>
+</LinearLayout>

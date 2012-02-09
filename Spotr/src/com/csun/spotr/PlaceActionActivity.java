@@ -28,9 +28,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
+/**
+ * The Missions tab content in Spots.
+ *
+ */
 public class PlaceActionActivity extends Activity {
 	private static final String TAG = "(PlaceActionActivity)";
 	private static final String GET_CHALLENGES_URL = "http://107.22.209.62/android/get_challenges_from_place.php";
@@ -54,10 +60,18 @@ public class PlaceActionActivity extends Activity {
 		// initialize list view of challenges
 		list = (ListView) findViewById(R.id.place_action_xml_listview_actions);
 		adapter = new PlaceActionItemAdapter(PlaceActionActivity.this, challengeList);
+		
+		// add top padding to first item and add bottom padding to last item
+		TextView padding = new TextView(this);
+		padding.setHeight(0);
+		list.addHeaderView(padding, null, false);
+		list.addFooterView(padding, null, false);
+		
 		list.setAdapter(adapter);
+				
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Challenge c = challengeList.get(position);
+				Challenge c = (Challenge) list.getAdapter().getItem(position);//challengeList.get(position);
 				// set current item chosen so that later we can make some side effects
 				currentChosenItem = position;
 				
@@ -98,7 +112,6 @@ public class PlaceActionActivity extends Activity {
 					startActivity(intent);
 				}
 				else { // c.getType == Challenge.Type.OTHER 
-				
 				}
 			}
 		});
@@ -215,6 +228,17 @@ public class PlaceActionActivity extends Activity {
 			if (result.equals("success")) {
 				list.getChildAt(currentChosenItem).setBackgroundColor(Color.GRAY);
 			}
+			else {
+				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActionActivity.this).create();
+				dialogMessage.setTitle("Recent check in");
+				dialogMessage.setMessage("You checked in recently. You can only check in once every 24 hours. :(");
+				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				dialogMessage.show();
+			}	
 		}
 	}
 	

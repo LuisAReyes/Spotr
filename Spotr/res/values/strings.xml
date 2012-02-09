@@ -66,4 +66,5 @@
         <item>Fifteen</item>
         <item>Sixteen</item>
     </string-array>
+    <string name="place_action_item_xml_string_pts">pts</string>
 </resources>

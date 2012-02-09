@@ -1,46 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" 
-    >
-
-<!--     <TextView -->
-<!--         android:id="@+id/place_action_xml_textview_challenge_title" -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:text="Available challenges" -->
-<!--         android:textColor="@android:color/white" -->
-<!--         android:textStyle="bold" /> -->
-
-<!-- Tri-colored upper border -->
-<!--     <View -->
-<!--         android:layout_width="fill_parent" -->
-<!--         android:layout_height="4dp" -->
-<!--         android:background="#FAB002" /> -->
- 
-<!--  	<View -->
-<!--         android:layout_width="fill_parent" -->
-<!--         android:layout_height="4dp" -->
-<!--         android:background="#F5114A" /> -->
- 	
-<!-- 	<View -->
-<!--         android:layout_width="fill_parent" -->
-<!--         android:layout_height="4dp" -->
-<!--         android:background="#1124F5" /> -->
-
-    
-    <ListView
-        android:id="@+id/place_action_xml_listview_actions"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:background="#eeeeec" >
-    </ListView>
-
-<!-- bottom border -->
-<!--     <View -->
-<!--         android:layout_width="fill_parent" -->
-<!--         android:layout_height="2dp" -->
-<!--         android:background="#FAB002" /> -->
-
-</LinearLayout>
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+       android:id="@+id/place_action_xml_listview_actions"
+       style="@style/MissionsList" >
+</ListView>
