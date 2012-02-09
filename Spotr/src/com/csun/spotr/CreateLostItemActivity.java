@@ -44,14 +44,15 @@ import android.widget.ImageView;
 public class CreateLostItemActivity extends Activity {
 	private static final String TAG = "(CreateLostItemActivity)";
 	private static final String GET_USER_POINTS_URL = "http://107.22.209.62/android/get_user_points.php";
-	private static final String UPLOAD_PHOTO_URL = "http://107.22.209.62/images/upload_photo.php";
 	private static final String SUBMIT_ITEM_URL = "http://107.22.209.62/android/submit_lost_item.php";
 	
 	private static Integer userPoints = 0;
 	private static String itemName = null;
 	private static String itemDesc = null;
+	private static int itemPoints = 0;
+	private static String itemBytecode = null;
 	private static String itemFile = null;
-	private int itemPoints = 0;
+	private static int userId = 0;
 	
 	private EditText editTextName;
 	private EditText editTextDescription;
@@ -94,20 +95,32 @@ public class CreateLostItemActivity extends Activity {
 		
 		buttonPointsPlus.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				itemPoints++;
+				if(itemPoints < userPoints)
+					itemPoints++;
 				editTextPoints.setText(Integer.toString(itemPoints));
 			}
 		});
 		
 		buttonPointsMinus.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				itemPoints--;
+				if(itemPoints > 0)
+					itemPoints--;
 				editTextPoints.setText(Integer.toString(itemPoints));
 			}
 		});
 		
 		buttonSubmit.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				bitmapPicture.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+				byte[] src = stream.toByteArray();
+				
+				itemBytecode = Base64.encodeBytes(src);				
+				itemName = editTextName.getText().toString();
+				itemDesc = editTextDescription.getText().toString();
+				itemFile = CurrentUser.getCurrentUser().getUsername() + CurrentDateTime.getUTCDateTime().trim() + ".png";
+				userId = CurrentUser.getCurrentUser().getId();
+				
 				new SubmitLostItem(CreateLostItemActivity.this).execute();
 			}
 		});
@@ -203,7 +216,6 @@ public class CreateLostItemActivity extends Activity {
 	
 	private class SubmitLostItem extends AsyncTask<String, Integer, String> {
 		private List<NameValuePair> lostItemData = new ArrayList<NameValuePair>();
-		private List<NameValuePair> photoData = new ArrayList<NameValuePair>();
 		private WeakReference<CreateLostItemActivity> refActivity;
 		private ProgressDialog progressDialog = null;
 		
@@ -221,22 +233,22 @@ public class CreateLostItemActivity extends Activity {
 		}
 		
 		protected String doInBackground(String... params) {		
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			bitmapPicture.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-			byte[] src = stream.toByteArray();
-			String byteCode = Base64.encodeBytes(src);
 			
 			lostItemData.add(new BasicNameValuePair("name", itemName));
 			lostItemData.add(new BasicNameValuePair("desc", itemDesc));
-//			lostItemData.add(new BasicNameValuePair("points", Integer.toString(itemPoints)));
-			lostItemData.add(new BasicNameValuePair("image", byteCode));
-			lostItemData.add(new BasicNameValuePair("file_name",  CurrentUser.getCurrentUser().getUsername() 
-					+ "_" + itemName + "_"+ CurrentDateTime.getUTCDateTime().trim() + ".png"));
-			lostItemData.add(new BasicNameValuePair("user_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
+			lostItemData.add(new BasicNameValuePair("points", Integer.toString(itemPoints)));
+			lostItemData.add(new BasicNameValuePair("image", itemBytecode));
+			lostItemData.add(new BasicNameValuePair("file_name", itemFile));
+			lostItemData.add(new BasicNameValuePair("user_id", Integer.toString(userId)));
 			
-			JSONObject jsonPicture = UploadFileHelper.uploadFileToServer(UPLOAD_PHOTO_URL, photoData);
-			JSONObject json = JsonHelper.getJsonObjectFromUrlWithData(SUBMIT_ITEM_URL, lostItemData);
-			String result = "success";
+			Log.d(TAG + ": itemName", itemName);
+			Log.d(TAG + ": itemDesc", itemDesc);
+			Log.d(TAG + ": itemBytecode", itemBytecode);
+			Log.d(TAG + ": itemFile", itemFile);
+			Log.d(TAG + ": userId", Integer.toString(userId));
+			
+			JSONObject json = UploadFileHelper.uploadFileToServer(SUBMIT_ITEM_URL, lostItemData);
+			String result = "";
 			try {
 				result = json.getString("result");
 			} catch(JSONException e) {
@@ -252,7 +264,7 @@ public class CreateLostItemActivity extends Activity {
 			if (result.equals("success")) {
 				AlertDialog dialogMessage = new AlertDialog.Builder(refActivity.get()).create();
 				dialogMessage.setTitle("Submission uploaded!");
-				dialogMessage.setMessage("Hey " + CurrentUser.getCurrentUser().getRealname() + ", submission successful!");
+				dialogMessage.setMessage("Hey " + CurrentUser.getCurrentUser().getUsername() + ", submission successful!");
 				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
