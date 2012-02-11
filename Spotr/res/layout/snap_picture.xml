@@ -2,46 +2,67 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" 
-	>
+    android:gravity="center|top"
+    android:orientation="vertical" >
 
-    <TextView
+    <!-- TextView
         android:id="@+id/snap_picture_xml_textview_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Snap Picture"
+        android:text="Snap A Picture"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="18pt"
         android:textColor="#00AAED"
-        android:textStyle="bold" />
+        android:textStyle="bold" / -->
 
-    <TextView
-        android:id="@+id/snap_picture_xml_textview_description"
-        android:layout_width="wrap_content"
+    <!-- Designed scroll view in case someone slides phone open or picture is too large -->
+    <ScrollView 
+    		android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:orientation="vertical" >
+    		
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Snap a picture now?"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <Button
+        android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/snap_picture_xml_imageview_preview_picture"
+        android:layout_width="fill_parent"
+        android:layout_height="232dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="5dip"
+        android:src="@drawable/just_s_shadow" />
+    
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:gravity="center" >
+    <!-- I put border margins between the two buttons to allow for a little spacing in between -->     <Button
         android:id="@+id/snap_picture_xml_button_go"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Snap a picture" />
-
-    <ImageView
-        android:id="@+id/snap_picture_xml_imageview_preview_picture"
-        android:layout_width="fill_parent"
-        android:layout_height="300dp"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_launcher" />
+        android:background="@layout/snap_picture_button_shape"
+        android:text="SNAP IT!"
+        android:layout_marginRight="5dip"
+        android:padding="25dip" />
     
     <Button
         android:id="@+id/snap_picture_xml_button_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:enabled="false"
-        android:text="Upload picture now?" />
+        android:background="@layout/snap_picture_button_shape"
+        android:text="UPLOAD IT!"
+        android:padding="25dip"
+        android_layout_marginLeft="5dip"
+        android:enabled="false" />
+    </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
     
 </LinearLayout>
