@@ -1,5 +1,7 @@
 package com.csun.spotr;
 
+import com.csun.spotr.custom_gui.FlingableTabHost;
+
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -23,9 +25,10 @@ public class PlaceMainActivity extends TabActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.place_main);
 		Resources res = getResources(); 
-		TabHost tabHost = getTabHost(); 
-		TabHost.TabSpec spec; 
-		Intent intent; 
+		FlingableTabHost tabHost = (FlingableTabHost) getTabHost(); 
+		FlingableTabHost.TabSpec spec; 
+		Intent intent;
+
 		// get place_id extras from PlaceActivity/LocalPlaceActivity
 		Bundle extras = getIntent().getExtras();
 		// create an Intent to launch an Activity for the tab (to be reused)
@@ -34,12 +37,12 @@ public class PlaceMainActivity extends TabActivity {
 		intent.putExtras(extras);
 
 		// initialize a TabSpec for each tab and add it to the TabHost
-	    View view = LayoutInflater.from(tabHost.getContext()).inflate(R.layout.tabs_bg, null);
-	    TextView tv = (TextView) view.findViewById(R.id.tabsText);
+	    View customTabView = LayoutInflater.from(tabHost.getContext()).inflate(R.layout.tab_custom, null);
+	    TextView tv = (TextView) customTabView.findViewById(R.id.tabText);
 	    tv.setText("Missions");
 		spec = tabHost
 				.newTabSpec("missions")
-				.setIndicator(view)//, res.getDrawable(R.drawable.place_activity_tab))
+				.setIndicator(customTabView)
 				.setContent(intent);
 		tabHost.addTab(spec);
 
@@ -48,12 +51,12 @@ public class PlaceMainActivity extends TabActivity {
 		// pass this Extra to PlaceActivityActivity
 		intent.putExtras(extras);
 		
-		view = LayoutInflater.from(tabHost.getContext()).inflate(R.layout.tabs_bg, null);
-	    tv = (TextView) view.findViewById(R.id.tabsText);
+		customTabView = LayoutInflater.from(tabHost.getContext()).inflate(R.layout.tab_custom, null);
+	    tv = (TextView) customTabView.findViewById(R.id.tabText);
 	    tv.setText("News");
 		spec = tabHost
 				.newTabSpec("news")
-				.setIndicator(view)//, res.getDrawable(R.drawable.place_activity_tab))
+				.setIndicator(customTabView)
 				.setContent(intent);
 		tabHost.addTab(spec);
 
@@ -61,12 +64,12 @@ public class PlaceMainActivity extends TabActivity {
 		// pass this extra to PlaceInfoActivity
 		intent.putExtras(extras);
 		
-		view = LayoutInflater.from(tabHost.getContext()).inflate(R.layout.tabs_bg, null);
-	    tv = (TextView) view.findViewById(R.id.tabsText);
+		customTabView = LayoutInflater.from(tabHost.getContext()).inflate(R.layout.tab_custom, null);
+	    tv = (TextView) customTabView.findViewById(R.id.tabText);
 	    tv.setText("About");
 		spec = tabHost
 				.newTabSpec("about")
-				.setIndicator(view)//, res.getDrawable(R.drawable.place_activity_tab))
+				.setIndicator(customTabView)
 				.setContent(intent);
 		tabHost.addTab(spec);
 		// set current tab to action

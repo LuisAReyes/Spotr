@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/TabBackground" >
+
+    <TextView
+        android:id="@+id/tabText"
+        style="@style/TabText" />
+</LinearLayout>

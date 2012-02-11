@@ -22,22 +22,43 @@
     <color name="main_menu_button_text">#832121</color>
     <!-- WHAT IS THIS I DON'T EVEN -->
     
+    
+    <!-- Colors -->
+    <color name="aluminum1">#eeeeec</color>
+    <color name="aluminum4">#888a85</color>
+    <color name="aluminum5">#555753</color>
+    <color name="aluminum6">#2e3436</color>
+    <color name="darkTurquoise">#33b5e5</color>
+    <!-- End Colors -->
+    
     <!-- Title Bar -->
     <style name="CustomWindowTitleBackground">
-        <item name="android:background">@color/darkTurquoise</item>
+        <item name="android:background">@color/aluminum6</item>
     </style>
  
     <style name="CustomTheme" parent="android:Theme">
         <item name="android:windowTitleSize">50dip</item>
         <item name="android:windowTitleBackgroundStyle">@style/CustomWindowTitleBackground</item>
     </style>
+    <!-- End Title Bar -->
     
-    <!-- Colors -->
-    <color name="aluminum1">#eeeeec</color>
-    <color name="aluminum5">#555753</color>
-    <color name="aluminum6">#2e3436</color>
-    <color name="darkTurquoise">#33b5e5</color>
+    <!-- TabWidget -->
+    <style name="TabBackground" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/tab_selector</item>
+    </style>
     
+    <style name="TabText" >
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/aluminum1</item>
+    </style>
+    <!-- End TabWidget -->
+        
     <!-- Main Menu -->
     <style name="MainMenuButton">
         <item name="android:layout_gravity">center_vertical</item>
@@ -47,16 +68,17 @@
         <item name="android:drawablePadding">6dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/aluminum1</item>
+        <item name="android:textColor">@color/aluminum6</item>
         <item name="android:background">@null</item>
     </style>
     
     <style name="NotificationHandle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">15dp</item>
-        <item name="android:background">@color/darkTurquoise</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:background">@color/aluminum4</item>
     </style>
-    
+    <!-- End Main Menu -->
+
     <!-- Spots -->
     <!-- Spots: Missions tab -->    
     <style name="MissionsList">
@@ -67,7 +89,7 @@
         <item name="android:dividerHeight">20dp</item>
         <item name="android:divider">@null</item>
         <item name="android:scrollbars">none</item>
-        <item name="android:background">@drawable/dashboard_bg</item>
+        <item name="android:background">@color/darkTurquoise</item>
     </style>
     
     <style name="MissionRow">
@@ -111,5 +133,6 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/aluminum1</item>
     </style>
+    <!-- End Spots: Missions tab -->
     
 </resources>

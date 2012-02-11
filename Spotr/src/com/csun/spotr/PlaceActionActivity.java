@@ -35,7 +35,6 @@ import android.widget.TextView;
 
 /**
  * The Missions tab content in Spots.
- *
  */
 public class PlaceActionActivity extends Activity {
 	private static final String TAG = "(PlaceActionActivity)";
@@ -56,7 +55,7 @@ public class PlaceActionActivity extends Activity {
 		// get place id
 		Bundle extrasBundle = getIntent().getExtras();
 		currentPlaceId = extrasBundle.getInt("place_id");
-		
+
 		// initialize list view of challenges
 		list = (ListView) findViewById(R.id.place_action_xml_listview_actions);
 		adapter = new PlaceActionItemAdapter(PlaceActionActivity.this, challengeList);

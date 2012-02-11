@@ -8,7 +8,7 @@
         android:id="@+id/main_menu_xml_dashboard"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/dashboard_bg"
+        android:background="@drawable/background_clouds"
         android:layout_above="@+id/spacer" >
         
         <!--  Me Button -->
