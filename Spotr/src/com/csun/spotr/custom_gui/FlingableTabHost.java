@@ -16,10 +16,6 @@ import android.widget.TabHost;
 
 public class FlingableTabHost extends TabHost {
     GestureDetector gestureDetector;
-//    Animation rightInAnimation;
-//    Animation rightOutAnimation;
-//    Animation lfeftInAnimation;
-//    Animation leftOutAnimation;
 
 	public FlingableTabHost(Context context, AttributeSet attrs) {
 		super(context, attrs);

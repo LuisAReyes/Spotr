@@ -1,11 +1,14 @@
 package com.csun.spotr;
 
+import com.csun.spotr.custom_gui.FlingableTabHost;
+
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.Window;
 import android.widget.TabHost;
 
 public class ProfileMainActivity extends TabActivity {
@@ -14,11 +17,13 @@ public class ProfileMainActivity extends TabActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.place_main);
+		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_bar);
 		
 		Resources res = getResources(); 
-		TabHost tabHost = getTabHost(); 
-		TabHost.TabSpec spec; 
+		FlingableTabHost tabHost = (FlingableTabHost) getTabHost(); 
+		FlingableTabHost.TabSpec spec; 
 		Intent intent; 
 		
 		// get use_id from ProfileMainActivity
