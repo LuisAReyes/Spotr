@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,31 +34,43 @@ import android.graphics.Color;
 import android.widget.Button;
 
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.skeleton.IActivityProgressUpdate;
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.LeaderboardItemAdapter;
 import com.csun.spotr.core.User;
 
-public class LeaderboardActivity extends Activity {
-	private static final String TAG = "(LeaderboardActivity)";
-	private static final String GET_USERS_URL = "http://107.22.209.62/android/get_users.php";
-	private ListView listview = null;
-	private LeaderboardItemAdapter adapter = null;
-	private List<User> userList = new ArrayList<User>();
+/**
+ * Description:
+ * Display all users with points and ranking 
+ */
+public class LeaderboardActivity 
+	extends Activity 
+		implements IActivityProgressUpdate<User> {
+	
+	private static final 	String 						TAG = "(LeaderboardActivity)";
+	private static final 	String 						GET_USERS_URL = "http://107.22.209.62/android/get_users.php";
+	
+	private 				ListView 					listview = null;
+	private 				LeaderboardItemAdapter 		adapter = null;
+	private 				List<User> 					userList = new ArrayList<User>();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.leaderboard);
+		
 		// initialize list view
 		listview = (ListView) findViewById(R.id.leaderboard_xml_listview_users);
-		adapter = new LeaderboardItemAdapter(this.getApplicationContext(), userList);
+		adapter = new LeaderboardItemAdapter(getApplicationContext(), userList);
 		listview.setAdapter(adapter);
 		listview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// handle click 
 			}
 		});
-		new GetUsersTask().execute();
+		
+		new GetUsersTask(this).execute();
 		
 		Button buttonWhere = (Button) findViewById(R.id.leaderboard_xml_button_where_am_i);
 		buttonWhere.setOnClickListener(new OnClickListener() {
@@ -74,23 +87,23 @@ public class LeaderboardActivity extends Activity {
 		});
 	}
 	
-	private class GetUsersTask extends AsyncTask<Void, User, Boolean> {
-		private  ProgressDialog progressDialog = null;
-		@Override
-		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(LeaderboardActivity.this);
-			progressDialog.setMessage("Loading...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
+	private static class GetUsersTask 
+		extends AsyncTask<Void, User, Boolean> 
+			implements IAsyncTask<LeaderboardActivity> {
+		
+		private WeakReference<LeaderboardActivity> ref;
+		
+		public GetUsersTask(LeaderboardActivity a) {
+			attach(a);
 		}
 		
 		@Override
-	    protected void onProgressUpdate(User... users) {
-			progressDialog.dismiss();
-			userList.add(users[0]);
-			adapter.notifyDataSetChanged();
+		protected void onPreExecute() {
+		}
+		
+		@Override
+	    protected void onProgressUpdate(User... u) {
+			ref.get().updateAsyncTaskProgress(u[0]);
 	    }
 		
 		@Override
@@ -125,7 +138,15 @@ public class LeaderboardActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
+			detach();
+		}
+
+		public void attach(LeaderboardActivity a) {
+			ref = new WeakReference<LeaderboardActivity>(a);
+		}
+
+		public void detach() {
+			ref.clear();
 		}
 	}
 	
@@ -172,5 +193,10 @@ public class LeaderboardActivity extends Activity {
     public void onDestroy() {
 		Log.v(TAG, "I'm destroyed!");
         super.onDestroy();
+	}
+
+	public void updateAsyncTaskProgress(User u) {
+		userList.add(u);
+		adapter.notifyDataSetChanged();
 	}
 }

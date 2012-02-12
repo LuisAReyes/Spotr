@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,22 +37,32 @@ import org.json.JSONObject;
 
 import com.csun.spotr.core.adapter_item.PlaceItem;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.skeleton.IActivityProgressUpdate;
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.FineLocation;
 import com.csun.spotr.util.FineLocation.LocationResult;
 import com.csun.spotr.util.GooglePlaceHelper;
 import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.PlaceItemAdapter;
 
-public class PlaceActivity extends Activity {
-	private static final String TAG = "(PlaceActivity)";
-	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
-	private static final String UPDATE_GOOGLE_PLACES_URL = "http://107.22.209.62/android/update_google_places.php";
+/**
+ * Description:
+ * Display all places around current phone's location
+ */
+public class PlaceActivity 
+	extends Activity 
+		implements IActivityProgressUpdate<PlaceItem> {
 	
-	private ListView list;
-	private PlaceItemAdapter adapter;
-	private List<PlaceItem> placeItemList = new ArrayList<PlaceItem>();
-	private Location lastKnownLocation = null;
-	private FineLocation fineLocation = new FineLocation();
+	private static final 		String 				TAG = "(PlaceActivity)";
+	private static final 		String 				GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
+	private static final 		String 				UPDATE_GOOGLE_PLACES_URL = "http://107.22.209.62/android/update_google_places.php";
+	
+	private 					ListView 			list;
+	private 					PlaceItemAdapter 	adapter;
+	private 					List<PlaceItem> 	placeItemList = new ArrayList<PlaceItem>();
+	private 					Location 			lastKnownLocation = null;
+	private 					FineLocation 		fineLocation = new FineLocation();
+	private 					Button 				refreshButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +79,7 @@ public class PlaceActivity extends Activity {
 		list = (ListView) findViewById(R.id.place_xml_listview_places);
 		adapter = new PlaceItemAdapter(this.getApplicationContext(), placeItemList);
 		list.setAdapter(adapter);
+		
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent("com.csun.spotr.PlaceMainActivity");
@@ -80,12 +92,10 @@ public class PlaceActivity extends Activity {
 		});
 		
 		// register click event for refresh button
-		Button refreshButton = (Button) findViewById(R.id.place_xml_button_refresh);
+		refreshButton = (Button) findViewById(R.id.place_xml_button_refresh);
 		refreshButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				placeItemList = new ArrayList<PlaceItem>();
-				adapter.notifyDataSetChanged();
-				new GetSpotsTask().execute();
+				new GetSpotsTask(PlaceActivity.this).execute();
 			}
 		});
 		
@@ -93,7 +103,7 @@ public class PlaceActivity extends Activity {
 			@Override
 			public void gotLocation(final Location location) {
 				lastKnownLocation = location;
-				new GetSpotsTask().execute();
+				refreshButton.setEnabled(true);
 			}
 		});
 		
@@ -107,18 +117,25 @@ public class PlaceActivity extends Activity {
 		return alert;
 	}
 
-	private class GetSpotsTask extends AsyncTask<Void, PlaceItem, Boolean> {
-		private List<NameValuePair> placeData = new ArrayList<NameValuePair>();
-		private ProgressDialog progressDialog = null;
+	private static class GetSpotsTask 
+		extends AsyncTask<Void, PlaceItem, Boolean> 
+			implements IAsyncTask<PlaceActivity> {
 		
+		private List<NameValuePair> placeData = new ArrayList<NameValuePair>();
+		private WeakReference<PlaceActivity> ref;
+		
+		public GetSpotsTask(PlaceActivity a) {
+			attach(a);
+		}
 		
 		private List<NameValuePair> constructGooglePlace() {
 			// this is data we will send to our server
 			List<NameValuePair> sentData = new ArrayList<NameValuePair>();
 			// we reformat the original data to include only what we need
 			JSONArray reformattedData = new JSONArray();
-			JSONObject json = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlacesUrl(lastKnownLocation, GooglePlaceHelper.GOOGLE_RADIUS_IN_METER));
+			JSONObject json = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlacesUrl(ref.get().lastKnownLocation, GooglePlaceHelper.GOOGLE_RADIUS_IN_METER));
 			JSONObject temp = null;
+			
 			try {
 				JSONArray originalGoogleDataArray = json.getJSONArray("results");
 				for (int i = 0; i < originalGoogleDataArray.length(); i++) {
@@ -165,20 +182,11 @@ public class PlaceActivity extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			Log.v(TAG, "loading places from database...");
-			// display waiting dialog
-			progressDialog = new ProgressDialog(PlaceActivity.this);
-			progressDialog.setMessage("Loading places...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
 		}
 
 		@Override
-		protected void onProgressUpdate(PlaceItem... places) {
-			progressDialog.dismiss();
-			placeItemList.add(places[0]);
-			adapter.notifyDataSetChanged();
+		protected void onProgressUpdate(PlaceItem... p) {
+			ref.get().updateAsyncTaskProgress(p[0]);
 		}
 
 		@Override
@@ -187,8 +195,8 @@ public class PlaceActivity extends Activity {
 			JsonHelper.getJsonObjectFromUrlWithData(UPDATE_GOOGLE_PLACES_URL, constructGooglePlace());
 			
 			// now sending latitude, longitude and radius to retrieve places
-			placeData.add(new BasicNameValuePair("latitude", Double.toString(lastKnownLocation.getLatitude())));
-			placeData.add(new BasicNameValuePair("longitude", Double.toString(lastKnownLocation.getLongitude())));
+			placeData.add(new BasicNameValuePair("latitude", Double.toString(ref.get().lastKnownLocation.getLatitude())));
+			placeData.add(new BasicNameValuePair("longitude", Double.toString(ref.get().lastKnownLocation.getLongitude())));
 			placeData.add(new BasicNameValuePair("radius", GooglePlaceHelper.RADIUS_IN_KM));
 			
 			// get places as JSON format from our database
@@ -213,18 +221,15 @@ public class PlaceActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
-			if (result == false) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActivity.this).create();
-				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-				dialogMessage.setMessage("There are no places at this location");
-				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				dialogMessage.show();
-			}
+			detach();
+		}
+
+		public void attach(PlaceActivity a) {
+			ref = new WeakReference<PlaceActivity>(a);
+		}
+
+		public void detach() {
+			ref.clear();
 		}
 
 	}
@@ -281,5 +286,10 @@ public class PlaceActivity extends Activity {
 	public void onDestroy() {
 		Log.v(TAG, "I'm destroyed!");
 		super.onDestroy();
+	}
+
+	public void updateAsyncTaskProgress(PlaceItem p) {
+		placeItemList.add(p);
+		adapter.notifyDataSetChanged();
 	}
 }

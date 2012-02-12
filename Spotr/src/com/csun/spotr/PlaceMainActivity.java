@@ -16,7 +16,8 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 /**
- * Framework for Spots.
+ * Description:
+ * 		Framework for Spots
  */
 public class PlaceMainActivity extends TabActivity {
 	private static final String TAG = "(PlaceMainActivity)";

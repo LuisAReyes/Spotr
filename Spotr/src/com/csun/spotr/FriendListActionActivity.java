@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,6 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,29 +34,41 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.csun.spotr.core.adapter_item.UserItem;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.skeleton.IActivityProgressUpdate;
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.UserItemAdapter;
 
-public class FriendListActionActivity extends Activity {
-	private static final String TAG = "(FriendListActionActivity)";
-	private static final String SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
-	private static final String SEND_REQUEST_URL = "http://107.22.209.62/android/send_friend_request.php";
-	private ListView listview = null;
-	private UserItemAdapter adapter = null;
-	private List<UserItem> userItemList = null;
-	private Button buttonSearch = null;
-	private EditText editTextSearch = null;
-	private SearchFriendsTask task = null;
+/**
+ * Description:
+ * 		Handle search for friends and send messages 
+ */
+public class FriendListActionActivity 
+	extends Activity 
+		implements IActivityProgressUpdate<UserItem> {
+	
+	private static final 	String 				TAG = "(FriendListActionActivity)";
+	private static final 	String 				SEARCH_FRIENDS_URL = "http://107.22.209.62/android/search_friends.php";
+	private static final 	String 				SEND_REQUEST_URL = "http://107.22.209.62/android/send_friend_request.php";
+	
+	private 				ListView 			listview = null;
+	private 				UserItemAdapter 	adapter = null;
+	private 				List<UserItem> 		userItemList = null;
+	
+	private 				Button 				buttonSearch = null;
+	private 				EditText 			editTextSearch = null;
+	private					SearchFriendsTask 	task = null;
 
-	private boolean loading = true;
-	private int prevTotal = 0;
-	private final int threshHold = 10;
-	private int counter = 0;
+	private 				boolean 			loading = true;
+	private 				int 				prevTotal = 0;
+	private final 			int 				threshHold = 10;
+	private 				int 				counter = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list_action);
+		
 		buttonSearch = (Button) findViewById(R.id.friend_list_action_xml_button_search);
 		editTextSearch = (EditText) findViewById(R.id.friend_list_action_xml_edittext_search);
 		listview = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
@@ -87,7 +99,7 @@ public class FriendListActionActivity extends Activity {
 			
 				Log.v(TAG, "search button was clicked.");
 				// start task
-				task = new SearchFriendsTask(editTextSearch.getText().toString(), true);
+				task = new SearchFriendsTask(FriendListActionActivity.this, editTextSearch.getText().toString(), true);
 				task.execute(counter);
 				
 				listview.clearChoices();
@@ -106,7 +118,8 @@ public class FriendListActionActivity extends Activity {
 								counter += threshHold;
 								loading = true;
 							}
-							new SearchFriendsTask(editTextSearch.getText().toString(), false).execute(counter);
+							
+							new SearchFriendsTask(FriendListActionActivity.this, editTextSearch.getText().toString(), false).execute(counter);
 						}
 					}
 
@@ -118,32 +131,25 @@ public class FriendListActionActivity extends Activity {
 		});
 	}
 
-	private class SearchFriendsTask extends AsyncTask<Integer, UserItem, Boolean> {
+	private class SearchFriendsTask extends AsyncTask<Integer, UserItem, Boolean> implements IAsyncTask<FriendListActionActivity> {
 		private List<NameValuePair> clientData = new ArrayList<NameValuePair>();
-		private ProgressDialog progressDialog = null;
+		private WeakReference<FriendListActionActivity> ref;
 		private JSONArray array = null;
 		private final String criteria;
-		private boolean displayDialogFlag;
 
-		public SearchFriendsTask(String criteria, boolean flag) {
+		public SearchFriendsTask(FriendListActionActivity a, String criteria, boolean flag) {
 			this.criteria = criteria;
-			displayDialogFlag = flag;
+			attach(a);
 		}
 
 		@Override
 		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(FriendListActionActivity.this);
-			progressDialog.setMessage("Searching...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+		
 		}
 
 		@Override
-		protected void onProgressUpdate(UserItem... users) {
-			userItemList.add(users[0]);
-			adapter.notifyDataSetChanged();
+		protected void onProgressUpdate(UserItem... u) {
+			ref.get().updateAsyncTaskProgress(u[0]);
 		}
 
 		@Override
@@ -155,7 +161,11 @@ public class FriendListActionActivity extends Activity {
 			if (array != null) {
 				try {
 					for (int i = 0; i < array.length(); ++i) {
-						publishProgress(new UserItem(array.getJSONObject(i).getInt("users_tbl_id"), array.getJSONObject(i).getString("users_tbl_username"), array.getJSONObject(i).getString("users_tbl_user_image_url")));
+						publishProgress(
+							new UserItem(
+								array.getJSONObject(i).getInt("users_tbl_id"), 
+								array.getJSONObject(i).getString("users_tbl_username"), 
+								array.getJSONObject(i).getString("users_tbl_user_image_url")));
 					}
 				}
 				catch (JSONException e) {
@@ -170,24 +180,15 @@ public class FriendListActionActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
-			if (result == false && displayDialogFlag == true) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
-				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-				dialogMessage.setMessage("No name match this search criteria. Please try again!");
-				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				dialogMessage.show();
-			}
-			
-			clientData = null;
-			progressDialog = null;
-			array = null;
-			
-			System.gc();
+			detach();
+		}
+
+		public void attach(FriendListActionActivity a) {
+			ref = new WeakReference<FriendListActionActivity>(a);
+		}
+
+		public void detach() {
+			ref.clear();
 		}
 	}
 
@@ -196,6 +197,7 @@ public class FriendListActionActivity extends Activity {
 		final AlertDialog dialog;
 		LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
 		final View layout = inflater.inflate(R.layout.friend_request_dialog, null);
+		
 		builder = new AlertDialog.Builder(this);
 		builder.setTitle("Send request");
 		builder.setView(layout);
@@ -206,7 +208,8 @@ public class FriendListActionActivity extends Activity {
 				if (editTextMessage.getText() != null) {
 					message = editTextMessage.getText().toString();
 				}
-				SendFriendRequestTask task = new SendFriendRequestTask();
+				
+				SendFriendRequestTask task = new SendFriendRequestTask(FriendListActionActivity.this);
 				task.execute(Integer.toString(CurrentUser.getCurrentUser().getId()), Integer.toString(user.getId()), message);
 			}
 		});
@@ -215,23 +218,25 @@ public class FriendListActionActivity extends Activity {
 			public void onClick(DialogInterface arg0, int arg1) {
 			}
 		});
+		
 		dialog = builder.create();
 		dialog.show();
 	}
 
-	private class SendFriendRequestTask extends AsyncTask<String, Integer, Boolean> {
+	private static class SendFriendRequestTask 
+		extends AsyncTask<String, Integer, Boolean> 
+			implements IAsyncTask<FriendListActionActivity> {
+		
 		private List<NameValuePair> friendData = new ArrayList<NameValuePair>();
-		private ProgressDialog progressDialog = null;
 		private JSONObject json = null;
+		private WeakReference<FriendListActionActivity> ref;
 
+		public SendFriendRequestTask(FriendListActionActivity a) {
+			attach(a);
+		}
+		
 		@Override
 		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(FriendListActionActivity.this);
-			progressDialog.setMessage("Sending request...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
 		}
 
 		@Override
@@ -239,7 +244,9 @@ public class FriendListActionActivity extends Activity {
 			friendData.add(new BasicNameValuePair("users_id", datas[0].toString()));
 			friendData.add(new BasicNameValuePair("friend_id", datas[1].toString()));
 			friendData.add(new BasicNameValuePair("friend_message", datas[2].toString()));
+			
 			json = JsonHelper.getJsonObjectFromUrlWithData(SEND_REQUEST_URL, friendData);
+			
 			try {
 				if (json.getString("result").equals("success")) {
 					return true;
@@ -253,36 +260,15 @@ public class FriendListActionActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			AlertDialog dialogMessage = null;
-			progressDialog.dismiss();
-			if (result == true) {
-				dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
-				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-				dialogMessage.setMessage("Request has been sent succesfully");
-				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				dialogMessage.show();
-			}
-			else {
-				dialogMessage = new AlertDialog.Builder(FriendListActionActivity.this).create();
-				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-				dialogMessage.setMessage("Fail to send request");
-				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				dialogMessage.show();
-			}
-
-			progressDialog = null;
-			dialogMessage = null;
-			friendData = null;
-			json = null;
-			System.gc();
+			detach();
+		}
+		
+		public void attach(FriendListActionActivity a) {
+			ref = new WeakReference<FriendListActionActivity>(a);
+		}
+		
+		public void detach() {
+			ref.clear();
 		}
 	}
 
@@ -322,5 +308,10 @@ public class FriendListActionActivity extends Activity {
 	public void onDestroy() {
 		Log.v(TAG, "I'm destroyed!");
 		super.onDestroy();
+	}
+
+	public void updateAsyncTaskProgress(UserItem u) {
+		userItemList.add(u);
+		adapter.notifyDataSetChanged();
 	}
 }

@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,28 +22,39 @@ import android.widget.TextView;
 
 import com.csun.spotr.core.adapter_item.QuestItem;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.skeleton.IActivityProgressUpdate;
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.JsonHelper;
 
 import com.csun.spotr.adapter.QuestItemAdapter;
 
-public class QuestActivity extends Activity {
-	private static final String TAG = "(QuestActivity)";
-	private static final String GET_QUEST_URL = "http://107.22.209.62/android/get_quest.php";
-	private ListView questListView;
-	private QuestItemAdapter questItemAdapter;
-	private List<QuestItem> questList = new ArrayList<QuestItem>();
+/**
+ * Description:
+ * 		Multiple challenges of multiple places 
+ */
+public class QuestActivity 
+	extends Activity 
+		implements IActivityProgressUpdate<QuestItem> {
 	
-	private TextView nameTextView;
-	private TextView placeTextView;
-	private TextView pointTextView;
+	private static final 	String 				TAG = "(QuestActivity)";
+	private static final 	String 				GET_QUEST_URL = "http://107.22.209.62/android/get_quest.php";
+	
+	private 				ListView 			listview;
+	private 				QuestItemAdapter 	adapter;
+	private 				List<QuestItem> 	questList = new ArrayList<QuestItem>();
+	
+	private 				TextView 			nameTextView;
+	private 				TextView 			placeTextView;
+	private 				TextView 			pointTextView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.quest);
-		questListView = (ListView) findViewById(R.id.quest_xml_listview_quest_list);
-		questItemAdapter = new QuestItemAdapter(this, questList);
-		questListView.setAdapter(questItemAdapter);
+		
+		listview = (ListView) findViewById(R.id.quest_xml_listview_quest_list);
+		adapter = new QuestItemAdapter(getApplicationContext(), questList);
+		listview.setAdapter(adapter);
 		
 		//initialize detail description of specific quest
 		nameTextView = (TextView) findViewById(R.id.quest_xml_textview_quest_name);
@@ -53,46 +62,43 @@ public class QuestActivity extends Activity {
 		pointTextView = (TextView) findViewById(R.id.quest_xml_textview_rewards);
 		
 		//handle event when click on specific quest
-		questListView.setOnItemClickListener(new OnItemClickListener() {
+		listview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				nameTextView.setText(questList.get(position).getName());
 				placeTextView.setText(Integer.toString(questList.get(position).getSpotnum()));
 				pointTextView.setText(Integer.toString(questList.get(position).getPoints()));
-
 			}
 		});
 		
-		new GetQuestTask().execute();
+		new GetQuestTask(this).execute();
 	}
 	
-	private class GetQuestTask extends AsyncTask<Integer, QuestItem, Boolean> {
+	private static class GetQuestTask 
+		extends AsyncTask<Integer, QuestItem, Boolean> 
+			implements IAsyncTask<QuestActivity> {
+		
 		private List<NameValuePair> clientData = new ArrayList<NameValuePair>();
-		private ProgressDialog progressDialog = null;
-		private JSONArray userJsonArray = null;
-
-		@Override
-		protected void onPreExecute() {
-			progressDialog = new ProgressDialog(QuestActivity.this);
-			progressDialog.setMessage("Loading quests in progress...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+		private WeakReference<QuestActivity> ref;
+		
+		public GetQuestTask(QuestActivity a) {
+			attach(a);
 		}
 
 		@Override
-		protected void onProgressUpdate(QuestItem... quests) {
-			questList.add(quests[0]);
-			questItemAdapter.notifyDataSetChanged();
+		protected void onPreExecute() {
+			
+		}
+
+		@Override
+		protected void onProgressUpdate(QuestItem... q) {
+			ref.get().updateAsyncTaskProgress(q[0]);
 		}
 
 		@Override
 		protected Boolean doInBackground(Integer... offsets) {
-			// send user id
 			clientData.add(new BasicNameValuePair("id", Integer.toString(CurrentUser.getCurrentUser().getId())));
-			// send offset
-			// clientData.add(new BasicNameValuePair("offset", Integer.toString(offsets[0])));
-			// retrieve data from server
-			userJsonArray = JsonHelper.getJsonArrayFromUrlWithData(GET_QUEST_URL, clientData);
+			JSONArray userJsonArray = JsonHelper.getJsonArrayFromUrlWithData(GET_QUEST_URL, clientData);
+			
 			if (userJsonArray != null) {
 				try {
 					for (int i = 0; i < userJsonArray.length(); ++i) {
@@ -116,7 +122,15 @@ public class QuestActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
+			detach();
+		}
+
+		public void attach(QuestActivity a) {
+			ref = new WeakReference<QuestActivity>(a);
+		}
+
+		public void detach() {
+			ref.clear();
 		}
 	}
 	
@@ -125,6 +139,10 @@ public class QuestActivity extends Activity {
 		Log.v(TAG,"I'm paused");
 		super.onPause();
 	}
-	
+
+	public void updateAsyncTaskProgress(QuestItem q) {
+		questList.add(q);
+		adapter.notifyDataSetChanged();
+	}
 	
 }

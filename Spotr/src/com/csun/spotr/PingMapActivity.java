@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,15 +11,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,8 +26,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.skeleton.IActivityProgressUpdate;
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.FineLocation;
 import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.util.FineLocation.LocationResult;
@@ -44,18 +44,25 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class PingMapActivity extends MapActivity {
-	private static final String TAG = "(PingMapActivity)";
-	private static final String GET_FRIEND_LOCATION_URL = "http://107.22.209.62/android/get_friend_locations.php";
-	private static final String PING_ME_URL = "http://107.22.209.62/android/ping_me.php";
+/**
+ * Description:
+ * 		Ping user's current location to friends or view friends' locations
+ */
+public class PingMapActivity 
+	extends MapActivity 
+		implements IActivityProgressUpdate<FriendAndLocation> {
+	
+	private static final 	String 						TAG = "(PingMapActivity)";
+	private static final 	String 						GET_FRIEND_LOCATION_URL = "http://107.22.209.62/android/get_friend_locations.php";
+	private static final 	String 						PING_ME_URL = "http://107.22.209.62/android/ping_me.php";
 
-	private MapView mapView = null;
-	private List<Overlay> mapOverlays = null;
-	private CustomItemizedOverlay itemizedOverlay = null;
-	private MapController mapController = null;
-	private FineLocation fineLocation = new FineLocation();
-	private Location lastKnownLocation = null;
-	private Button buttonPing;
+	private 				MapView 					mapView = null;
+	private 				List<Overlay> 				mapOverlays = null;
+	private 				CustomItemizedOverlay 		itemizedOverlay = null;
+	private 				MapController 				mapController = null;
+	private 				FineLocation 				fineLocation = new FineLocation();
+	private 				Location 					lastKnownLocation = null;
+	private 				Button 						buttonPing;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -105,14 +112,14 @@ public class PingMapActivity extends MapActivity {
 		
 		buttonPing.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				new PingMeTask().execute(lastKnownLocation);
+				new PingMeTask(PingMapActivity.this).execute(lastKnownLocation);
 			}
 		});
 
 		// handle show display list event
 		buttonShowFriends.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				new GetFriendLocationsTask().execute();
+				new GetFriendLocationsTask(PingMapActivity.this).execute();
 			}
 		});
 	}
@@ -153,27 +160,24 @@ public class PingMapActivity extends MapActivity {
 		return false;
 	}
 
-	private class GetFriendLocationsTask extends AsyncTask<Void, FriendAndLocation, Boolean> {
+	private static class GetFriendLocationsTask 
+		extends AsyncTask<Void, FriendAndLocation, Boolean> 
+			implements IAsyncTask<PingMapActivity> {
+		
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
-		private ProgressDialog progressDialog = null;
-
-		@Override
-		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(PingMapActivity.this);
-			progressDialog.setMessage("Finding friends' locations...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+		private WeakReference<PingMapActivity> ref;
+		
+		public GetFriendLocationsTask(PingMapActivity a) {
+			attach(a);
 		}
 
 		@Override
-		protected void onProgressUpdate(FriendAndLocation... friends) {
-			OverlayItem overlay = new OverlayItem(new GeoPoint((int) (friends[0].getLatitude() * 1E6), (int) (friends[0].getLongitude() * 1E6)), friends[0].getName(), friends[0].getTime());
-			// add to item to map
-			itemizedOverlay.addOverlay(overlay, friends[0]);
-			mapController.animateTo(new GeoPoint((int) (friends[0].getLatitude() * 1E6), (int) (friends[0].getLongitude() * 1E6)));
-			mapController.setZoom(18);
+		protected void onPreExecute() {
+		}
+
+		@Override
+		protected void onProgressUpdate(FriendAndLocation... f) {
+			ref.get().updateAsyncTaskProgress(f[0]);
 		}
 
 		@Override
@@ -206,39 +210,41 @@ public class PingMapActivity extends MapActivity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
 			if (result == false) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(PingMapActivity.this).create();
-				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-				dialogMessage.setMessage("There is no friends' locations");
-				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				dialogMessage.show();
+				Toast.makeText(ref.get().getApplicationContext(), "No friends found!", Toast.LENGTH_SHORT).show();
 			}
+			detach();
+		}
+
+		public void attach(PingMapActivity a) {
+			ref = new WeakReference<PingMapActivity>(a);
+		}
+
+		public void detach() {
+			ref.clear();
 		}
 	}
 
-	private class PingMeTask extends AsyncTask<Location, Void, String> {
+	private static class PingMeTask 
+		extends AsyncTask<Location, Void, String> 
+			implements IAsyncTask<PingMapActivity> {
+		
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
-		private ProgressDialog progressDialog = null;
-
+		private WeakReference<PingMapActivity> ref;
+		
+		public PingMeTask(PingMapActivity a) {
+			attach(a);
+		}
+		
 		@Override
 		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(PingMapActivity.this);
-			progressDialog.setMessage("Ping me location...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+			
 		}
 
 		@Override
 		protected String doInBackground(Location... locations) {
-			userData.add(new BasicNameValuePair("latitude", Double.toString(lastKnownLocation.getLatitude())));
-			userData.add(new BasicNameValuePair("longitude", Double.toString(lastKnownLocation.getLongitude())));
+			userData.add(new BasicNameValuePair("latitude", Double.toString(locations[0].getLatitude())));
+			userData.add(new BasicNameValuePair("longitude", Double.toString(locations[0].getLongitude())));
 			userData.add(new BasicNameValuePair("user_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
 
 			JSONObject json = JsonHelper.getJsonObjectFromUrlWithData(PING_ME_URL, userData);
@@ -254,56 +260,32 @@ public class PingMapActivity extends MapActivity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			progressDialog.dismiss();
-			
-			OverlayItem ovl = 
-					new OverlayItem(
-						new GeoPoint(
-							(int) (lastKnownLocation.getLatitude() * 1E6), 
-							(int) (lastKnownLocation.getLongitude() * 1E6)), 
-							CurrentUser.getCurrentUser().getUsername(), "Just Now");
-			
-			Drawable icon = getResources().getDrawable(R.drawable.map_circle_marker_red);
-			icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
-			ovl.setMarker(icon);
-			
-			FriendAndLocation yourLocation = new FriendAndLocation(
-				CurrentUser.getCurrentUser().getId(), 
-				CurrentUser.getCurrentUser().getUsername(), 
-				lastKnownLocation.getLatitude(), 
-				lastKnownLocation.getLongitude(), "just now");
-			
-			itemizedOverlay.addOverlay(ovl, yourLocation);
-			mapController.animateTo(new GeoPoint((int) (lastKnownLocation.getLatitude() * 1E6), (int) (lastKnownLocation.getLongitude() * 1E6)));
-			mapController.setZoom(18);
-
-			AlertDialog dialogMessage = new AlertDialog.Builder(PingMapActivity.this).create();
-			dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-			dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
-			
+			ref.get().displayUserLocation(ref.get().lastKnownLocation);
 			if (result.equals("fail")) {
-				dialogMessage.setMessage("Can't update your location due to network connection error.");
+				Toast.makeText(ref.get().getApplicationContext(), "Can't update your location due to network connection error.", Toast.LENGTH_SHORT).show();
 			}
 			else {
-				dialogMessage.setMessage("Ping your location successfully");
+				Toast.makeText(ref.get().getApplicationContext(), "Ping succeeded!", Toast.LENGTH_SHORT).show();
 			}
-			
-			dialogMessage.show();
+		}
+		
+		public void attach(PingMapActivity a) {
+			ref = new WeakReference<PingMapActivity>(a);
+		}
+		
+		public void detach() {
+			ref.clear();
 		}
 	}
 
-	private class CustomItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
+	private static class CustomItemizedOverlay 
+		extends BalloonItemizedOverlay<OverlayItem> {
+		
 		private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
 		private List<FriendAndLocation> friendLocationList = new ArrayList<FriendAndLocation>();
-		private Context context;
 
 		public CustomItemizedOverlay(Drawable defaultMarker, MapView mapView) {
 			super(boundCenter(defaultMarker), mapView);
-			context = mapView.getContext();
 			populate();
 		}
 
@@ -386,5 +368,36 @@ public class PingMapActivity extends MapActivity {
 			break;
 		}
 		return true;
+	}
+
+	public void updateAsyncTaskProgress(FriendAndLocation f) {
+		OverlayItem overlay = new OverlayItem(new GeoPoint((int) (f.getLatitude() * 1E6), (int) (f.getLongitude() * 1E6)), f.getName(), f.getTime());
+		// add to item to map
+		itemizedOverlay.addOverlay(overlay, f);
+		mapController.animateTo(new GeoPoint((int) (f.getLatitude() * 1E6), (int) (f.getLongitude() * 1E6)));
+		mapController.setZoom(18);
+	}
+	
+	public void displayUserLocation(Location loc) {
+		OverlayItem ovl = 
+				new OverlayItem(
+					new GeoPoint(
+						(int) (loc.getLatitude() * 1E6), 
+						(int) (loc.getLongitude() * 1E6)), 
+						CurrentUser.getCurrentUser().getUsername(), "Just Now");
+		
+		Drawable icon = getResources().getDrawable(R.drawable.map_circle_marker_red);
+		icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+		ovl.setMarker(icon);
+		
+		FriendAndLocation yourLocation = new FriendAndLocation(
+			CurrentUser.getCurrentUser().getId(), 
+			CurrentUser.getCurrentUser().getUsername(), 
+			loc.getLatitude(), 
+			loc.getLongitude(), "just now");
+		
+		itemizedOverlay.addOverlay(ovl, yourLocation);
+		mapController.animateTo(new GeoPoint((int) (loc.getLatitude() * 1E6), (int) (loc.getLongitude() * 1E6)));
+		mapController.setZoom(18);
 	}
 }

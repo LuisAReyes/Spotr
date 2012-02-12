@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +13,11 @@ import com.csun.spotr.adapter.FriendFeedItemAdapter;
 import com.csun.spotr.core.Challenge;
 import com.csun.spotr.core.adapter_item.FriendFeedItem;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.skeleton.IActivityProgressUpdate;
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.JsonHelper;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -31,13 +31,21 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class FriendListFeedActivity extends Activity {
-	private static final String TAG = "(FriendListFeedActivity)";
-	private static final String GET_FRIEND_FEED_URL = "http://107.22.209.62/android/get_friend_feeds.php";
-	private List<FriendFeedItem> friendFeedList = new ArrayList<FriendFeedItem>();
-	private ListView listview = null;
-	private FriendFeedItemAdapter adapter = null;
-	private GetFriendFeedTask task = null;
+/**
+ * Description:
+ * 		Display friends' feeds like Facebook/Google+
+ */
+public class FriendListFeedActivity 
+	extends Activity 
+		implements IActivityProgressUpdate<FriendFeedItem> {
+	
+	private static final 	String 						TAG = "(FriendListFeedActivity)";
+	private static final 	String 						GET_FRIEND_FEED_URL = "http://107.22.209.62/android/get_friend_feeds.php";
+	
+	private 				List<FriendFeedItem> 		friendFeedList = new ArrayList<FriendFeedItem>();
+	private 				ListView 					listview = null;
+	private 				FriendFeedItemAdapter 		adapter = null;
+	private 				GetFriendFeedTask 			task = null;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,41 +53,43 @@ public class FriendListFeedActivity extends Activity {
 		setContentView(R.layout.friend_list_feed);
 		
 		listview = (ListView) findViewById(R.id.friend_list_feed_xml_listview);
-		adapter = new FriendFeedItemAdapter(this.getApplicationContext(), friendFeedList);
+		adapter = new FriendFeedItemAdapter(getApplicationContext(), friendFeedList);
 		listview.setAdapter(adapter);
+		
 		listview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				
 			}
 		});
-		task = new GetFriendFeedTask();
+		
+		task = new GetFriendFeedTask(FriendListFeedActivity.this);
 		task.execute();
     }
     
-    private class GetFriendFeedTask extends AsyncTask<Void, FriendFeedItem, Boolean> {
+    private static class GetFriendFeedTask 
+    	extends AsyncTask<Void, FriendFeedItem, Boolean> 
+    		implements IAsyncTask<FriendListFeedActivity> {
+    	
 		private List<NameValuePair> datas = new ArrayList<NameValuePair>(); 
-		private ProgressDialog progressDialog = null;
+		private WeakReference<FriendListFeedActivity> ref;
 		private JSONArray array = null;
 		
-		@Override
-		protected void onPreExecute() {
-			datas.add(new BasicNameValuePair("users_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
-			// display waiting dialog
-			progressDialog = new ProgressDialog(FriendListFeedActivity.this);
-			progressDialog.setMessage("Loading friends' feeds...please wait!");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+		public GetFriendFeedTask(FriendListFeedActivity a) {
+			attach(a);
 		}
 		
 		@Override
-		  protected void onProgressUpdate(FriendFeedItem... feeds) {
-			progressDialog.dismiss();
-			friendFeedList.add(feeds[0]);
-			adapter.notifyDataSetChanged();
+		protected void onPreExecute() {
+		}
+		
+		@Override
+		protected void onProgressUpdate(FriendFeedItem... f) {
+			ref.get().updateAsyncTaskProgress(f[0]);
 	    }
 		
 		@Override
 		protected Boolean doInBackground(Void...voids) {
+			datas.add(new BasicNameValuePair("users_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
 			array = JsonHelper.getJsonArrayFromUrlWithData(GET_FRIEND_FEED_URL, datas);
 			if (array != null) { 
 				try {
@@ -125,23 +135,15 @@ public class FriendListFeedActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
-			if (result == false) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListFeedActivity.this).create();
-				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-				dialogMessage.setMessage("There are no friend feeds yet!");
-				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				dialogMessage.show();
-			}
-			
-			progressDialog = null;
-			datas = null;
-			array = null;
-			System.gc();
+			detach();
+		}
+
+		public void attach(FriendListFeedActivity a) {
+			ref = new WeakReference<FriendListFeedActivity>(a);
+		}
+
+		public void detach() {
+			ref.clear();
 		}
 			
 	}
@@ -188,10 +190,11 @@ public class FriendListFeedActivity extends Activity {
     @Override
     public void onDestroy() {
     	Log.v(TAG, "I'm destroyed!");
-        listview = null;
-        adapter = null;
-        friendFeedList = null;
-        System.gc();
         super.onDestroy();
+	}
+
+	public void updateAsyncTaskProgress(FriendFeedItem f) {
+		friendFeedList.add(f);
+		adapter.notifyDataSetChanged();
 	}
 }

@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +13,13 @@ import org.json.JSONObject;
 import com.csun.spotr.adapter.PlaceActionItemAdapter;
 import com.csun.spotr.core.Challenge;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.skeleton.IActivityProgressUpdate;
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.JsonHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,23 +32,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
 /**
+ * Description:
  * The Missions tab content in Spots.
  */
-public class PlaceActionActivity extends Activity {
-	private static final String TAG = "(PlaceActionActivity)";
-	private static final String GET_CHALLENGES_URL = "http://107.22.209.62/android/get_challenges_from_place.php";
-	private static final String DO_CHECK_IN_URL = "http://107.22.209.62/android/do_check_in.php";
-	private int currentPlaceId;
-	private int currentChosenItem;
-	private ListView list = null;
-	private	PlaceActionItemAdapter adapter = null;
-	private List<Challenge> challengeList = new ArrayList<Challenge>();
+public class PlaceActionActivity 
+	extends Activity 
+		implements IActivityProgressUpdate<Challenge> {
+	
+	private static final 	String 					TAG = "(PlaceActionActivity)";
+	private static final 	String 					GET_CHALLENGES_URL = "http://107.22.209.62/android/get_challenges_from_place.php";
+	private static final	String 					DO_CHECK_IN_URL = "http://107.22.209.62/android/do_check_in.php";
+	
+	public 					int 					currentPlaceId;
+	public 					int 					currentChosenItem;
+	public 					ListView 				list = null;
+	private					PlaceActionItemAdapter	adapter = null;
+	private 				List<Challenge> 		challengeList = new ArrayList<Challenge>();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,9 +71,9 @@ public class PlaceActionActivity extends Activity {
 		// add top padding to first item and add bottom padding to last item
 		TextView padding = new TextView(this);
 		padding.setHeight(0);
+		
 		list.addHeaderView(padding, null, false);
 		list.addFooterView(padding, null, false);
-		
 		list.setAdapter(adapter);
 				
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -75,7 +83,7 @@ public class PlaceActionActivity extends Activity {
 				currentChosenItem = position;
 				
 				if (c.getType() == Challenge.Type.CHECK_IN) {
-					CheckInTask task = new CheckInTask();
+					CheckInTask task = new CheckInTask(PlaceActionActivity.this);
 					task.execute(
 						Integer.toString(CurrentUser.getCurrentUser().getId()),
 						Integer.toString(currentPlaceId),
@@ -116,25 +124,33 @@ public class PlaceActionActivity extends Activity {
 		});
 		
 		// run GetChallengeTask
-		new GetChallengesTask().execute();
+		new GetChallengesTask(PlaceActionActivity.this).execute();
 	}
 	
-	private class GetChallengesTask extends AsyncTask<String, Challenge, Boolean> {
+	private static class GetChallengesTask 
+		extends AsyncTask<String, Challenge, Boolean> 
+			implements IAsyncTask<PlaceActionActivity> {
+		
 		private List<NameValuePair> challengeData = new ArrayList<NameValuePair>();
-		@Override
-		protected void onPreExecute() {
+		private WeakReference<PlaceActionActivity> ref;
+		
+		public GetChallengesTask(PlaceActionActivity a) {
+			attach(a);
 		}
 		
 		@Override
-	    protected void onProgressUpdate(Challenge... challenges) {
-			challengeList.add(challenges[0]);
-			adapter.notifyDataSetChanged();
-			// adapter.notifyDataSetInvalidated();
+		protected void onPreExecute() {
+			
+		}
+		
+		@Override
+	    protected void onProgressUpdate(Challenge... c) {
+			ref.get().updateAsyncTaskProgress(c[0]);
 	    }
 
 		@Override
 		protected Boolean doInBackground(String... text) {
-			challengeData.add(new BasicNameValuePair("place_id", Integer.toString(currentPlaceId)));
+			challengeData.add(new BasicNameValuePair("place_id", Integer.toString(ref.get().currentPlaceId)));
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_CHALLENGES_URL, challengeData);
 			if (array != null) { 
 				try {
@@ -166,22 +182,28 @@ public class PlaceActionActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			if (result == false) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActionActivity.this).create();
-				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-				dialogMessage.setMessage("There are no challenges at this place!");
-				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				dialogMessage.show();
-			}
+			detach();
+		}
+
+		public void attach(PlaceActionActivity a) {
+			ref = new WeakReference<PlaceActionActivity>(a);
+		}
+
+		public void detach() {
+			ref.clear();
 		}
 	}
 	
-	private class CheckInTask extends AsyncTask<String, Integer, String> {
+	private static class CheckInTask 
+		extends AsyncTask<String, Integer, String> 
+			implements IAsyncTask<PlaceActionActivity> {
+		
 		private List<NameValuePair> checkInData = new ArrayList<NameValuePair>();
+		private WeakReference<PlaceActionActivity> ref;
+		
+		public CheckInTask(PlaceActionActivity a) {
+			attach(a);
+		}
 
 		@Override
 		protected void onPreExecute() {
@@ -213,6 +235,7 @@ public class PlaceActionActivity extends Activity {
 			checkInData.add(new BasicNameValuePair("challenges_id", ids[2]));
 			JSONObject json = JsonHelper.getJsonObjectFromUrlWithData(DO_CHECK_IN_URL, checkInData);
 			String result = "";
+			
 			try {
 				result = json.getString("result");
 			} 
@@ -225,34 +248,23 @@ public class PlaceActionActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			if (result.equals("success")) {
-				list.getChildAt(currentChosenItem).setBackgroundColor(Color.GRAY);
+				ref.get().list.getChildAt(ref.get().currentChosenItem).setBackgroundColor(Color.GRAY);
 			}
 			else {
-				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActionActivity.this).create();
-				dialogMessage.setTitle("Recent check in");
-				dialogMessage.setMessage("You checked in recently. You can only check in once every 24 hours. :(");
-				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				dialogMessage.show();
+				ref.get().showDialog(0);
 			}	
+			
+			detach();
+		}
+
+		public void attach(PlaceActionActivity a) {
+			ref = new WeakReference<PlaceActionActivity>(a);
+		}
+
+		public void detach() {
+			ref.clear();
 		}
 	}
-	
-	/*
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event)  {
-	    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-	        startActivity(new Intent(getApplicationContext(), LocalPlaceActivity.class));
-	        finish();
-	        return true;
-	    }
-
-	    return super.onKeyDown(keyCode, event);
-	}
-	*/
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -297,5 +309,40 @@ public class PlaceActionActivity extends Activity {
     public void onDestroy() {
 		Log.v(TAG, "I'm destroyed!");
         super.onDestroy();
+	}
+
+	public void updateAsyncTaskProgress(Challenge c) {
+		challengeList.add(c);
+		adapter.notifyDataSetChanged();
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case 0:
+			return new 
+				AlertDialog.Builder(this)
+					.setIcon(R.drawable.error_circle)
+					.setTitle("Warning!")
+					.setMessage("You checked in recently. You can only check in once every 24 hours. :(!")
+					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							
+						}
+					}).create();
+		
+		case 1: 
+			return new 
+					AlertDialog.Builder(this)
+						.setIcon(R.drawable.error_circle)
+						.setTitle("Error Message")
+						.setMessage("<undefined>")
+						.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+								
+							}
+						}).create();
+		}
+		return null;
 	}
 }

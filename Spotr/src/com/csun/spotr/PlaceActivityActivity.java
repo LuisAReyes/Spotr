@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,16 +9,14 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.skeleton.IActivityProgressUpdate;
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.JsonHelper;
 import com.csun.spotr.adapter.PlaceFeedItemAdapter;
 import com.csun.spotr.core.Challenge;
 import com.csun.spotr.core.adapter_item.PlaceFeedItem;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -33,17 +32,25 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class PlaceActivityActivity extends Activity {
-	private static final String TAG = "(PlaceActivityActivity)";
-	private static final String GET_PLACE_FEED_URL = "http://107.22.209.62/android/get_activities.php";
-	private int currentPlaceId = 0;
-	private ListView listview = null;
-	private PlaceFeedItemAdapter adapter = null;
-	private List<PlaceFeedItem> placeFeedList = new ArrayList<PlaceFeedItem>();
-	private boolean loading = true;
-	private int prevTotal = 0;
-	private final int threshHold = 5;
-	private int counter = 0;
+/**
+ * Description:
+ * 		Display feeds of a place
+ */
+public class PlaceActivityActivity 
+	extends Activity 
+		implements IActivityProgressUpdate<PlaceFeedItem> {
+	
+	private static final 	String 					TAG = "(PlaceActivityActivity)";
+	private static final 	String 					GET_PLACE_FEED_URL = "http://107.22.209.62/android/get_activities.php";
+	
+	public 					int 					currentPlaceId = 0;
+	private 				ListView 				listview = null;
+	private 				PlaceFeedItemAdapter 	adapter = null;
+	private 				List<PlaceFeedItem> 	placeFeedList = new ArrayList<PlaceFeedItem>();
+	private 				boolean 				loading = true;
+	private 				int 					prevTotal = 0;
+	private final 			int 					threshHold = 5;
+	private 				int 					counter = 0;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,16 +61,18 @@ public class PlaceActivityActivity extends Activity {
 		currentPlaceId = extrasBundle.getInt("place_id");
 		
 		listview = (ListView) findViewById(R.id.place_activity_xml_listview);
-		adapter = new PlaceFeedItemAdapter(this.getApplicationContext(), placeFeedList);
+		adapter = new PlaceFeedItemAdapter(getApplicationContext(), placeFeedList);
 		listview.setAdapter(adapter);
+		
 		listview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				
 			}
 		});
 		
 		
 		// initial task
-		new GetPlaceFeedTask(true).execute(counter);
+		new GetPlaceFeedTask(this).execute(counter);
 		
 		// as we scroll down the list, add more items
 		listview.setOnScrollListener(new OnScrollListener() {
@@ -72,7 +81,6 @@ public class PlaceActivityActivity extends Activity {
 					if (totalItemCount > prevTotal) {
 						loading = false;
 						prevTotal = totalItemCount;
-						Log.d(TAG, Integer.toString(totalItemCount));
 					}
 				}
 
@@ -82,7 +90,7 @@ public class PlaceActivityActivity extends Activity {
 						loading = true;
 					}
 					// run with another 5
-					new GetPlaceFeedTask(false).execute(counter);
+					new GetPlaceFeedTask(PlaceActivityActivity.this).execute(counter);
 				}
 			}
 
@@ -92,35 +100,29 @@ public class PlaceActivityActivity extends Activity {
 		});
     }
     
-    private class GetPlaceFeedTask extends AsyncTask<Integer, PlaceFeedItem, Boolean> {
+    private static class GetPlaceFeedTask 
+    	extends AsyncTask<Integer, PlaceFeedItem, Boolean> 
+    		implements IAsyncTask<PlaceActivityActivity> {
+    	
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>(); 
-		private ProgressDialog progressDialog = null;
-		private boolean displayDialogFlag = false;
+		private WeakReference<PlaceActivityActivity> ref;
 		
-		public GetPlaceFeedTask(boolean flag) {
-			displayDialogFlag = flag;
+		public GetPlaceFeedTask(PlaceActivityActivity a) {
+			attach(a);
 		}
 		
 		@Override
 		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(PlaceActivityActivity.this);
-			progressDialog.setMessage("Loading place activities...please wait!");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
 		}
 		
 		@Override
-	    protected void onProgressUpdate(PlaceFeedItem... feeds) {
-			progressDialog.dismiss();
-			placeFeedList.add(feeds[0]);
-			adapter.notifyDataSetChanged();
+	    protected void onProgressUpdate(PlaceFeedItem... f) {
+			ref.get().updateAsyncTaskProgress(f[0]);
 	    }
 		
 		@Override
 		protected Boolean doInBackground(Integer... offsets) {
-			placeData.add(new BasicNameValuePair("spots_id", Integer.toString(currentPlaceId)));
+			placeData.add(new BasicNameValuePair("spots_id", Integer.toString(ref.get().currentPlaceId)));
 			placeData.add(new BasicNameValuePair("offset", Integer.toString(offsets[0])));
 			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_PLACE_FEED_URL, placeData);
 			if (array != null) { 
@@ -163,18 +165,15 @@ public class PlaceActivityActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Boolean result) {
-			progressDialog.dismiss();
-			if (result == false && displayDialogFlag == true) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(PlaceActivityActivity.this).create();
-				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-				dialogMessage.setMessage("There are no activities for this place!");
-				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				dialogMessage.show();
-			}
+			detach();
+		}
+
+		public void attach(PlaceActivityActivity a) {
+			ref = new WeakReference<PlaceActivityActivity>(a);
+		}
+
+		public void detach() {
+			ref.clear();
 		}
 	}
     
@@ -222,4 +221,9 @@ public class PlaceActivityActivity extends Activity {
     	Log.v(TAG, "I'm paused!");
     	super.onPause();
     }
+
+	public void updateAsyncTaskProgress(PlaceFeedItem f) {
+		placeFeedList.add(f);
+		adapter.notifyDataSetChanged();
+	}
 }

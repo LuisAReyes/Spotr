@@ -1,6 +1,7 @@
 package com.csun.spotr;
 
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,13 +12,14 @@ import org.json.JSONException;
 
 import com.csun.spotr.adapter.ProfileItemAdapter;
 import com.csun.spotr.core.User;
+import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.skeleton.IActivityProgressUpdate;
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.ImageLoader;
 import com.csun.spotr.util.JsonHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,7 +30,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,34 +40,37 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ProfileActivity extends Activity {
-	private static final String TAG = "(ProfileActivity)";
-	private static final String GET_USER_DETAIL_URL = "http://107.22.209.62/android/get_user_detail.php";
-	private static final int CAMERA_PICTURE = 111;
-	private static final int GALLERY_PICTURE = 222;
-	private ListView listViewProfile = null;
-	private ProfileItemAdapter adapter = null;
-	private int currentUserId = 0;
-	private User user = null;
-	private GetUserDetailTask task = null;
-	private Bitmap bitmapUserPicture = null;
-	private ImageView imageViewUserPicture = null;
-	private ImageLoader imageLoader;
-	private TextView textViewChallengesDone = null;
-	private TextView textViewPlacesVisited = null;
-	private TextView textViewPoints = null;
-	private List<String> headers = new ArrayList<String>();
-	private List<String> bodies = new ArrayList<String>();
+/**
+ * Description:
+ * 		Display user's detail information
+ */
+public class ProfileActivity 
+	extends Activity 
+		implements IActivityProgressUpdate<User> {
+	
+	private static final 	String 					TAG = "(ProfileActivity)";
+	private static final 	String 					GET_USER_DETAIL_URL = "http://107.22.209.62/android/get_user_detail.php";
+	private static final 	int 					CAMERA_PICTURE = 111;
+	private static final 	int 					GALLERY_PICTURE = 222;
+	
+	private 				ListView 				list = null;
+	private 				ProfileItemAdapter		adapter = null;
+	private 				GetUserDetailTask 		task = null;
+	private 				Bitmap 					bitmapUserPicture = null;
+	
+	public 					ImageView 				imageViewUserPicture = null;
+	public 					ImageLoader 			imageLoader;
+	public 					TextView 				textViewChallengesDone = null;
+	public 					TextView 				textViewPlacesVisited = null;
+	public 					TextView 				textViewPoints = null;
+	public 					List<String> 			headers = new ArrayList<String>();
+	public 					List<String> 			bodies = new ArrayList<String>();
 				
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile);
 
-		// testing
-		Bundle extrasBundle = getIntent().getExtras();
-		currentUserId = extrasBundle.getInt("user_id");
-		
 		imageLoader = new ImageLoader(getApplicationContext());
 		
 		imageViewUserPicture = (ImageView) findViewById(R.id.profile_xml_imageview_user_picture);
@@ -76,7 +80,7 @@ public class ProfileActivity extends Activity {
 			}
 		});
 		
-		task = new GetUserDetailTask();
+		task = new GetUserDetailTask(ProfileActivity.this);
 		task.execute();
 	}
 
@@ -128,25 +132,27 @@ public class ProfileActivity extends Activity {
 		return cursor.getString(column_index);
 	}
 
-	private class GetUserDetailTask extends AsyncTask<Void, Integer, User> {
+	private static class GetUserDetailTask 
+		extends AsyncTask<Void, Integer, User> 
+			implements IAsyncTask<ProfileActivity> {
+		
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
-		private ProgressDialog progressDialog = null;
+		private WeakReference<ProfileActivity> ref;
 		private JSONArray array = null;
+		
+		public GetUserDetailTask(ProfileActivity a) {
+			attach(a);
+		}
 		
 		@Override
 		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(ProfileActivity.this);
-			progressDialog.setMessage("Loading ...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(false);
-			progressDialog.show();
 		}
 
 		@Override
 		protected User doInBackground(Void...voids) {
-			userData.add(new BasicNameValuePair("user_id", Integer.toString(currentUserId)));
+			userData.add(new BasicNameValuePair("user_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
 			array = JsonHelper.getJsonArrayFromUrlWithData(GET_USER_DETAIL_URL, userData);
+			User user = null;
 			try {
 				user = new User.Builder( 
 						// required parameters
@@ -167,68 +173,22 @@ public class ProfileActivity extends Activity {
 		}
 		
 		@Override
-		protected void onPostExecute(final User user) {
-			progressDialog.dismiss();
-			if (user != null) {
-				imageLoader.displayImage(user.getImageUrl(), imageViewUserPicture);
-				
-				textViewChallengesDone = (TextView) findViewById(R.id.profile_xml_textview_challenges_done);
-				textViewChallengesDone.setText(Integer.toString(user.getChallengesDone()));
-				
-				textViewPlacesVisited = (TextView) findViewById(R.id.profile_xml_textview_places_visited);
-				textViewPlacesVisited.setText(Integer.toString(user.getPlacesVisited()));
-				
-				textViewPoints = (TextView) findViewById(R.id.profile_xml_textview_points);
-				textViewPoints.setText(Integer.toString(user.getPoints()));
-				
-				headers = new ArrayList<String>();
-				bodies = new ArrayList<String>();
-				
-				headers.add("Name");
-				bodies.add(user.getUsername());
-				headers.add("Password");
-				bodies.add(user.getPassword());
-				
-				listViewProfile = (ListView) findViewById(R.id.profile_xml_listview_items);
-				adapter = new ProfileItemAdapter(ProfileActivity.this, headers, bodies);
-				listViewProfile.setAdapter(adapter);
+		protected void onPostExecute(final User u) {
+			if (u != null) {
+				ref.get().updateAsyncTaskProgress(u);
 			}
-			
-			progressDialog = null;
-			userData = null;
-			array = null;
-			
-			System.gc();
+			detach();
 		}
-	}
-	
-	private Uri constructUriFromBitmap(Bitmap bitmap) {
-		if (bitmap == null)
-			return null;
-		
-		ContentValues values = new ContentValues(1);
-		values.put(Media.MIME_TYPE, "image/jpeg");
-		Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
-		OutputStream outStream;
-		
-		try {
-		    outStream = getContentResolver().openOutputStream(uri);
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 30, outStream);
-		    outStream.close();
-		} 
-		catch (Exception e) {
-		    Log.e(TAG, "exception while writing image", e);
-		}
-		
-		bitmap.recycle();
-		bitmap = null;
-		outStream = null;
-		
-		System.gc();
-		return uri;
-	}
-	
 
+		public void attach(ProfileActivity a) {
+			ref = new WeakReference<ProfileActivity>(a);
+		}
+
+		public void detach() {
+			ref.clear();
+		}
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -278,15 +238,32 @@ public class ProfileActivity extends Activity {
 			bitmapUserPicture = null;
 		}
 		
-		listViewProfile = null;
-		adapter = null;
-		user = null;
-		imageViewUserPicture = null;
-		textViewChallengesDone = null;
-		textViewPlacesVisited = null;
-		textViewPoints = null;
-		
-		System.gc();
         super.onDestroy();
+	}
+
+	public void updateAsyncTaskProgress(User u) {
+		imageLoader.displayImage(u.getImageUrl(), imageViewUserPicture);
+		
+		textViewChallengesDone = (TextView) findViewById(R.id.profile_xml_textview_challenges_done);
+		textViewChallengesDone.setText(Integer.toString(u.getChallengesDone()));
+		
+		textViewPlacesVisited = (TextView) findViewById(R.id.profile_xml_textview_places_visited);
+		textViewPlacesVisited.setText(Integer.toString(u.getPlacesVisited()));
+		
+		textViewPoints = (TextView) findViewById(R.id.profile_xml_textview_points);
+		textViewPoints.setText(Integer.toString(u.getPoints()));
+		
+		headers = new ArrayList<String>();
+		bodies = new ArrayList<String>();
+		
+		headers.add("Name");
+		bodies.add(u.getUsername());
+		headers.add("Password");
+		bodies.add(u.getPassword());
+		
+		list = (ListView) findViewById(R.id.profile_xml_listview_items);
+		adapter = new ProfileItemAdapter(getApplicationContext(), headers, bodies);
+		list.setAdapter(adapter);
+		
 	}
 }

@@ -11,7 +11,13 @@ import android.view.MenuInflater;
 import android.view.Window;
 import android.widget.TabHost;
 
-public class FriendListMainActivity extends TabActivity {
+/**
+ * Description:
+ * 		Main tab host for friends
+ */
+public class FriendListMainActivity 
+	extends TabActivity {
+	
 	private static final String TAG = "(FriendListMainActivity)";
 	
 	@Override

@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.JsonHelper;
 
 import android.app.Activity;
@@ -24,17 +26,25 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-public class SignupActivity extends Activity {
-	private static final String TAG = "(SignupActivity)";
-	private static final String SIGN_UP_URL = "http://107.22.209.62/android/signup.php";
-	private Button 	buttonSignup = null;
-	private EditText edittextEmail = null;
-	private EditText edittextPassword = null;
-	private EditText edittextConfirmPassword = null;
-	private CheckBox checkboxVisible = null;
-	private Button buttonExit = null;
-	private boolean passwordVisible = false;
-	private boolean validInformation = false;
+/**
+ * Description:
+ * 		Sign up for a new account
+ */
+public class SignupActivity 
+	extends Activity {
+	
+	private static final 	String 		TAG = "(SignupActivity)";
+	private static final 	String 		SIGN_UP_URL = "http://107.22.209.62/android/signup.php";
+	
+	private 				Button 		buttonSignup = null;
+	private 				EditText 	edittextEmail = null;
+	private 				EditText 	edittextPassword = null;
+	private 				EditText 	edittextConfirmPassword = null;
+	private 				CheckBox 	checkboxVisible = null;
+	private 				Button 		buttonExit = null;
+	
+	private 				boolean 	passwordVisible = false;
+	private 				boolean 	validInformation = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -75,19 +85,32 @@ public class SignupActivity extends Activity {
 					showDialog(0);
 				}
 				else {
-					SignupTask task = new SignupTask();
+					SignupTask task = new SignupTask(SignupActivity.this, edittextEmail.getText().toString().trim(), edittextPassword.getText().toString().trim());
 					task.execute();
 				}
 			}
 		});
 	}
 	
-	private class SignupTask extends AsyncTask<Void, Integer, Boolean> {
+	private static class SignupTask 
+		extends AsyncTask<Void, Integer, Boolean> 
+			implements IAsyncTask<SignupActivity> {
+		
 		private List<NameValuePair> datas = new ArrayList<NameValuePair>();
+		private WeakReference<SignupActivity> ref;
+		private String email;
+		private String password;
+		
+		public SignupTask(SignupActivity a, String email, String password) {
+			this.email = email;
+			this.password = password;
+			attach(a);
+		}
+		
 		@Override
 		protected void onPreExecute() {
-			datas.add(new BasicNameValuePair("username", edittextEmail.getText().toString().trim()));
-			datas.add(new BasicNameValuePair("password", edittextPassword.getText().toString().trim()));
+			datas.add(new BasicNameValuePair("username", email));
+			datas.add(new BasicNameValuePair("password", password));
 		}
 		
 		@Override
@@ -106,11 +129,21 @@ public class SignupActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			if (result == false) {
-				showDialog(3);
+				ref.get().showDialog(3);
 			}
 			else {
-				showDialog(2);
+				ref.get().showDialog(2);
 			}
+			
+			detach();
+		}
+
+		public void attach(SignupActivity a) {
+			ref = new WeakReference<SignupActivity>(a);
+		}
+
+		public void detach() {
+			ref.clear();
 		}
 	}
 

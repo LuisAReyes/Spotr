@@ -36,10 +36,8 @@ public class FriendProfileActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_profile);
-		
 		friendId = getIntent().getExtras().getInt("user_id");
-		
-		imageLoader = new ImageLoader(this.getApplicationContext());
+		imageLoader = new ImageLoader(getApplicationContext());
 		imageViewFriendPicture = (ImageView) findViewById(R.id.friend_profile_xml_friend_picture);
 		textViewName = (TextView) findViewById(R.id.friend_profile_xml_name);
 		textViewChallengesDone = (TextView) findViewById(R.id.friend_profile_xml_challenges_done);

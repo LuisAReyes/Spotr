@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import org.json.JSONException;
 
 import com.csun.spotr.core.Place;
 import com.csun.spotr.custom_gui.BalloonItemizedOverlay;
+import com.csun.spotr.skeleton.IActivityProgressUpdate;
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.JsonHelper;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -36,15 +39,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class PlaceInfoActivity extends MapActivity {
-	private static final String TAG = "(PlaceInfoActivity)";
-	private static final String GET_SPOT_DETAIL_URL = "http://107.22.209.62/android/get_spot_detail.php";
-	private int currentPlaceId = 0;
-	private MapView mapView = null;
-	private List<Overlay> mapOverlays = null;
-	private MapController mapController = null;
-	private MyItemizedOverlay itemizedOverlay = null;
-	private Drawable mapMarker;
+/**
+ * Description:
+ * 		Display detail information of a place
+ */
+public class PlaceInfoActivity 
+	extends MapActivity 
+		implements IActivityProgressUpdate<Place> {
+	
+	private static final 	String 					TAG = "(PlaceInfoActivity)";
+	private static final 	String 					GET_SPOT_DETAIL_URL = "http://107.22.209.62/android/get_spot_detail.php";
+	
+	public 					int 					currentPlaceId = 0;
+	private 				MapView 				mapView = null;
+	private 				List<Overlay> 			mapOverlays = null;
+	private 				MapController 			mapController = null;
+	private 				MyItemizedOverlay 		itemizedOverlay = null;
+	private 				Drawable 				mapMarker;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,18 +77,24 @@ public class PlaceInfoActivity extends MapActivity {
 		Bundle extrasBundle = getIntent().getExtras();
 		currentPlaceId = extrasBundle.getInt("place_id");
 
-		new GetPlaceDetailTask().execute();
+		new GetPlaceDetailTask(this).execute();
 	}
 
-	private class GetPlaceDetailTask extends AsyncTask<Void, Integer, Place> {
+	private static class GetPlaceDetailTask 
+		extends AsyncTask<Void, Integer, Place> 
+			implements IAsyncTask<PlaceInfoActivity> {
+		
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>();
-		private ProgressDialog progressDialog = null;
-		private JSONArray array;
+		private WeakReference<PlaceInfoActivity> ref;
+		
+		public GetPlaceDetailTask(PlaceInfoActivity a) {
+			attach(a);
+		}
 
 		@Override
 		protected Place doInBackground(Void... voids) {
-			placeData.add(new BasicNameValuePair("place_id", Integer.toString(currentPlaceId)));
-			array = JsonHelper.getJsonArrayFromUrlWithData(GET_SPOT_DETAIL_URL, placeData);
+			placeData.add(new BasicNameValuePair("place_id", Integer.toString(ref.get().currentPlaceId)));
+			JSONArray array = JsonHelper.getJsonArrayFromUrlWithData(GET_SPOT_DETAIL_URL, placeData);
 			Place place = null;
 			try {
 				// create a place
@@ -106,67 +123,21 @@ public class PlaceInfoActivity extends MapActivity {
 
 		@Override
 		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(PlaceInfoActivity.this);
-			progressDialog.setMessage("Loading ...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
+
 		}
 
 		@Override
-		protected void onPostExecute(final Place place) {
-			progressDialog.dismiss();
+		protected void onPostExecute(final Place p) {
+			ref.get().updateAsyncTaskProgress(p);
+			detach();
+		}
 
-			placeData = null;
-			array = null;
-			progressDialog = null;
-			System.gc();
+		public void attach(PlaceInfoActivity a) {
+			ref = new WeakReference<PlaceInfoActivity>(a);
+		}
 
-			TextView name = (TextView) findViewById(R.id.place_info_xml_textview_name);
-			name.setText(place.getName());
-
-			TextView description = (TextView) findViewById(R.id.place_info_xml_textview_description);
-			description.setText(place.getAddress());
-
-			TextView location = (TextView) findViewById(R.id.place_info_xml_textview_location);
-			location.setText("[" + Double.toString(place.getLatitude()) + ", " + Double.toString(place.getLongitude()) + "]");
-
-			TextView url = (TextView) findViewById(R.id.place_info_xml_textview_url);
-			url.setText(place.getWebsiteUrl());
-
-			url.setClickable(true);
-			url.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
-					Bundle extras = new Bundle();
-					extras.putString("place_web_url", place.getWebsiteUrl());
-					Log.v(TAG, place.getWebsiteUrl());
-					Intent intent = new Intent(getApplicationContext(), WebviewActivity.class);
-					intent.putExtras(extras);
-					startActivity(intent);
-				}
-			});
-
-			ImageView image = (ImageView) findViewById(R.id.place_info_xml_imageview_picture);
-			image.setImageResource(R.drawable.ic_launcher);
-
-			Button phoneButton = (Button) findViewById(R.id.place_info_xml_button_phone_number);
-			phoneButton.setText(place.getPhoneNumber());
-
-			final String phoneUrl = "tel:" + place.getPhoneNumber().replaceAll("-", "").replace("(", "").replace(")", "").replace(" ", "");
-			Log.v(TAG, phoneUrl);
-
-			phoneButton.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
-					Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(phoneUrl));
-					startActivity(intent);
-				}
-			});
-
-			OverlayItem overlay = new OverlayItem(new GeoPoint((int) (place.getLatitude() * 1E6), (int) (place.getLongitude() * 1E6)), place.getName(), place.getAddress());
-			itemizedOverlay.addOverlay(overlay, place);
-			mapController.animateTo(new GeoPoint((int) (place.getLatitude() * 1E6), (int) (place.getLongitude() * 1E6)));
-			mapController.setZoom(16);
+		public void detach() {
+			ref.clear();
 		}
 	}
 
@@ -179,11 +150,9 @@ public class PlaceInfoActivity extends MapActivity {
 	private class MyItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 		private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
 		private List<Place> placeInformations = new ArrayList<Place>();
-		private Context context;
 
 		public MyItemizedOverlay(Drawable defaultMarker, MapView mapView) {
 			super(boundCenter(defaultMarker), mapView);
-			context = mapView.getContext();
 		}
 
 		public void addOverlay(OverlayItem overlay, Place place) {
@@ -255,12 +224,53 @@ public class PlaceInfoActivity extends MapActivity {
 	@Override
 	public void onDestroy() {
 		Log.v(TAG, "I'm destroyed!");
-		mapView = null;
-		mapOverlays = null;
-		mapController = null;
-		itemizedOverlay = null;
-		mapMarker = null;
-		System.gc();
 		super.onDestroy();
+	}
+
+	public void updateAsyncTaskProgress(final Place p) {
+		TextView name = (TextView) findViewById(R.id.place_info_xml_textview_name);
+		name.setText(p.getName());
+
+		TextView description = (TextView) findViewById(R.id.place_info_xml_textview_description);
+		description.setText(p.getAddress());
+
+		TextView location = (TextView) findViewById(R.id.place_info_xml_textview_location);
+		location.setText("[" + Double.toString(p.getLatitude()) + ", " + Double.toString(p.getLongitude()) + "]");
+
+		TextView url = (TextView) findViewById(R.id.place_info_xml_textview_url);
+		url.setText(p.getWebsiteUrl());
+
+		url.setClickable(true);
+		url.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Bundle extras = new Bundle();
+				extras.putString("place_web_url", p.getWebsiteUrl());
+				Log.v(TAG, p.getWebsiteUrl());
+				Intent intent = new Intent(getApplicationContext(), WebviewActivity.class);
+				intent.putExtras(extras);
+				startActivity(intent);
+			}
+		});
+
+		ImageView image = (ImageView) findViewById(R.id.place_info_xml_imageview_picture);
+		image.setImageResource(R.drawable.ic_launcher);
+
+		Button phoneButton = (Button) findViewById(R.id.place_info_xml_button_phone_number);
+		phoneButton.setText(p.getPhoneNumber());
+
+		final String phoneUrl = "tel:" + p.getPhoneNumber().replaceAll("-", "").replace("(", "").replace(")", "").replace(" ", "");
+		Log.v(TAG, phoneUrl);
+
+		phoneButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(phoneUrl));
+				startActivity(intent);
+			}
+		});
+
+		OverlayItem overlay = new OverlayItem(new GeoPoint((int) (p.getLatitude() * 1E6), (int) (p.getLongitude() * 1E6)), p.getName(), p.getAddress());
+		itemizedOverlay.addOverlay(overlay, p);
+		mapController.animateTo(new GeoPoint((int) (p.getLatitude() * 1E6), (int) (p.getLongitude() * 1E6)));
+		mapController.setZoom(16);
 	}
 }

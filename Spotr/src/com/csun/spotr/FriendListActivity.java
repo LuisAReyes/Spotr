@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import org.json.JSONException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -26,20 +27,31 @@ import android.view.View;
 import com.csun.spotr.core.adapter_item.UserItem;
 import com.csun.spotr.adapter.UserItemAdapter;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.skeleton.IActivityProgressUpdate;
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.JsonHelper;
 
-public class FriendListActivity extends Activity {
-	private static final String TAG = "(FriendListActivity)";
-	private static final String GET_FRIENDS_URL = "http://107.22.209.62/android/get_friends.php";
-	private ListView listview = null;
-	private UserItemAdapter adapter = null;
-	private List<UserItem> userItemList = new ArrayList<UserItem>();
-	private GetFriendsTask task = null;
-	private boolean loading = true;
-	private int prevTotal = 0;
-	private final int threshHold = 10;
-	private int counter = 0;
-
+/**
+ * Description:
+ * 		This class will retrieve a list of friends from database.
+ */
+public class FriendListActivity 
+	extends Activity 
+		implements IActivityProgressUpdate<UserItem> {
+	
+	private static final String 				TAG = "(FriendListActivity)";
+	private static final String 				GET_FRIENDS_URL = "http://107.22.209.62/android/get_friends.php";
+	
+	private 			 ListView 				listview = null;
+	private 			 boolean 				loading = true;
+	private 			 int 					prevTotal = 0;
+	private final 		 int 					threshHold = 10;
+	private int 								counter = 0;
+	
+	public 				 UserItemAdapter 		adapter = null;
+	public 				 List<UserItem> 		userItemList = new ArrayList<UserItem>();
+	public 				 GetFriendsTask 		task = null;
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_list_main);
@@ -60,7 +72,7 @@ public class FriendListActivity extends Activity {
 		});
 
 		// initially, we load 10 items and show user immediately
-		task = new GetFriendsTask(true);
+		task = new GetFriendsTask(this, true);
 		task.execute(counter);
 
 		// handle scrolling event
@@ -70,14 +82,13 @@ public class FriendListActivity extends Activity {
 					if (totalItemCount > prevTotal) {
 						loading = false;
 						prevTotal = totalItemCount;
-						Log.d(TAG, Integer.toString(totalItemCount));
 					}
 				}
 
 				if (!loading && ((totalItemCount - visibleItemCount) <= (firstVisibleItem + threshHold))) {
 					counter += 10;
 					loading = true;
-					new GetFriendsTask(false).execute(counter);
+					new GetFriendsTask(FriendListActivity.this, false).execute(counter);
 				}
 			}
 
@@ -87,32 +98,22 @@ public class FriendListActivity extends Activity {
 		});
 	}
 
-	private class GetFriendsTask extends AsyncTask<Integer, UserItem, Boolean> {
+	private static class GetFriendsTask extends AsyncTask<Integer, UserItem, Boolean> implements IAsyncTask<FriendListActivity>{
 		private List<NameValuePair> clientData = new ArrayList<NameValuePair>();
-		private ProgressDialog progressDialog = null;
+		private WeakReference<FriendListActivity> ref;
 		private JSONArray userJsonArray = null;
-		private boolean displayDialogFlag;
 
-		public GetFriendsTask(boolean flag) {
-			this.displayDialogFlag = flag;
+		public GetFriendsTask(FriendListActivity a, boolean flag) {
+			attach(a);
 		}
 		
 		@Override
 		protected void onPreExecute() {
-			if (displayDialogFlag == true) {
-				// display waiting dialog
-				progressDialog = new ProgressDialog(FriendListActivity.this);
-				progressDialog.setMessage("Loading friends...");
-				progressDialog.setIndeterminate(true);
-				progressDialog.setCancelable(false);
-				progressDialog.show();
-			}
 		}
 
 		@Override
-		protected void onProgressUpdate(UserItem... users) {
-			userItemList.add(users[0]);
-			adapter.notifyDataSetChanged();
+		protected void onProgressUpdate(UserItem... u) {
+			ref.get().updateAsyncTaskProgress(u[0]);
 		}
 
 		@Override
@@ -143,25 +144,21 @@ public class FriendListActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			if (displayDialogFlag)
-				progressDialog.dismiss();
-			if (result == false && displayDialogFlag == true) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(FriendListActivity.this).create();
-				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
-				dialogMessage.setMessage("You current have no friends");
-				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				dialogMessage.show();
-			}
-			
-			clientData = null;
-			userJsonArray = null;
-			progressDialog = null;
-			System.gc();
+			detach();
 		}
+		
+		public void attach(FriendListActivity a) {
+			ref = new WeakReference<FriendListActivity>(a);
+		}
+		
+		public void detach() {
+			ref.clear();
+		}
+	}
+	
+	public void updateAsyncTaskProgress(UserItem u) {
+		userItemList.add(u);
+		adapter.notifyDataSetChanged();
 	}
 
 	private void startDialog(final UserItem user) {
@@ -196,13 +193,36 @@ public class FriendListActivity extends Activity {
 	@Override
 	public void onDestroy() {
 		Log.v(TAG, "I'm destroyed!");
-
-		listview = null;
-		adapter = null;
-		userItemList = null;
-		task = null;
-
-		System.gc();
 		super.onDestroy();
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case 0:
+			return new 
+				AlertDialog.Builder(this)
+					.setIcon(R.drawable.error_circle)
+					.setTitle("Error Message")
+					.setMessage("No friends!")
+					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							
+						}
+					}).create();
+		
+		case 1: 
+			return new 
+					AlertDialog.Builder(this)
+						.setIcon(R.drawable.error_circle)
+						.setTitle("Error Message")
+						.setMessage("<undefined>")
+						.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+								
+							}
+						}).create();
+		}
+		return null;
 	}
 }

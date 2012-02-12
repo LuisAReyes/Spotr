@@ -1,6 +1,7 @@
 package com.csun.spotr;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.json.JSONObject;
 
 import com.csun.spotr.singleton.CurrentDateTime;
 import com.csun.spotr.singleton.CurrentUser;
+import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.Base64;
 import com.csun.spotr.util.UploadFileHelper;
 
@@ -29,18 +31,27 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-public class SnapPictureActivity extends Activity {
-	private static final String TAG = "(SnapPictureActivity)";
-	private static final String SNAP_PICTURE_URL = "http://107.22.209.62/images/upload_picture.php";
-	private Button buttonGo = null;
-	private Button buttonNext = null;
-	private ImageView imageViewPreview = null;
-	private Bitmap takenPictureBitmap = null;
-	private String usersId;
-	private String spotsId;
-	private String challengesId;
-	private String comment;
+/**
+ * Description:
+ * 		Take a picture and upload to server
+ */
+public class SnapPictureActivity 
+	extends Activity {
+
+	private static final 	String 			TAG = "(SnapPictureActivity)";
+	private static final 	String 			SNAP_PICTURE_URL = "http://107.22.209.62/images/upload_picture.php";
+	
+	private 				Button 			buttonGo = null;
+	private 				Button 			buttonNext = null;
+	private 				ImageView 		imageViewPreview = null;
+	private 				Bitmap 			takenPictureBitmap = null;
+	
+	private 				String 			usersId;
+	private 				String 			spotsId;
+	private 				String 			challengesId;
+	private 				String 			comment;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,48 +91,55 @@ public class SnapPictureActivity extends Activity {
 					buttonNext.setEnabled(false);
 					buttonGo.setEnabled(false);
 					// start upload picture to server
-					UploadPictueTask task = new UploadPictueTask();
+					ByteArrayOutputStream stream = new ByteArrayOutputStream();
+					// compress picture and add to stream (PNG)
+					takenPictureBitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+					// create raw data src
+					byte[] src = stream.toByteArray();
+					// encode it
+					String byteCode = Base64.encodeBytes(src);
+					UploadPictueTask task = new UploadPictueTask(SnapPictureActivity.this, byteCode);
 					task.execute();
 				}
 			});
 		}
 	}
 
-	private class UploadPictueTask extends AsyncTask<Void, Integer, String> {
-		ProgressDialog progressDialog = new ProgressDialog(SnapPictureActivity.this);
+	private static class UploadPictueTask 
+		extends AsyncTask<Void, Integer, String> 
+			implements IAsyncTask<SnapPictureActivity> {
+		
 		private List<NameValuePair> clientData = new ArrayList<NameValuePair>();
+		private WeakReference<SnapPictureActivity> ref;
+		private String picturebyteCode;
+		
+		public UploadPictueTask(SnapPictureActivity a, String pbc) {
+			attach(a);
+			picturebyteCode = pbc;
+		}
 		
 		@Override
 		protected void onPreExecute() {
-			// display waiting dialog
-			progressDialog = new ProgressDialog(SnapPictureActivity.this);
-			progressDialog.setMessage("Uploading picture...");
-			progressDialog.setIndeterminate(true);
-			progressDialog.setCancelable(true);
-			progressDialog.show();
+			
 		}
 
 		@Override
 		protected String doInBackground(Void... voids) {
-			// create a stream
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			// compress picture and add to stream (PNG)
-			takenPictureBitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-			// create raw data src
-			byte[] src = stream.toByteArray();
-			// encode it
-			String byteCode = Base64.encodeBytes(src);
 			// send encoded data to server
-			clientData.add(new BasicNameValuePair("image", byteCode));
+			clientData.add(new BasicNameValuePair("image", picturebyteCode));
+			
 			// send a file name where file name = "username" + "current date time UTC", to make sure that we have a unique id picture every time.
 			// since the username is unique, we should take advantage of this otherwise two or more users could potentially snap pictures at the same time.
 			clientData.add(new BasicNameValuePair("file_name",  CurrentUser.getCurrentUser().getUsername() + CurrentDateTime.getUTCDateTime().trim() + ".png"));
+			
 			// send the rest of data
-			clientData.add(new BasicNameValuePair("users_id", usersId));
-			clientData.add(new BasicNameValuePair("spots_id", spotsId));
-			clientData.add(new BasicNameValuePair("challenges_id", challengesId));
+			clientData.add(new BasicNameValuePair("users_id", ref.get().usersId));
+			clientData.add(new BasicNameValuePair("spots_id", ref.get().spotsId));
+			clientData.add(new BasicNameValuePair("challenges_id", ref.get().challengesId));
+			
 			// TODO: comment should be added
-			clientData.add(new BasicNameValuePair("comment", comment));
+			clientData.add(new BasicNameValuePair("comment", ref.get().comment));
+			
 			// get JSON to check result
 			JSONObject json = UploadFileHelper.uploadFileToServer(SNAP_PICTURE_URL, clientData);
 		
@@ -137,13 +155,19 @@ public class SnapPictureActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(String result) {
-			progressDialog.dismiss();
 			if (result.equals("success")) {
-				Intent intent = new Intent("com.csun.spotr.PlaceMainActivity");
-				intent.putExtra("place_id", Integer.parseInt(spotsId));
-				startActivity(intent);
-				finish();
+				Toast.makeText(ref.get().getApplicationContext(), "Upload picture done!", Toast.LENGTH_SHORT).show();
 			}
+			
+			detach();
+		}
+		
+		public void attach(SnapPictureActivity a) {
+			ref = new WeakReference<SnapPictureActivity>(a);
+		}
+		
+		public void detach() {
+			ref.clear();
 		}
 	}
 	

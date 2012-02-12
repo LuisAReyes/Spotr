@@ -83,12 +83,6 @@ public class PlaceActionItemAdapter extends BaseAdapter {
 		else
 			holder.iconImageView.setImageResource(R.drawable.ic_launcher);
 		
-		// alternate row color
-//		if (position % 2 != 0)
-//			convertView.setBackgroundColor(R.color.aluminum5);
-//		else
-//			convertView.setBackgroundColor(R.color.aluminum6);
-				
 		return convertView;
 	}
 }
