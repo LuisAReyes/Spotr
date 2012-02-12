@@ -62,7 +62,7 @@ public class FriendListActionActivity extends Activity {
 		listview = (ListView) findViewById(R.id.friend_list_action_xml_listview_search_friends);
 		
 		userItemList = new ArrayList<UserItem>();
-		adapter = new UserItemAdapter(FriendListActionActivity.this, userItemList);
+		adapter = new UserItemAdapter(this.getApplicationContext(), userItemList);
 		listview.setAdapter(adapter);
 		
 		listview.setOnItemClickListener(new OnItemClickListener() {

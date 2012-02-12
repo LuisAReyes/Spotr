@@ -1,5 +1,6 @@
 package com.csun.spotr;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -35,12 +37,16 @@ import com.csun.spotr.util.FineLocation.LocationResult;
 import com.csun.spotr.core.Place;
 import com.csun.spotr.custom_gui.CustomItemizedOverlay;
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
+/*
+ * 02/11/2012
+ */
 public class LocalMapViewActivity extends MapActivity {
 	private static final String TAG = "(LocalMapViewActivity)";
 	private static final String GET_SPOTS_URL = "http://107.22.209.62/android/get_spots.php";
@@ -48,10 +54,14 @@ public class LocalMapViewActivity extends MapActivity {
 
 	private MapView mapView = null;
 	private List<Overlay> mapOverlays = null;
-	private CustomItemizedOverlay itemizedOverlay = null;
 	private MapController mapController = null;
 	private FineLocation fineLocation = new FineLocation();
-	private Location lastKnownLocation = null;
+	public Location lastKnownLocation = null;
+	public static CustomItemizedOverlay itemizedOverlay = null;
+	
+	private Button changeViewButton;
+	private Button listPlaceButton;
+	private Button locateButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -76,26 +86,16 @@ public class LocalMapViewActivity extends MapActivity {
 		mapOverlays.add(itemizedOverlay);
 
 		// get the other 3 buttons
-		Button changeViewButton = (Button) findViewById(R.id.mapview_xml_button_change_view);
-		Button listPlaceButton = (Button) findViewById(R.id.mapview_xml_button_places);
-		Button locateButton = (Button) findViewById(R.id.mapview_xml_button_locate);
+		changeViewButton = (Button) findViewById(R.id.mapview_xml_button_change_view);
+		listPlaceButton = (Button) findViewById(R.id.mapview_xml_button_places);
+		locateButton = (Button) findViewById(R.id.mapview_xml_button_locate);
 
 		LocationResult locationResult = (new LocationResult() {
 			@Override
 			public void gotLocation(final Location location) {
 				lastKnownLocation = location;
-				OverlayItem ovl = new OverlayItem(new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6)), "My location", "Hello");
-				Drawable icon = getResources().getDrawable(R.drawable.map_circle_marker_red);
-				icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
-				ovl.setMarker(icon);
-				Place place = new Place.Builder(location.getLongitude(), location.getLatitude(), -1).build();
-				itemizedOverlay.addOverlay(ovl, place);
-
-				mapController.animateTo(new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6)));
-				mapController.setZoom(18);
-
-				// process to update map
-				new GetSpotsTask().execute(lastKnownLocation);
+				locateButton.setEnabled(true);
+				listPlaceButton.setEnabled(true);
 			}
 		});
 		fineLocation.getLocation(this, locationResult);
@@ -110,14 +110,22 @@ public class LocalMapViewActivity extends MapActivity {
 		// handle locate event
 		locateButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				// do nothing
+				OverlayItem ovl = new OverlayItem(new GeoPoint((int) (lastKnownLocation.getLatitude() * 1E6), (int) (lastKnownLocation.getLongitude() * 1E6)), "My location", "Hello");
+				Drawable icon = getResources().getDrawable(R.drawable.map_circle_marker_red);
+				icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+				ovl.setMarker(icon);
+				Place place = new Place.Builder(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude(), -1).build();
+				itemizedOverlay.addOverlay(ovl, place);
+
+				mapController.animateTo(new GeoPoint((int) (lastKnownLocation.getLatitude() * 1E6), (int) (lastKnownLocation.getLongitude() * 1E6)));
+				mapController.setZoom(18);
 			}
 		});
 
 		// handle show display list event
 		listPlaceButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				// do nothing
+				new GetSpotsTask(LocalMapViewActivity.this).execute(lastKnownLocation);
 			}
 		});
 	}
@@ -158,16 +166,21 @@ public class LocalMapViewActivity extends MapActivity {
 		return false;
 	}
 
-	private class GetSpotsTask extends AsyncTask<Location, Place, Boolean> {
+	private static class GetSpotsTask extends AsyncTask<Location, Place, Boolean> {
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>();
+		private WeakReference<Activity> ref;
 		private ProgressDialog progressDialog = null;
+		
+		public GetSpotsTask(Activity a) {
+			ref = new WeakReference<Activity>(a);
+		}
 
-		private List<NameValuePair> constructGooglePlace() {
+		private List<NameValuePair> constructGooglePlace(Location loc) {
 			// this is data we will send to our server
 			List<NameValuePair> sentData = new ArrayList<NameValuePair>();
 			// we reformat the original data to include only what we need
 			JSONArray reformattedData = new JSONArray();
-			JSONObject json = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlacesUrl(lastKnownLocation, GooglePlaceHelper.GOOGLE_RADIUS_IN_METER));
+			JSONObject json = JsonHelper.getJsonFromUrl(GooglePlaceHelper.buildGooglePlacesUrl(loc, GooglePlaceHelper.GOOGLE_RADIUS_IN_METER));
 			JSONObject temp = null;
 			try {
 				JSONArray originalGoogleDataArray = json.getJSONArray("results");
@@ -216,7 +229,7 @@ public class LocalMapViewActivity extends MapActivity {
 		@Override
 		protected void onPreExecute() {
 			// display waiting dialog
-			progressDialog = new ProgressDialog(LocalMapViewActivity.this);
+			progressDialog = new ProgressDialog(ref.get());
 			progressDialog.setMessage("Loading...");
 			progressDialog.setIndeterminate(true);
 			progressDialog.setCancelable(false);
@@ -229,11 +242,11 @@ public class LocalMapViewActivity extends MapActivity {
 			// add to item to map
 			itemizedOverlay.addOverlay(overlay, places[0]);
 		}
-
+		
 		@Override
 		protected Boolean doInBackground(Location... locations) {
 			// send Google data to our server to update 'spots' table
-			JsonHelper.getJsonObjectFromUrlWithData(UPDATE_GOOGLE_PLACES_URL, constructGooglePlace());
+			JsonHelper.getJsonObjectFromUrlWithData(UPDATE_GOOGLE_PLACES_URL, constructGooglePlace(locations[0]));
 			
 			// now sending latitude, longitude and radius to retrieve places
 			placeData.add(new BasicNameValuePair("latitude", Double.toString(locations[0].getLatitude())));
@@ -270,7 +283,7 @@ public class LocalMapViewActivity extends MapActivity {
 		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
 			if (result == false) {
-				AlertDialog dialogMessage = new AlertDialog.Builder(LocalMapViewActivity.this).create();
+				AlertDialog dialogMessage = new AlertDialog.Builder(ref.get()).create();
 				dialogMessage.setTitle("Hello " + CurrentUser.getCurrentUser().getUsername());
 				dialogMessage.setMessage("There are no places at this location");
 				dialogMessage.setButton("Ok", new DialogInterface.OnClickListener() {

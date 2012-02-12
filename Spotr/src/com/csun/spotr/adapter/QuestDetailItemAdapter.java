@@ -6,6 +6,7 @@ import com.csun.spotr.R;
 import com.csun.spotr.core.adapter_item.QuestDetailItem;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +14,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class QuestDetailItemAdapter extends BaseAdapter{
-	private Activity context;
+	private Context context;
 	private List<QuestDetailItem> items;
+	private ItemViewHolder holder;
+	private static LayoutInflater inflater;
 	
-	public QuestDetailItemAdapter(Activity context, List<QuestDetailItem> items) {
+	public QuestDetailItemAdapter(Context context, List<QuestDetailItem> items) {
 		super();
-		this.context = context;
+		this.context = context.getApplicationContext();
 		this.items = items;
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 	
 	public int getCount() {		
@@ -40,8 +44,6 @@ public class QuestDetailItemAdapter extends BaseAdapter{
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ItemViewHolder holder;
-		LayoutInflater inflater = context.getLayoutInflater();
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.quest_item, null);
 			holder = new ItemViewHolder();

@@ -3,6 +3,7 @@ package com.csun.spotr.adapter;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,14 @@ import com.csun.spotr.core.Challenge;
 
 public class QuestActionItemAdapter extends BaseAdapter {
 	private List<Challenge> items;
-	private Activity context;
-
-	public QuestActionItemAdapter(Activity context, List<Challenge> items) {
-		this.context = context;
+	private Context context;
+	private static LayoutInflater inflater;
+	private	ItemViewHolder holder;
+	
+	public QuestActionItemAdapter(Context context, List<Challenge> items) {
+		this.context = context.getApplicationContext();
 		this.items = items;
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	public int getCount() {
@@ -42,8 +46,6 @@ public class QuestActionItemAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ItemViewHolder holder;
-		LayoutInflater inflater = context.getLayoutInflater();
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.place_action_item, null);
 			holder = new ItemViewHolder();

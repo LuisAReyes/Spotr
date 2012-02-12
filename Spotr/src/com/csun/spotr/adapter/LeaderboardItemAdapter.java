@@ -1,12 +1,14 @@
 package com.csun.spotr.adapter;
 
 import java.util.List;
+import java.util.zip.Inflater;
 
 import com.csun.spotr.R;
 import com.csun.spotr.core.User;
 import com.csun.spotr.singleton.CurrentUser;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +16,15 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class LeaderboardItemAdapter extends BaseAdapter {
-	private Activity context;
+	private Context context;
 	private List<User> items;
+	private static LayoutInflater inflater;
+	private ItemViewHolder holder;
 	
-	public LeaderboardItemAdapter(Activity context, List<User> items) {
+	public LeaderboardItemAdapter(Context c, List<User> items) {
 		super();
-		this.context = context;
+		this.context = c.getApplicationContext();
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.items = items;
 	}
 
@@ -44,8 +49,6 @@ public class LeaderboardItemAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ItemViewHolder holder;
-		LayoutInflater inflater = context.getLayoutInflater();
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.leaderboard_item, null);
 			

@@ -51,7 +51,7 @@ public class QuestDetailActivity extends Activity {
 		//quest_points = this.getIntent().getExtras().getInt("quest_points");
 		
 		questDetailListView = (ListView) findViewById(R.id.quest_detail_xml_listview_quest_list);
-		questDetailItemAdapter = new QuestDetailItemAdapter(this, questDetailList);
+		questDetailItemAdapter = new QuestDetailItemAdapter(this.getApplicationContext(), questDetailList);
 		questDetailListView.setAdapter(questDetailItemAdapter);
 		
 		//initialize detail description of specific quest

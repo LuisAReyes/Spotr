@@ -3,6 +3,7 @@ package com.csun.spotr.adapter;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +13,16 @@ import android.widget.TextView;
 import com.csun.spotr.R;
 
 public class ProfileItemAdapter extends BaseAdapter {
-	private Activity context;
+	private Context context;
 	private List<String> headers;
 	private List<String> bodies;
+	private static LayoutInflater inflater;
+	private	ViewHolder holder;
 
-	public ProfileItemAdapter(Activity context, List<String> headers, List<String> bodies) {
+	public ProfileItemAdapter(Context context, List<String> headers, List<String> bodies) {
 		super();
-		this.context = context;
+		this.context = context.getApplicationContext();
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.headers = headers;
 		this.bodies = bodies;
 	}
@@ -41,9 +45,6 @@ public class ProfileItemAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder;
-		LayoutInflater inflater = context.getLayoutInflater();
-
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.profile_item, null);
 			holder = new ViewHolder();
@@ -52,8 +53,9 @@ public class ProfileItemAdapter extends BaseAdapter {
 
 			convertView.setTag(holder);
 		}
-		else
+		else {
 			holder = (ViewHolder) convertView.getTag();
+		}
 
 		holder.textviewHeader.setText(headers.get(position));
 		holder.textviewBody.setText(bodies.get(position));

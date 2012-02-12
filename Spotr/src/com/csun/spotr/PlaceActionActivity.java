@@ -58,7 +58,7 @@ public class PlaceActionActivity extends Activity {
 
 		// initialize list view of challenges
 		list = (ListView) findViewById(R.id.place_action_xml_listview_actions);
-		adapter = new PlaceActionItemAdapter(PlaceActionActivity.this, challengeList);
+		adapter = new PlaceActionItemAdapter(this, challengeList);
 		
 		// add top padding to first item and add bottom padding to last item
 		TextView padding = new TextView(this);

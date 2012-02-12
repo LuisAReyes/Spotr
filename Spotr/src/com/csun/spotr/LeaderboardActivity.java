@@ -50,7 +50,7 @@ public class LeaderboardActivity extends Activity {
 		setContentView(R.layout.leaderboard);
 		// initialize list view
 		listview = (ListView) findViewById(R.id.leaderboard_xml_listview_users);
-		adapter = new LeaderboardItemAdapter(LeaderboardActivity.this, userList);
+		adapter = new LeaderboardItemAdapter(this.getApplicationContext(), userList);
 		listview.setAdapter(adapter);
 		listview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -91,7 +91,6 @@ public class LeaderboardActivity extends Activity {
 			progressDialog.dismiss();
 			userList.add(users[0]);
 			adapter.notifyDataSetChanged();
-			// adapter.notifyDataSetInvalidated();
 	    }
 		
 		@Override
@@ -127,8 +126,6 @@ public class LeaderboardActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			progressDialog.dismiss();
-			
-
 		}
 	}
 	

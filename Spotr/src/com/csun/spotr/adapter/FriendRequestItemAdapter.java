@@ -6,6 +6,7 @@ import com.csun.spotr.R;
 import com.csun.spotr.core.adapter_item.FriendRequestItem;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,11 +15,13 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class FriendRequestItemAdapter extends BaseAdapter {
-	private Activity context;
+	private Context context;
 	private List<FriendRequestItem> items;
+	private static LayoutInflater inflater;
 
-	public FriendRequestItemAdapter(Activity context, List<FriendRequestItem> items) {
-		this.context = context;
+	public FriendRequestItemAdapter(Context context, List<FriendRequestItem> items) {
+		this.context = context.getApplicationContext();
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.items = items;
 	}
 
@@ -42,7 +45,6 @@ public class FriendRequestItemAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ItemViewHolder holder;
-		LayoutInflater inflater = context.getLayoutInflater();
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.friend_request_item, null);
 			holder = new ItemViewHolder();
