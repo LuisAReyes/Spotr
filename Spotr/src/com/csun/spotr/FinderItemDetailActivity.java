@@ -34,7 +34,7 @@ public class FinderItemDetailActivity extends Activity {
 		setContentView(R.layout.finder_item_detail);
 		
 		finderId = getIntent().getExtras().getInt("finder_id");
-		adapter = new FinderAdditionalItemImageAdapter(FinderItemDetailActivity.this, items);
+		adapter = new FinderAdditionalItemImageAdapter(this.getApplicationContext(), items);
 		Gallery ga = (Gallery) findViewById(R.id.finder_item_detail_xml_gallery);
 		ga.setAdapter(adapter);
 		

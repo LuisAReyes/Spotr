@@ -66,7 +66,7 @@ public class PlaceActivity extends Activity {
 
 	
 		list = (ListView) findViewById(R.id.place_xml_listview_places);
-		adapter = new PlaceItemAdapter(PlaceActivity.this, placeItemList);
+		adapter = new PlaceItemAdapter(this.getApplicationContext(), placeItemList);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

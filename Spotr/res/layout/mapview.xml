@@ -22,6 +22,7 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:enabled="false"
                 android:text="@string/mapview_xml_button_locate_str" />
 
             <Button
@@ -29,6 +30,7 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:enabled="false"
                 android:text="@string/mapview_xml_button_place_str" />
         </TableRow>
     </TableLayout>

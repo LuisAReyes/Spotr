@@ -3,6 +3,7 @@ package com.csun.spotr.adapter;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -22,10 +23,13 @@ import com.csun.spotr.core.Challenge;
  */
 public class PlaceActionItemAdapter extends BaseAdapter {
 	private List<Challenge> items;
-	private Activity context;
+	private Context context;
+	private static LayoutInflater inflater;
+	private ItemViewHolder holder;
 
-	public PlaceActionItemAdapter(Activity context, List<Challenge> items) {
-		this.context = context;
+	public PlaceActionItemAdapter(Context context, List<Challenge> items) {
+		this.context = context.getApplicationContext();
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);	
 		this.items = items;
 	}
 
@@ -50,8 +54,6 @@ public class PlaceActionItemAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ItemViewHolder holder;
-		LayoutInflater inflater = context.getLayoutInflater();
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.place_action_item, null);
 			holder = new ItemViewHolder();

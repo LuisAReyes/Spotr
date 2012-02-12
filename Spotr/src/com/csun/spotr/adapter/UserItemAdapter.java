@@ -16,14 +16,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class UserItemAdapter extends BaseAdapter {
-	private Activity context;
+	private Context context;
 	private List<UserItem> items;
 	private static LayoutInflater inflater = null;
 	public ImageLoader imageLoader;
 	private ItemViewHolder viewHolder;
 
-	public UserItemAdapter(Activity context, List<UserItem> items) {
-		this.context = context;
+	public UserItemAdapter(Context context, List<UserItem> items) {
+		this.context = context.getApplicationContext();
 		this.items = items;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		imageLoader = new ImageLoader(context.getApplicationContext());

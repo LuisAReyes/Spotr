@@ -13,7 +13,7 @@ public class RewardImageAdapter extends BaseAdapter {
     private Context mContext;
 
     public RewardImageAdapter(Context c) {
-        mContext = c;
+        mContext = c.getApplicationContext();
     }
 
     public int getCount() {

@@ -55,7 +55,6 @@ public class PingMapActivity extends MapActivity {
 	private MapController mapController = null;
 	private FineLocation fineLocation = new FineLocation();
 	private Location lastKnownLocation = null;
-
 	private Button buttonPing;
 
 	@Override
@@ -84,11 +83,14 @@ public class PingMapActivity extends MapActivity {
 		Button changeViewButton = (Button) findViewById(R.id.ping_map_xml_button_change_view);
 		buttonPing = (Button) findViewById(R.id.ping_map_xml_button_ping_me);
 		Button buttonShowFriends = (Button) findViewById(R.id.ping_map_xml_button_show_friends);
+		
+		buttonPing.setEnabled(false);
 
 		LocationResult locationResult = (new LocationResult() {
 			@Override
 			public void gotLocation(final Location location) {
 				lastKnownLocation = location;
+				buttonPing.setEnabled(true);
 			}
 		});
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +24,13 @@ import com.csun.spotr.core.adapter_item.PlaceActionItem;
 
 public class UserActivityItemAdapter extends BaseAdapter {
 	private List<String> items;
-	private Activity context;
+	private Context context;
+	private static LayoutInflater inflater;
+	private ItemViewHolder holder;
 
-	public UserActivityItemAdapter(Activity context, List<String> items) {
-		this.context = context;
+	public UserActivityItemAdapter(Context context, List<String> items) {
+		this.context = context.getApplicationContext();
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.items = items;
 	}
 
@@ -49,8 +53,6 @@ public class UserActivityItemAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ItemViewHolder holder;
-		LayoutInflater inflater = context.getLayoutInflater();
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.user_activity_item, null);
 			holder = new ItemViewHolder();

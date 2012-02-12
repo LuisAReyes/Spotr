@@ -20,13 +20,13 @@ import com.csun.spotr.util.ImageLoader;
 
 public class FriendFeedItemAdapter extends BaseAdapter {
 	private List<FriendFeedItem> items;
-	private Activity context;
+	private Context context;
 	private static LayoutInflater inflater;
 	public ImageLoader imageLoader;
 	private ItemViewHolder ivh;
 	
-	public FriendFeedItemAdapter(Activity context, List<FriendFeedItem> items) {
-		this.context = context;
+	public FriendFeedItemAdapter(Context context, List<FriendFeedItem> items) {
+		this.context = context.getApplicationContext();
 		this.items = items;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		imageLoader = new ImageLoader(context.getApplicationContext());

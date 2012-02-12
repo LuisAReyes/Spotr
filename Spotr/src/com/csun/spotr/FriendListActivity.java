@@ -48,7 +48,7 @@ public class FriendListActivity extends Activity {
 		listview = (ListView) findViewById(R.id.friend_list_main_xml_listview_friends);
 
 		// set up list view adapter
-		adapter = new UserItemAdapter(FriendListActivity.this, userItemList);
+		adapter = new UserItemAdapter(this.getApplicationContext(), userItemList);
 		listview.setAdapter(adapter);
 		listview.setVisibility(View.VISIBLE);
 

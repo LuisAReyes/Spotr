@@ -4,8 +4,7 @@ import com.csun.spotr.core.Challenge;
 
 public class FriendFeedItem {
 	// required parameters
-	private final int activityId; // in case we want to handle the detail of
-									// this activity
+	private final int activityId; 
 	private final int friendId;
 	private final String friendName;
 	private final Challenge.Type challengeType;

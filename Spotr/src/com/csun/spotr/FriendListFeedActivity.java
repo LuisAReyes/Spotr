@@ -45,7 +45,7 @@ public class FriendListFeedActivity extends Activity {
 		setContentView(R.layout.friend_list_feed);
 		
 		listview = (ListView) findViewById(R.id.friend_list_feed_xml_listview);
-		adapter = new FriendFeedItemAdapter(FriendListFeedActivity.this, friendFeedList);
+		adapter = new FriendFeedItemAdapter(this.getApplicationContext(), friendFeedList);
 		listview.setAdapter(adapter);
 		listview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

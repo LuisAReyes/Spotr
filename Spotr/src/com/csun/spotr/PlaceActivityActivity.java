@@ -54,7 +54,7 @@ public class PlaceActivityActivity extends Activity {
 		currentPlaceId = extrasBundle.getInt("place_id");
 		
 		listview = (ListView) findViewById(R.id.place_activity_xml_listview);
-		adapter = new PlaceFeedItemAdapter(PlaceActivityActivity.this, placeFeedList);
+		adapter = new PlaceFeedItemAdapter(this.getApplicationContext(), placeFeedList);
 		listview.setAdapter(adapter);
 		listview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
