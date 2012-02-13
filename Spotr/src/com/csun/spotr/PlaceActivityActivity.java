@@ -12,8 +12,10 @@ import org.json.JSONException;
 import com.csun.spotr.skeleton.IActivityProgressUpdate;
 import com.csun.spotr.skeleton.IAsyncTask;
 import com.csun.spotr.util.JsonHelper;
+import com.csun.spotr.adapter.FriendFeedItemAdapter;
 import com.csun.spotr.adapter.PlaceFeedItemAdapter;
 import com.csun.spotr.core.Challenge;
+import com.csun.spotr.core.adapter_item.FriendFeedItem;
 import com.csun.spotr.core.adapter_item.PlaceFeedItem;
 
 import android.app.Activity;
@@ -38,15 +40,15 @@ import android.widget.ListView;
  */
 public class PlaceActivityActivity 
 	extends Activity 
-		implements IActivityProgressUpdate<PlaceFeedItem> {
+		implements IActivityProgressUpdate<FriendFeedItem> {
 	
 	private static final 	String 					TAG = "(PlaceActivityActivity)";
 	private static final 	String 					GET_PLACE_FEED_URL = "http://107.22.209.62/android/get_activities.php";
 	
 	public 					int 					currentPlaceId = 0;
 	private 				ListView 				listview = null;
-	private 				PlaceFeedItemAdapter 	adapter = null;
-	private 				List<PlaceFeedItem> 	placeFeedList = new ArrayList<PlaceFeedItem>();
+	private 				FriendFeedItemAdapter   adapter = null;
+	private 				List<FriendFeedItem> 	placeFeedList = new ArrayList<FriendFeedItem>();
 	private 				boolean 				loading = true;
 	private 				int 					prevTotal = 0;
 	private final 			int 					threshHold = 5;
@@ -55,13 +57,13 @@ public class PlaceActivityActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.place_activity);
+        setContentView(R.layout.friend_list_feed);
         
         Bundle extrasBundle = getIntent().getExtras();
 		currentPlaceId = extrasBundle.getInt("place_id");
 		
-		listview = (ListView) findViewById(R.id.place_activity_xml_listview);
-		adapter = new PlaceFeedItemAdapter(getApplicationContext(), placeFeedList);
+		listview = (ListView) findViewById(R.id.friend_list_feed_xml_listview);
+		adapter = new FriendFeedItemAdapter(getApplicationContext(), placeFeedList);
 		listview.setAdapter(adapter);
 		
 		listview.setOnItemClickListener(new OnItemClickListener() {
@@ -101,7 +103,7 @@ public class PlaceActivityActivity
     }
     
     private static class GetPlaceFeedTask 
-    	extends AsyncTask<Integer, PlaceFeedItem, Boolean> 
+    	extends AsyncTask<Integer, FriendFeedItem, Boolean> 
     		implements IAsyncTask<PlaceActivityActivity> {
     	
 		private List<NameValuePair> placeData = new ArrayList<NameValuePair>(); 
@@ -116,7 +118,7 @@ public class PlaceActivityActivity
 		}
 		
 		@Override
-	    protected void onProgressUpdate(PlaceFeedItem... f) {
+	    protected void onProgressUpdate(FriendFeedItem... f) {
 			ref.get().updateAsyncTaskProgress(f[0]);
 	    }
 		
@@ -140,17 +142,23 @@ public class PlaceActivityActivity
 						}
 						
 						publishProgress(
-							new PlaceFeedItem.Builder(array.getJSONObject(i).getInt("activity_tbl_id"),
-								array.getJSONObject(i).getString("users_tbl_username"),
-								Challenge.returnType(array.getJSONObject(i).getString("challenges_tbl_type")),
-								array.getJSONObject(i).getString("activity_tbl_created"))
-									.name(array.getJSONObject(i).getString("challenges_tbl_name"))
-									.comment(array.getJSONObject(i).getString("activity_tbl_comment"))
-									.description(array.getJSONObject(i).getString("challenges_tbl_description"))
-									.userPictureUrl(userPictureUrl)
-									.snapPictureUrl(snapPictureUrl)
-										.build());
+								new FriendFeedItem.Builder(
+										// required parameters
+										array.getJSONObject(i).getInt("activity_tbl_id"),
+										0,
+										array.getJSONObject(i).getString("users_tbl_username"),
+										Challenge.returnType(array.getJSONObject(i).getString("challenges_tbl_type")),
+										array.getJSONObject(i).getString("activity_tbl_created"),
+										array.getJSONObject(i).getString("spots_tbl_name"))
+											// optional parameters
+											.challengeName(array.getJSONObject(i).getString("challenges_tbl_name"))
+											.challengeDescription(array.getJSONObject(i).getString("challenges_tbl_description"))
+											.activitySnapPictureUrl(snapPictureUrl)
+											.friendPictureUrl(userPictureUrl)
+											.activityComment(array.getJSONObject(i).getString("activity_tbl_comment"))
+												.build());	
 						
+					
 					}
 				}
 				catch (JSONException e) {
@@ -222,7 +230,7 @@ public class PlaceActivityActivity
     	super.onPause();
     }
 
-	public void updateAsyncTaskProgress(PlaceFeedItem f) {
+	public void updateAsyncTaskProgress(FriendFeedItem f) {
 		placeFeedList.add(f);
 		adapter.notifyDataSetChanged();
 	}

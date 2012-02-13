@@ -130,6 +130,7 @@ public class PlaceActionActivity
 					startActivity(intent);
 				}
 				else { // c.getType == Challenge.Type.OTHER 
+					
 				}
 			}
 		});
