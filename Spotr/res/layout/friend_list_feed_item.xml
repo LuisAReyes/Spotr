@@ -1,14 +1,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/friend_list_feed_item_xml_tablelayout_table"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal" >
-       "
-
+    
     <ImageView
         android:id="@+id/friend_list_feed_item_xml_imageview_user_picture"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginRight="6dp"
         android:src="@drawable/ic_launcher" />
 
@@ -40,42 +38,39 @@
             android:textColor="#7A7A7A"
             android:textSize="10dp" />
 
-        <ImageView
-            android:id="@+id/friend_list_feed_item_xml_imageview_snap_picture"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/ic_launcher" />
+        <TextView
+            android:id="@+id/friend_list_feed_item_xml_textview_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="10dp" />
         
          <TextView
+            android:id="@+id/friend_list_feed_item_xml_textview_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:textColor="#7A7A7A"
+            android:textColor="#000000"
             android:textSize="10dp" />
-         
-         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:textColor="#7A7A7A"
-            android:textSize="10dp" />
- 
-         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:textColor="#7A7A7A"
-            android:textSize="10dp" />
- 
-         
 
+        <ImageView
+            android:id="@+id/friend_list_feed_item_xml_imageview_snap_picture"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:paddingLeft="10dp"
+            android:paddingTop="20dp"
+            android:visibility="gone"
+            android:paddingBottom="20dp"
+            android:src="@drawable/ic_launcher" />
+        
         <Button
             style="@style/CommentButton"
             android:background="@drawable/button_state_selector"
             android:text="Comments" />
+        
     </LinearLayout>
 
 </LinearLayout>

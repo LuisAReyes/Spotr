@@ -9,7 +9,7 @@
         android:id="@+id/friend_list_feed_xml_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#EDEDED" >
-    </ListView>
+        android:background="#FFFFFF"
+		/>
 
 </LinearLayout>

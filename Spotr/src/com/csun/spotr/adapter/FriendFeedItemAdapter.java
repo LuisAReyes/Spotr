@@ -47,6 +47,8 @@ public class FriendFeedItemAdapter extends BaseAdapter {
 		TextView textViewUsername;
 		TextView textViewPlaceName;
 		TextView textViewTime;
+		TextView textViewContent;
+		TextView textViewDetail;
 		ImageView imageViewSnapPicture;
 	}
 	
@@ -58,6 +60,8 @@ public class FriendFeedItemAdapter extends BaseAdapter {
 			holder.imageViewUserPicture = (ImageView) convertView.findViewById(R.id.friend_list_feed_item_xml_imageview_user_picture);
 			holder.textViewPlaceName = (TextView) convertView.findViewById(R.id.friend_list_feed_item_xml_textview_placename);
 			holder.textViewTime = (TextView) convertView.findViewById(R.id.friend_list_feed_item_xml_textview_time);
+			holder.textViewContent = (TextView) convertView.findViewById(R.id.friend_list_feed_item_xml_textview_content);
+			holder.textViewDetail = (TextView) convertView.findViewById(R.id.friend_list_feed_item_xml_textview_detail);
 			holder.imageViewSnapPicture = (ImageView) convertView.findViewById(R.id.friend_list_feed_item_xml_imageview_snap_picture);
 			convertView.setTag(holder);
 		}
@@ -69,7 +73,35 @@ public class FriendFeedItemAdapter extends BaseAdapter {
 		holder.textViewUsername.setText(items.get(position).getFriendName());
 		holder.textViewPlaceName.setText("@ " + items.get(position).getPlaceName());
 		holder.textViewTime.setText("about " + items.get(position).getActivityTime());
-		imageLoader.displayImage(items.get(position).getFriendPictureUrl(), holder.imageViewSnapPicture);
+		
+		if (items.get(position).getChallengeType() == Challenge.Type.CHECK_IN) {
+			holder.textViewContent.setText("check-in");
+			holder.imageViewSnapPicture.setVisibility(View.GONE);
+			holder.textViewDetail.setVisibility(View.GONE);
+		}
+		else if (items.get(position).getChallengeType() == Challenge.Type.SNAP_PICTURE) {
+			holder.textViewContent.setText("snap-picture");
+			holder.imageViewSnapPicture.setVisibility(View.VISIBLE);
+			imageLoader.displayImage(items.get(position).getActivitySnapPictureUrl(), holder.imageViewSnapPicture);
+			holder.textViewDetail.setVisibility(View.GONE);
+		}
+		else if (items.get(position).getChallengeType() == Challenge.Type.WRITE_ON_WALL) {
+			holder.textViewContent.setText("write-on-wall");
+			holder.imageViewSnapPicture.setVisibility(View.GONE);
+			holder.textViewDetail.setVisibility(View.VISIBLE);
+			holder.textViewDetail.setText(items.get(position).getActivityComment());
+		}
+		else if (items.get(position).getChallengeType() == Challenge.Type.QUESTION_ANSWER) {
+			holder.textViewContent.setText("answer-question");
+			holder.imageViewSnapPicture.setVisibility(View.GONE);
+			holder.textViewDetail.setVisibility(View.VISIBLE);
+			holder.textViewDetail.setText(items.get(position).getActivityComment());
+		}
+		else {
+			holder.imageViewSnapPicture.setVisibility(View.GONE);
+			holder.textViewDetail.setVisibility(View.GONE);
+		}
+		
 		return convertView;
 	}
 }
