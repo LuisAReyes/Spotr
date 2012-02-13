@@ -3,23 +3,26 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" 
+    android:background="#00C1E8"
 	>
 
     <TableLayout
         android:layout_width="400dp"
-        android:layout_height="40dp" >
+        android:layout_height="55dp" >
 
         <TableRow >
             <Button
                 android:id="@+id/mapview_xml_button_change_view"
-                android:layout_width="100dp"
+                style="@style/TreasureButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/mapview_xml_button_view_str" />
 
             <Button
                 android:id="@+id/mapview_xml_button_locate"
-                android:layout_width="100dp"
+                style="@style/TreasureButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:enabled="false"
@@ -27,7 +30,8 @@
 
             <Button
                 android:id="@+id/mapview_xml_button_places"
-                android:layout_width="100dp"
+                style="@style/TreasureButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:enabled="false"
@@ -38,8 +42,10 @@
     <com.google.android.maps.MapView
         android:id="@+id/mapview_xml_map"
         android:layout_width="fill_parent"
-        android:layout_height="420dp"
-        android:apiKey="0kqsfxjLdh6ggN9sWrcd75tQQA_2JugZxhGcElQ"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:layout_height="390dp"
+        android:apiKey="0kqsfxjLdh6hBSw6P1O21ednBAHof_q1GuRuffg"
         android:clickable="true" />
 
 </LinearLayout>

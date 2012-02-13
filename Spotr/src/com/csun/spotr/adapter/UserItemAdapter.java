@@ -48,10 +48,10 @@ public class UserItemAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.friend_list_main_item, null);
+			convertView = inflater.inflate(R.layout.user_item, null);
 			viewHolder = new ItemViewHolder();
-			viewHolder.textViewName = (TextView) convertView.findViewById(R.id.friend_list_main_item_xml_textview_name);
-			viewHolder.imageViewPicture = (ImageView) convertView.findViewById(R.id.friend_list_main_item_xml_imageview_picture);
+			viewHolder.textViewName = (TextView) convertView.findViewById(R.id.user_item_xml_textview_name);
+			viewHolder.imageViewPicture = (ImageView) convertView.findViewById(R.id.user_item_xml_imageview_picture);
 			convertView.setTag(viewHolder);
 		}
 		else {

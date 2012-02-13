@@ -42,7 +42,7 @@ import com.csun.spotr.core.User;
 
 /**
  * Description:
- * Display all users with points and ranking 
+ * 		Display all users with points and ranking 
  */
 public class LeaderboardActivity 
 	extends Activity 

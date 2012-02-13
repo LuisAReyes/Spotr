@@ -31,14 +31,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
 /**
  * Description:
- * The Missions tab content in Spots.
+ * 		The Missions tab content in Spots.
  */
 public class PlaceActionActivity 
 	extends Activity 
@@ -69,8 +71,17 @@ public class PlaceActionActivity
 		adapter = new PlaceActionItemAdapter(this, challengeList);
 		
 		// add top padding to first item and add bottom padding to last item
-		TextView padding = new TextView(this);
+		TextView padding = new TextView(getApplicationContext());
 		padding.setHeight(0);
+		
+		Button buttonTreasure = (Button) findViewById(R.id.place_action_xml_button_treasure);
+		buttonTreasure.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), TreasureActivity.class);
+				startActivity(intent);
+			}
+		});
+		
 		
 		list.addHeaderView(padding, null, false);
 		list.addFooterView(padding, null, false);
@@ -155,9 +166,8 @@ public class PlaceActionActivity
 			if (array != null) { 
 				try {
 					for (int i = 0; i < array.length(); ++i) {
-						if (!array.getJSONObject(i).getString("challenges_tbl_type").equals("OTHER"))
-						{
-						publishProgress(								
+						if (!array.getJSONObject(i).getString("challenges_tbl_type").equals("OTHER")) {
+							publishProgress(								
 							new Challenge.Builder(
 									// required parameters
 									array.getJSONObject(i).getInt("challenges_tbl_id"),

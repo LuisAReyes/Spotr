@@ -20,7 +20,7 @@ public class FineLocation {
 	public boolean getLocation(Context context, LocationResult result) {
 		locationResult = result;
 		if (lm == null)
-			lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+			lm = (LocationManager) context.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
 		// exceptions will be thrown if provider is not permitted.
 		try {

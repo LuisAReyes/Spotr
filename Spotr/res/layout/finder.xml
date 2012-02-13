@@ -8,9 +8,10 @@
 
     <Button
         android:id="@+id/finder_xml_button"
+        style="@style/TreasureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create a lost item" />
+        android:text="Create Lost Item" />
 
     <GridView
         android:id="@+id/finder_xml_gridview"

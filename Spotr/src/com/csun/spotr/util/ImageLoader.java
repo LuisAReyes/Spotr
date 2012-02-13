@@ -27,7 +27,7 @@ public class ImageLoader {
 	private FileCache fileCache;
 	private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
 	private ExecutorService executorService;
-	private final int stub_id = R.drawable.ic_launcher;
+	private final int stubId = R.drawable.ic_launcher;
 
 	public ImageLoader(Context context) {
 		fileCache = new FileCache(context);
@@ -41,7 +41,7 @@ public class ImageLoader {
 			imageView.setImageBitmap(bitmap);
 		else {
 			queuePhoto(url, imageView);
-			imageView.setImageResource(stub_id);
+			imageView.setImageResource(stubId);
 		}
 	}
 
@@ -63,8 +63,8 @@ public class ImageLoader {
 			Bitmap bitmap = null;
 			URL imageUrl = new URL(url);
 			HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
-			conn.setConnectTimeout(30000);
-			conn.setReadTimeout(30000);
+			conn.setConnectTimeout(50000);
+			conn.setReadTimeout(50000);
 			conn.setInstanceFollowRedirects(true);
 			InputStream is = conn.getInputStream();
 			OutputStream os = new FileOutputStream(f);
@@ -130,10 +130,13 @@ public class ImageLoader {
 		public void run() {
 			if (imageViewReused(photoToLoad))
 				return;
+			
 			Bitmap bmp = getBitmap(photoToLoad.url);
 			memoryCache.put(photoToLoad.url, bmp);
+			
 			if (imageViewReused(photoToLoad))
 				return;
+			
 			BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
 			Activity a = (Activity) photoToLoad.imageView.getContext();
 			a.runOnUiThread(bd);
@@ -164,7 +167,7 @@ public class ImageLoader {
 				photoToLoad.imageView.setImageBitmap(bitmap);
 			}
 			else {
-				photoToLoad.imageView.setImageResource(stub_id);
+				photoToLoad.imageView.setImageResource(stubId);
 			}
 		}
 	}

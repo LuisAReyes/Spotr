@@ -67,6 +67,22 @@
             android:text="Spot It"
             android:onClick="getActivity" />
         
+        <!-- Spot_It Button -->
+        <Button
+            android:id="@+id/main_menu_btn_weapons"
+            style="@style/MainMenuButton"
+            android:drawableTop="@drawable/ic_main_menu_ping"
+            android:text="Weapons"
+            android:onClick="getActivity" />
+        
+          <!-- Spot_It Button -->
+        <Button
+            android:id="@+id/main_menu_btn_inbox"
+            style="@style/MainMenuButton"
+            android:drawableTop="@drawable/ic_main_menu_quests"
+            android:text="Inbox"
+            android:onClick="getActivity" />
+        
     </com.csun.spotr.custom_gui.DashboardLayout>
     
     <LinearLayout

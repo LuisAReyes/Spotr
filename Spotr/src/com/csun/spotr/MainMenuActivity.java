@@ -120,6 +120,14 @@ public class MainMenuActivity
 		 	intent = new Intent(getApplicationContext(), PingMapActivity.class);
 			startActivity(intent);   
 		}
+		else if (id == R.id.main_menu_btn_weapons) {
+			intent = new Intent(getApplicationContext(), WeaponActivity.class);
+			startActivity(intent);   
+		}
+		else if (id == R.id.main_menu_btn_inbox) {
+			intent = new Intent(getApplicationContext(), InboxActivity.class);
+			startActivity(intent);   
+		}
 		else {
 			// should never go here
 		}

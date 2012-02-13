@@ -98,7 +98,10 @@ public class FriendListActivity
 		});
 	}
 
-	private static class GetFriendsTask extends AsyncTask<Integer, UserItem, Boolean> implements IAsyncTask<FriendListActivity>{
+	private static class GetFriendsTask 
+		extends AsyncTask<Integer, UserItem, Boolean> 
+			implements IAsyncTask<FriendListActivity> {
+		
 		private List<NameValuePair> clientData = new ArrayList<NameValuePair>();
 		private WeakReference<FriendListActivity> ref;
 		private JSONArray userJsonArray = null;
