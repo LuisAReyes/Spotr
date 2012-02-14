@@ -18,6 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +28,8 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.EditText;
+
 
 import com.csun.spotr.singleton.CurrentUser;
 import com.csun.spotr.skeleton.IActivityProgressUpdate;
@@ -106,13 +109,13 @@ public class PingMapActivity
 		// handle change view event
 		changeViewButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				startDialog();
+				startDialog(0);
 			}
 		});
 		
 		buttonPing.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				new PingMeTask(PingMapActivity.this).execute(lastKnownLocation);
+				startDialog(1);
 			}
 		});
 
@@ -124,35 +127,68 @@ public class PingMapActivity
 		});
 	}
 
-	private void startDialog() {
+	private void startDialog(int dialog) {
 		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
-		myAlertDialog.setTitle("Map View Option");
-		myAlertDialog.setMessage("Pick a map view");
-		myAlertDialog.setPositiveButton("Street", new DialogInterface.OnClickListener() {
-			// do something when the button is clicked
-			public void onClick(DialogInterface arg0, int arg1) {
-				mapView.setSatellite(false);
-				mapView.setTraffic(false);
-				mapView.invalidate();
-			}
-		});
+		// Dialog for handling map views
+		switch (dialog){
+			case 0:
+				myAlertDialog.setTitle("Map View Option");
+				myAlertDialog.setMessage("Pick a map view");
+				myAlertDialog.setPositiveButton("Street", new DialogInterface.OnClickListener() {
+					// do something when the button is clicked
+					public void onClick(DialogInterface arg0, int arg1) {
+						mapView.setSatellite(false);
+						mapView.setTraffic(false);
+						mapView.invalidate();
+					}
+				});
+		
+				myAlertDialog.setNeutralButton("Satellite", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						mapView.setSatellite(true);
+						mapView.setTraffic(false);
+						mapView.invalidate();
+					}
+				});
+		
+				myAlertDialog.setNegativeButton("Traffic", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						mapView.setSatellite(false);
+						mapView.setTraffic(true);
+						mapView.invalidate();
+					}
+				});
+				myAlertDialog.show();
+				break;
+			
+			// Dialog for handling ping options 
+			case 1:
+				final EditText input = new EditText(this);
+				myAlertDialog.setView(input);
+				myAlertDialog.setTitle("Ping Options");
+				myAlertDialog.setMessage("Enter a message and how long your ping should stay on map");
+				myAlertDialog.setPositiveButton("1 Day", new DialogInterface.OnClickListener() {
+					// do something when the button is clicked
+					public void onClick(DialogInterface arg0, int arg1) {
+						new PingMeTask(PingMapActivity.this, input.getText().toString(), 86400).execute(lastKnownLocation);
+					}
+				});
+		
+				myAlertDialog.setNeutralButton("3 Days", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						new PingMeTask(PingMapActivity.this, input.getText().toString(), 259200).execute(lastKnownLocation);
+					}
+				});
+		
+				myAlertDialog.setNegativeButton("7 Days", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						new PingMeTask(PingMapActivity.this, input.getText().toString(), 604800).execute(lastKnownLocation);
+					}
+				});
+				myAlertDialog.show();
+				break;
 
-		myAlertDialog.setNeutralButton("Satellite", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface arg0, int arg1) {
-				mapView.setSatellite(true);
-				mapView.setTraffic(false);
-				mapView.invalidate();
-			}
-		});
-
-		myAlertDialog.setNegativeButton("Traffic", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface arg0, int arg1) {
-				mapView.setSatellite(false);
-				mapView.setTraffic(true);
-				mapView.invalidate();
-			}
-		});
-		myAlertDialog.show();
+		}
 	}
 
 	@Override
@@ -194,7 +230,8 @@ public class PingMapActivity
 										array.getJSONObject(i).getString("users_tbl_username"), 
 										array.getJSONObject(i).getDouble("users_locations_tbl_latitude"), 
 										array.getJSONObject(i).getDouble("users_locations_tbl_longitude"), 
-										array.getJSONObject(i).getString("users_locations_tbl_created")));
+										array.getJSONObject(i).getString("users_locations_tbl_created"),
+										array.getJSONObject(i).getString("users_locations_tbl_msg")));
 						}
 					}
 				}
@@ -231,9 +268,13 @@ public class PingMapActivity
 		
 		private List<NameValuePair> userData = new ArrayList<NameValuePair>();
 		private WeakReference<PingMapActivity> ref;
+		private String pingMessage = null;
+		private int pingDuration;
 		
-		public PingMeTask(PingMapActivity a) {
+		public PingMeTask(PingMapActivity a, String msg, int duration) {
 			attach(a);
+			pingMessage = msg;
+			pingDuration = duration;
 		}
 		
 		@Override
@@ -246,6 +287,10 @@ public class PingMapActivity
 			userData.add(new BasicNameValuePair("latitude", Double.toString(locations[0].getLatitude())));
 			userData.add(new BasicNameValuePair("longitude", Double.toString(locations[0].getLongitude())));
 			userData.add(new BasicNameValuePair("user_id", Integer.toString(CurrentUser.getCurrentUser().getId())));
+			userData.add(new BasicNameValuePair("message", pingMessage));
+			userData.add(new BasicNameValuePair("duration", Integer.toString(pingDuration)));
+
+
 
 			JSONObject json = JsonHelper.getJsonObjectFromUrlWithData(PING_ME_URL, userData);
 			String result = "";
@@ -394,7 +439,7 @@ public class PingMapActivity
 			CurrentUser.getCurrentUser().getId(), 
 			CurrentUser.getCurrentUser().getUsername(), 
 			loc.getLatitude(), 
-			loc.getLongitude(), "just now");
+			loc.getLongitude(), "just now", "");
 		
 		itemizedOverlay.addOverlay(ovl, yourLocation);
 		mapController.animateTo(new GeoPoint((int) (loc.getLatitude() * 1E6), (int) (loc.getLongitude() * 1E6)));

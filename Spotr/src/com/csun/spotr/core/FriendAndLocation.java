@@ -6,13 +6,15 @@ public class FriendAndLocation {
     private final double latitude;
     private final double longitude;
     private final String time;
+    private final String msg;
     
-    public FriendAndLocation(int userId, String name, double latitude, double longitude, String time) {
-	this.userId = userId;
-	this.name = name;
-	this.latitude = latitude;
-	this.longitude = longitude;
-	this.time = time;
+    public FriendAndLocation(int userId, String name, double latitude, double longitude, String time, String msg) {
+    	this.userId = userId;
+    	this.name = name;
+    	this.latitude = latitude;
+    	this.longitude = longitude;
+    	this.time = time;
+    	this.msg = msg;
     }
 
     public int getUserId() {
@@ -32,6 +34,9 @@ public class FriendAndLocation {
     }
     
     public String getTime() {
-	return time;
+    	return time;
+    }
+    public String getMsg() {
+    	return msg;
     }
 }
